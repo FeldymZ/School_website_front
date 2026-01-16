@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-white text-darkBlue;
+}
+@keyframes menuIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-menu {
+  animation: menuIn 180ms ease-out;
+}
+
+/* Autoriser le débordement vertical pour les cartes */
+.swiper {
+  overflow: visible !important;
+}
+
+.swiper-wrapper {
+  overflow: visible !important;
+}
+
+.swiper-slide {
+  overflow: visible !important;
+}
+
+/* Scrollbar discrète */
+.menu-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.menu-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.menu-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.bg-wave-gradient {
+  background: linear-gradient(
+    135deg,
+    #eef9ff,
+    #d6f0ff,
+    #eef9ff
+  );
+  background-size: 200% 200%;
+  animation: waveGradient 15s ease infinite;
+}
+
+@keyframes waveGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.agenda-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.agenda-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.agenda-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
