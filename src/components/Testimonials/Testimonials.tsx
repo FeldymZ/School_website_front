@@ -61,7 +61,7 @@ export default function Testimonials() {
 
         <div className="max-w-7xl mx-auto px-6">
           {/* CONTAINER BLEU AVEC MOTIFS */}
-          <div className="relative rounded-[32px] bg-gradient-to-br from-[#083a52] via-[#0a5f7d] to-[#00a8e8] p-12 md:p-16 text-white overflow-hidden shadow-2xl">
+          <div className="relative rounded-[32px] bg-man p-12 md:p-16 text-white overflow-hidden shadow-2xl">
 
             {/* MOTIFS DÉCORATIFS */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
@@ -72,7 +72,7 @@ export default function Testimonials() {
               <div className="inline-flex items-center justify-center gap-3 mb-4">
                 <Quote size={24} className="text-white/60" />
                 <h2 className="text-3xl md:text-4xl font-bold">
-                  Ce qu'ils disent de nous
+                  Témoignages
                 </h2>
                 <Quote size={24} className="text-white/60 rotate-180" />
               </div>

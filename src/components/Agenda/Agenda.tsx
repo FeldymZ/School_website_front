@@ -10,6 +10,8 @@ import type { AgendaEvent } from "@/types/agenda";
 /* ==================== AGENDA ===================== */
 /* ================================================= */
 
+const PRIMARY_COLOR = "#00a8e8";
+
 export default function Agenda() {
   const [upcoming, setUpcoming] = useState<AgendaEvent[]>([]);
   const [past, setPast] = useState<AgendaEvent[]>([]);
@@ -38,14 +40,23 @@ export default function Agenda() {
       {/* ================= TITRE ================= */}
       <div className="mb-5">
         <div className="flex items-center gap-3 mb-2.5">
-          <div className="bg-[#1b5e7a] p-3 rounded-xl">
+          <div
+            className="p-3 rounded-xl"
+            style={{ backgroundColor: PRIMARY_COLOR }}
+          >
             <Calendar size={24} className="text-white" />
           </div>
-          <h2 className="text-xl font-bold text-[#1b5e7a]">
+          <h2
+            className="text-xl font-bold"
+            style={{ color: PRIMARY_COLOR }}
+          >
             Agenda
           </h2>
         </div>
-        <div className="h-[2px] w-28 bg-[#1b5e7a]" />
+        <div
+          className="h-[2px] w-28"
+          style={{ backgroundColor: PRIMARY_COLOR }}
+        />
       </div>
 
       {/* ================= À VENIR ================= */}
@@ -54,7 +65,8 @@ export default function Agenda() {
         icon={<Calendar size={15} />}
         events={upcoming}
         highlight
-        headerClass="bg-[#1b5e7a] text-white"
+        headerClass="text-white"
+        headerStyle={{ backgroundColor: PRIMARY_COLOR }}
       />
 
       {/* ================= PASSÉS ================= */}
@@ -80,12 +92,14 @@ function AgendaSection({
   events,
   highlight = false,
   headerClass,
+  headerStyle,
 }: {
   title: string;
   icon: React.ReactNode;
   events: AgendaEvent[];
   highlight?: boolean;
   headerClass: string;
+  headerStyle?: React.CSSProperties;
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const ITEMS_PER_PAGE = 3;
@@ -109,23 +123,21 @@ function AgendaSection({
       {/* HEADER */}
       <div
         className={`px-4 py-2.5 flex items-center justify-between ${headerClass}`}
+        style={headerStyle}
       >
         <div className="flex items-center gap-2">
           {icon}
           <h3 className="text-sm font-bold">{title}</h3>
         </div>
+
         {events.length > ITEMS_PER_PAGE && (
           <div className="flex items-center gap-1">
             {Array.from({ length: totalPages }).map((_, index) => (
               <div
                 key={index}
                 className={`
-                  w-1.5 h-1.5 rounded-full transition-all duration-300
-                  ${
-                    index === currentIndex
-                      ? "bg-white w-5"
-                      : "bg-white/40"
-                  }
+                  h-1.5 rounded-full transition-all duration-300
+                  ${index === currentIndex ? "w-5 bg-white" : "w-1.5 bg-white/40"}
                 `}
               />
             ))}
@@ -133,7 +145,7 @@ function AgendaSection({
         )}
       </div>
 
-      {/* LISTE avec animation */}
+      {/* LISTE */}
       <div className="p-3 relative overflow-hidden min-h-[280px]">
         {events.length === 0 ? (
           <p className="text-xs text-gray-500 text-center py-4">
@@ -141,11 +153,9 @@ function AgendaSection({
           </p>
         ) : (
           <div
-            className="space-y-2.5 transition-all duration-500 ease-in-out"
             key={currentIndex}
-            style={{
-              animation: 'fadeSlideIn 0.5s ease-in-out'
-            }}
+            className="space-y-2.5 transition-all duration-500"
+            style={{ animation: "fadeSlideIn 0.5s ease-in-out" }}
           >
             {visibleEvents.map((event) => (
               <AgendaItem
@@ -158,7 +168,7 @@ function AgendaSection({
         )}
       </div>
 
-      {/* Animation CSS */}
+      {/* Animation */}
       <style>{`
         @keyframes fadeSlideIn {
           from {
@@ -188,19 +198,16 @@ function AgendaItem({
 }) {
   const date = new Date(event.eventDate);
   const day = date.getDate();
-  const month = date.toLocaleDateString("fr-FR", {
-    month: "short",
-  });
+  const month = date.toLocaleDateString("fr-FR", { month: "short" });
 
   return (
     <div
       className={`
-        group
-        flex gap-2.5 p-2.5 rounded-xl transition-all duration-300
-        cursor-pointer
+        group flex gap-2.5 p-2.5 rounded-xl cursor-pointer
+        transition-all duration-300
         ${
           highlight
-            ? "bg-gradient-to-r from-[#1b5e7a]/5 to-transparent hover:from-[#1b5e7a]/10 hover:shadow-md"
+            ? "bg-gradient-to-r from-[#00a8e8]/5 to-transparent hover:from-[#00a8e8]/10 hover:shadow-md"
             : "hover:bg-gray-50 hover:shadow-sm"
         }
       `}
@@ -210,46 +217,41 @@ function AgendaItem({
         className={`
           min-w-[44px] h-[44px] rounded-lg
           flex flex-col items-center justify-center
-          font-bold
-          transition-all duration-300
-          group-hover:scale-110
-          group-hover:shadow-lg
+          font-bold transition-all duration-300
+          group-hover:scale-110 group-hover:shadow-lg
           ${
             highlight
-              ? "bg-[#1b5e7a] text-white group-hover:bg-[#15505f]"
-              : "bg-gray-100 text-gray-600 group-hover:bg-gray-200"
+              ? "bg-[#00a8e8] text-white"
+              : "bg-gray-100 text-gray-600"
           }
         `}
       >
-        <span className="text-lg leading-none">
-          {day}
-        </span>
-        <span className="text-[9px] uppercase">
-          {month}
-        </span>
+        <span className="text-lg leading-none">{day}</span>
+        <span className="text-[9px] uppercase">{month}</span>
       </div>
 
       {/* CONTENU */}
       <div className="flex-1">
-        <h5 className={`
-          text-xs font-bold mb-0.5 line-clamp-2
-          transition-colors duration-300
-          ${
-            highlight
-              ? "text-gray-900 group-hover:text-[#1b5e7a]"
-              : "text-gray-600 group-hover:text-gray-900"
-          }
-        `}>
+        <h5
+          className={`
+            text-xs font-bold mb-0.5 line-clamp-2
+            ${
+              highlight
+                ? "text-gray-900 group-hover:text-[#00a8e8]"
+                : "text-gray-600 group-hover:text-gray-900"
+            }
+          `}
+        >
           {event.title}
         </h5>
 
-        <p className="text-[11px] text-gray-600 line-clamp-2 mb-1 group-hover:text-gray-700 transition-colors">
+        <p className="text-[11px] text-gray-600 line-clamp-2 mb-1">
           {event.description}
         </p>
 
         {event.location && (
-          <div className="flex items-center gap-1 text-[10px] text-gray-500 group-hover:text-[#1b5e7a] transition-colors">
-            <MapPin size={10} className="group-hover:scale-110 transition-transform" />
+          <div className="flex items-center gap-1 text-[10px] text-gray-500 group-hover:text-[#00a8e8]">
+            <MapPin size={10} />
             <span>{event.location}</span>
           </div>
         )}

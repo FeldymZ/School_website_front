@@ -1,16 +1,17 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
 
-/* ===== PAGES ===== */
+/* ================= PAGES ================= */
 import Home from "@/pages/Home";
 import FormationDetailsPage from "@/pages/FormationDetails";
 import ActualitesPage from "@/pages/Actualites";
 import ActualiteDetailsPage from "@/pages/ActualiteDetails";
+import FormationsList from "@/pages/FormationsList";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />, // Layout global : Topbar + Navbar + Outlet
+    element: <App />,
     children: [
       /* ================= ACCUEIL ================= */
       {
@@ -19,39 +20,36 @@ export const router = createBrowserRouter([
       },
 
       /* ================= FORMATIONS ================= */
-
-      // (optionnel) page liste formations
       {
-        path: "formations",
-        element: <></>, // ou <Formations />
+        path: "formationsList", // ✅ ICI
+        element: <FormationsList />,
       },
-
-      // ✅ DÉTAIL FORMATION (route canonique)
       {
         path: "formations/:id",
         element: <FormationDetailsPage />,
       },
 
       /* ================= ACTUALITÉS ================= */
-
-      // ✅ LISTE DES ACTUALITÉS
       {
         path: "actualites",
         element: <ActualitesPage />,
       },
-
-      // ✅ DÉTAIL ACTUALITÉ
       {
         path: "actualites/:id",
         element: <ActualiteDetailsPage />,
       },
 
-      /* ================= AUTRES (À VENIR) ================= */
-
-      // Contact (sera implémenté plus tard)
+      /* ================= CONTACT ================= */
       {
         path: "contact",
-        element: <></>,
+        element: (
+          <div className="max-w-7xl mx-auto px-6 py-32">
+            <h1 className="text-3xl font-bold">Contact</h1>
+            <p className="mt-4 text-gray-600">
+              Cette section sera disponible prochainement.
+            </p>
+          </div>
+        ),
       },
     ],
   },

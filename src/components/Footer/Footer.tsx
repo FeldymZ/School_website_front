@@ -143,6 +143,32 @@ export default function Footer() {
 
               <li>
                 <Link
+                  to="#"
+                  className="group relative flex items-center gap-3 text-gray-400 hover:text-white transition-all duration-300"
+                >
+                  <div className="absolute -inset-2 bg-gradient-to-r from-blue-600/10 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="relative w-2 h-2 bg-blue-500 rounded-full group-hover:bg-cyan-400 transition-all duration-300 group-hover:scale-150" />
+                  <span className="relative flex-1 group-hover:translate-x-2 transition-transform duration-300">
+                    Messagerie Elèctronique
+                  </span>
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  to="#"
+                  className="group relative flex items-center gap-3 text-gray-400 hover:text-white transition-all duration-300"
+                >
+                  <div className="absolute -inset-2 bg-gradient-to-r from-blue-600/10 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="relative w-2 h-2 bg-blue-500 rounded-full group-hover:bg-cyan-400 transition-all duration-300 group-hover:scale-150" />
+                  <span className="relative flex-1 group-hover:translate-x-2 transition-transform duration-300">
+                    Authentifier un diplôme
+                  </span>
+                </Link>
+              </li>
+
+              <li>
+                <Link
                   to="/contact"
                   className="group relative flex items-center gap-3 text-gray-400 hover:text-white transition-all duration-300"
                 >

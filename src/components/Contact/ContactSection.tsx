@@ -64,19 +64,22 @@ export default function ContactSection() {
   };
 
   return (
-    <section className="relative w-full bg-gray-50 py-24">
+    <section
+      id="contact"
+      className="relative w-full bg-gray-50 py-24"
+    >
       <div className="max-w-7xl mx-auto px-6">
 
         {/* ================= DECOR HAUT ================= */}
         <div className="flex items-center justify-center gap-4 mb-10">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#00a8e8]" />
-          <div className="w-40 h-[2px] bg-[#00a8e8]/70 rounded-full" />
-          <span className="w-2.5 h-2.5 rounded-full bg-[#00a8e8]" />
+          <span className="w-2.5 h-2.5 rounded-full bg-secondary" />
+          <div className="w-40 h-[2px] bg-secondary/70 rounded-full" />
+          <span className="w-2.5 h-2.5 rounded-full bg-secondary" />
         </div>
 
         {/* ================= TITRE ================= */}
         <div className="text-center mb-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-[#003d5c] mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-darkBlue mb-4">
             Vous avez des questions ?
           </h2>
           <p className="text-gray-600 max-w-3xl mx-auto">
@@ -89,12 +92,12 @@ export default function ContactSection() {
           {/* ===== GAUCHE ===== */}
           <div className="space-y-8">
             {/* Besoin d'aide */}
-            <div className="bg-[#d4e9f7] rounded-2xl p-8 flex gap-6">
-              <div className="w-20 h-20 bg-[#00a8e8] rounded-full flex items-center justify-center">
+            <div className="bg-lightBlue rounded-2xl p-8 flex gap-6">
+              <div className="w-20 h-20 bg-secondary rounded-full flex items-center justify-center">
                 <HelpCircle size={40} className="text-white" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-[#003d5c] mb-2">
+                <h3 className="text-xl font-bold text-darkBlue mb-2">
                   Besoin d'aide ?
                 </h3>
                 <p className="text-gray-700 text-sm">
@@ -105,7 +108,7 @@ export default function ContactSection() {
 
             {/* FAQ */}
             <div>
-              <h3 className="text-2xl font-bold text-[#003d5c] mb-4">
+              <h3 className="text-2xl font-bold text-darkBlue mb-4">
                 Questions fréquentes
               </h3>
               <p className="text-sm text-gray-600 mb-4">
@@ -117,12 +120,17 @@ export default function ContactSection() {
                   <button
                     key={faq}
                     onClick={() => handleFaqClick(faq)}
-                    className="w-full bg-white border rounded-xl px-6 py-4 flex justify-between hover:border-[#00a8e8] hover:bg-blue-50 transition-all"
+                    className="
+                      w-full bg-white border rounded-xl
+                      px-6 py-4 flex justify-between
+                      hover:border-secondary hover:bg-blue/10
+                      transition-all
+                    "
                   >
-                    <span className="text-[#003d5c] font-medium">
+                    <span className="text-darkBlue font-medium">
                       {faq}
                     </span>
-                    <ChevronDown size={20} className="text-[#00a8e8]" />
+                    <ChevronDown size={20} className="text-secondary" />
                   </button>
                 ))}
               </div>
@@ -131,7 +139,7 @@ export default function ContactSection() {
 
           {/* ===== DROITE : FORMULAIRE ===== */}
           <div className="bg-white rounded-2xl shadow-lg p-8 sticky top-8">
-            <h3 className="text-2xl font-bold text-[#003d5c] mb-6">
+            <h3 className="text-2xl font-bold text-darkBlue mb-6">
               Posez votre question
             </h3>
 
@@ -142,7 +150,7 @@ export default function ContactSection() {
                 value={form.senderName}
                 onChange={handleChange}
                 placeholder="Nom complet"
-                className="w-full border rounded-lg px-4 py-3"
+                className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:border-secondary"
               />
 
               <input
@@ -152,7 +160,7 @@ export default function ContactSection() {
                 value={form.senderEmail}
                 onChange={handleChange}
                 placeholder="Email"
-                className="w-full border rounded-lg px-4 py-3"
+                className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:border-secondary"
               />
 
               <textarea
@@ -162,7 +170,7 @@ export default function ContactSection() {
                 value={form.message}
                 onChange={handleChange}
                 placeholder="Votre question"
-                className="w-full border rounded-lg px-4 py-3 resize-none"
+                className="w-full border rounded-lg px-4 py-3 resize-none focus:outline-none focus:border-secondary"
               />
 
               {success && (
@@ -184,7 +192,11 @@ export default function ContactSection() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-[#00a8e8] text-white font-bold py-4 rounded-xl"
+                className="
+                  w-full bg-secondary text-white
+                  font-bold py-4 rounded-xl
+                  hover:bg-blue transition
+                "
               >
                 {loading ? "Envoi en cours..." : "Envoyer ma question"}
               </button>

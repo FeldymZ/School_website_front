@@ -7,14 +7,21 @@ import Agenda from "@/components/Agenda/Agenda";
 import LocationSection from "@/components/Location/LocationSection";
 import ContactSection from "@/components/Contact/ContactSection";
 import Footer from "@/components/Footer/Footer";
+import AboutUs from "@/components/AboutUs/AboutUs";
 export default function Home() {
   return (
     <>
       {/* HERO */}
       <Banner />
 
+
+      {/* Qui sommes nous */}
+      <AboutUs />
+
       {/* FORMATIONS */}
       <Formations />
+
+
 
       {/* CHIFFRES CLÉS */}
       <KeyFigures />
@@ -26,7 +33,7 @@ export default function Home() {
       <section className="w-full bg-gray-50 py-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
-            {/* ACTUALITÉS (2/3) */}
+            {/* ACTUALITÉ   S (2/3) */}
             <div className="lg:col-span-2">
               <ActualitesList />
             </div>
@@ -38,6 +45,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+
 
       <Testimonials />
       <LocationSection />

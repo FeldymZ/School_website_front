@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import {
   ChevronDown,
   ArrowUpRight,
@@ -18,13 +18,16 @@ import {
 
 import type { MegaMenuData } from "@/types/menu";
 
+/* ================= TYPES ================= */
+
 type MenuKey =
   | "esiitech"
   | "formations"
   | "vie"
   | "partenariats";
 
-/* Largeurs des MegaMenus */
+/* ================= CONSTANTES ================= */
+
 const MENU_WIDTHS: Record<MenuKey, number> = {
   esiitech: 480,
   formations: 560,
@@ -32,10 +35,15 @@ const MENU_WIDTHS: Record<MenuKey, number> = {
   partenariats: 420,
 };
 
+/* ================= COMPONENT ================= */
+
 export default function MainNavbar() {
   const [activeMenu, setActiveMenu] = useState<MenuKey | null>(null);
   const [anchorLeft, setAnchorLeft] = useState(0);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  const location = useLocation();
 
   const staticMenus: Record<
     Exclude<MenuKey, "formations" | "partenariats">,
@@ -45,7 +53,40 @@ export default function MainNavbar() {
     vie: vieEtudianteMenu,
   };
 
-  /* ===== Positionnement MegaMenu (desktop) ===== */
+  /* ================================================= */
+  /* ================= SCROLL ======================== */
+  /* ================================================= */
+
+  useEffect(() => {
+    const onScroll = () => {
+      setIsScrolled(window.scrollY > 40);
+    };
+
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  /* ================================================= */
+  /* ================= CONTACT ====================== */
+  /* ================================================= */
+
+  const scrollToContact = () => {
+    setIsMobileOpen(false);
+
+    if (location.pathname !== "/") {
+      window.location.href = "/#contact";
+      return;
+    }
+
+    document.getElementById("contact")?.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
+
+  /* ================================================= */
+  /* ============= POSITION MEGA MENU =============== */
+  /* ================================================= */
+
   const openMenu = (key: MenuKey, el: HTMLElement) => {
     const rect = el.getBoundingClientRect();
     const nav = el.closest("nav");
@@ -54,12 +95,10 @@ export default function MainNavbar() {
     const navRect = nav.getBoundingClientRect();
     const menuWidth = MENU_WIDTHS[key];
 
-    const center =
-      rect.left - navRect.left + rect.width / 2;
-
+    const center = rect.left - navRect.left + rect.width / 2;
     let left = center - menuWidth / 2;
 
-    const MARGIN = 8;
+    const MARGIN = 12;
     left = Math.max(
       MARGIN,
       Math.min(left, navRect.width - menuWidth - MARGIN)
@@ -71,18 +110,27 @@ export default function MainNavbar() {
 
   return (
     <nav
-      className="relative w-full bg-white border-b z-50"
+      className={`
+        sticky z-50 w-full
+        bg-white border-b border-gray-100
+        shadow-sm transition-all duration-300
+        ${isScrolled ? "top-0" : "top-12"}
+      `}
       onMouseLeave={() => setActiveMenu(null)}
     >
-      {/* ================= BARRE HAUTE ================= */}
+      {/* ================= BAR ================= */}
       <div className="flex items-center justify-between px-6 py-4">
         {/* LOGO */}
         <Link to="/" onClick={() => setIsMobileOpen(false)}>
-          <img src="/logo.png" alt="ESIITECH" className="h-12" />
+          <img
+            src="/logo.png"
+            alt="ESIITECH"
+            className="h-12 transition-transform hover:scale-105"
+          />
         </Link>
 
-        {/* ===== MENU DESKTOP ===== */}
-        <ul className="hidden lg:flex gap-10 font-semibold">
+        {/* ================= DESKTOP MENU ================= */}
+        <ul className="hidden lg:flex items-center gap-10 font-semibold text-gray-800">
           {[
             ["esiitech", "ESIITECH"],
             ["formations", "Formations"],
@@ -94,94 +142,82 @@ export default function MainNavbar() {
               onMouseEnter={(e) =>
                 openMenu(key as MenuKey, e.currentTarget)
               }
-              className="flex items-center gap-1 cursor-pointer"
+              className="group relative flex items-center gap-1 cursor-pointer"
             >
-              {label}
+              <span className="group-hover:text-secondary transition">
+                {label}
+              </span>
               <ChevronDown size={14} />
+              <span
+                className="
+                  absolute -bottom-2 left-0
+                  h-[2px] w-0 bg-secondary
+                  transition-all duration-300
+                  group-hover:w-full
+                "
+              />
             </li>
           ))}
 
           <li>
-            <Link
-              to="/contact"
+            <button
+              onClick={scrollToContact}
               className="hover:text-secondary transition"
             >
               Contact
-            </Link>
+            </button>
           </li>
         </ul>
 
-        {/* ===== FOAD DESKTOP ===== */}
+        {/* ================= FOAD ================= */}
         <a
           href="https://foad.esiitech-gabon.com/"
           target="_blank"
           rel="noopener noreferrer"
           className="
-            hidden lg:flex
-            items-center gap-2
+            hidden lg:flex items-center gap-2
+            px-5 py-2.5 rounded-xl
+            font-bold
+            text-secondary
             border-2 border-secondary
-            px-4 py-2
-            rounded-md
+            hover:bg-secondary hover:text-white
+            transition-all duration-300
           "
         >
           <ArrowUpRight size={16} />
-          ACCÉDER AU FOAD
+          Accéder au FOAD
         </a>
 
-        {/* ===== BOUTON MENU MOBILE ===== */}
+        {/* ================= MOBILE BUTTON ================= */}
         <button
-          className="lg:hidden"
+          className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition"
           onClick={() => setIsMobileOpen((v) => !v)}
         >
           {isMobileOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
 
-      {/* ================= MENU MOBILE ================= */}
-      {isMobileOpen && (
-        <div className="lg:hidden absolute top-full left-0 w-full bg-white border-t shadow-xl">
-          <ul className="flex flex-col divide-y">
-            <MobileLink to="/" onClick={() => setIsMobileOpen(false)}>
-              Accueil
-            </MobileLink>
-
-            <MobileLink to="/formations" onClick={() => setIsMobileOpen(false)}>
-              Formations
-            </MobileLink>
-
-            <MobileLink to="/vie-etudiante" onClick={() => setIsMobileOpen(false)}>
-              Vie étudiante
-            </MobileLink>
-
-            <MobileLink to="/partenariats" onClick={() => setIsMobileOpen(false)}>
-              Partenariats
-            </MobileLink>
-
-            <MobileLink to="/contact" onClick={() => setIsMobileOpen(false)}>
-              Contact
-            </MobileLink>
-
-            {/* FOAD MOBILE */}
-            <li className="p-4">
-              <a
-                href="https://foad.esiitech-gabon.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="
-                  flex items-center justify-center gap-2
-                  bg-secondary text-white
-                  px-4 py-3 rounded-lg
-                "
+      {/* ================= MOBILE MENU ================= */}
+      {isMobileOpen && !isScrolled && (
+        <div className="lg:hidden absolute top-full left-0 w-full bg-white shadow-xl border-t">
+          <ul className="flex flex-col divide-y font-semibold">
+            <MobileLink to="/" label="Accueil" onClick={() => setIsMobileOpen(false)} />
+            <MobileLink to="/formationsList" label="Formations" onClick={() => setIsMobileOpen(false)} />
+            <MobileLink to="/vie-etudiante" label="Vie étudiante" onClick={() => setIsMobileOpen(false)} />
+            <MobileLink to="/partenariats" label="Partenariats" onClick={() => setIsMobileOpen(false)} />
+            <li>
+              <button
+                onClick={scrollToContact}
+                className="w-full text-left px-6 py-4 hover:bg-gray-50 hover:text-secondary transition"
               >
-                <ArrowUpRight size={18} />
-                Accéder au FOAD
-              </a>
+                Contact
+              </button>
             </li>
           </ul>
         </div>
       )}
 
-      {/* ================= MEGA MENUS (DESKTOP) ================= */}
+      {/* ================= MEGA MENUS ================= */}
       {activeMenu === "formations" && (
         <MegaMenuFormations anchorLeft={anchorLeft} />
       )}
@@ -202,25 +238,25 @@ export default function MainNavbar() {
   );
 }
 
-/* ================= COMPOSANT LIEN MOBILE ================= */
+/* ================= MOBILE LINK ================= */
 
 function MobileLink({
   to,
+  label,
   onClick,
-  children,
 }: {
   to: string;
+  label: string;
   onClick: () => void;
-  children: React.ReactNode;
 }) {
   return (
     <li>
       <Link
         to={to}
         onClick={onClick}
-        className="block px-6 py-4 font-semibold text-gray-800 hover:bg-gray-50"
+        className="block px-6 py-4 hover:bg-gray-50 hover:text-secondary transition"
       >
-        {children}
+        {label}
       </Link>
     </li>
   );

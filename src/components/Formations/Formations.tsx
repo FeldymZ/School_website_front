@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { GraduationCap, ArrowUpRight, Sparkles } from "lucide-react";
+import { GraduationCap, ArrowUpRight, Sparkles, Eye } from "lucide-react";
 import { Formation, FormationLevel } from "@/types/formation";
 import { fetchFormationsByLevel } from "@/services/formationService";
 import { resolveMediaUrl } from "@/utils/media";
@@ -36,49 +36,27 @@ export default function Formations() {
 
   return (
     <section className="relative w-full py-24 bg-white overflow-hidden">
-      {/* 🌊 VAGUE AU-DESSUS */}
-      <div className="absolute top-0 left-0 w-full -translate-y-full">
-        <svg
-          viewBox="0 0 1440 60"
-          className="w-full h-[60px]"
-          preserveAspectRatio="none"
-        >
-          <path
-            className="wave-path"
-            d="M0,30 C240,10 480,50 720,30 C960,10 1200,50 1440,30 L1440,0 L0,0 Z"
-            fill="#ffffff"
-          />
-        </svg>
-      </div>
-
       <div className="max-w-7xl mx-auto px-6">
+
         {/* ================= TITRE ================= */}
-        <div className="text-center mb-16">
-          <div className="flex items-center justify-center gap-3 mb-4">
+        <div className="text-center mb-12">
+          <div className="flex items-center justify-center gap-3 mb-5">
             <GraduationCap size={28} className="text-[#1b5e7a] animate-pulse" />
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-              Offres de <span className="text-[#1b5e7a]">formations</span>
+              Nos offres de <span className="text-[#1b5e7a]">formation</span>
             </h2>
             <Sparkles size={24} className="text-secondary animate-pulse" />
           </div>
-
-          <div className="h-[2px] w-32 bg-[#1b5e7a] mx-auto mb-6" />
-
-          <p className="text-gray-600 text-base md:text-lg leading-relaxed max-w-3xl mx-auto">
-            Nous proposons des formations uniques et de très haut niveau dans les
-            domaines de l'informatique, la cybersécurité, le développement Web et
-            Mobile, l'archivage numérique et le big data.
-          </p>
+          <div className="h-[2px] w-32 bg-[#1b5e7a] mx-auto" />
         </div>
 
         {/* ================= SWITCH NIVEAU ================= */}
-        <div className="flex justify-center mb-16">
+        <div className="flex justify-center mb-12">
           <div className="inline-flex items-center gap-2 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-2 shadow-lg border border-gray-200">
             <button
               onClick={() => setLevel("LICENCE")}
               className={`
-                relative px-8 py-4 rounded-xl font-bold text-base
-                transition-all duration-300
+                px-8 py-4 rounded-xl font-bold transition-all duration-300
                 ${
                   level === "LICENCE"
                     ? "bg-gradient-to-r from-[#1b5e7a] to-secondary text-white shadow-xl scale-105"
@@ -86,20 +64,16 @@ export default function Formations() {
                 }
               `}
             >
-              {level === "LICENCE" && (
-                <span className="absolute inset-0 rounded-xl bg-white/20 animate-pulse" />
-              )}
-              <span className="relative flex items-center gap-2">
+              <span className="flex items-center gap-2">
                 <GraduationCap size={20} />
-                Nos Licences
+                Licences
               </span>
             </button>
 
             <button
               onClick={() => setLevel("MASTER")}
               className={`
-                relative px-8 py-4 rounded-xl font-bold text-base
-                transition-all duration-300
+                px-8 py-4 rounded-xl font-bold transition-all duration-300
                 ${
                   level === "MASTER"
                     ? "bg-gradient-to-r from-[#1b5e7a] to-secondary text-white shadow-xl scale-105"
@@ -107,12 +81,9 @@ export default function Formations() {
                 }
               `}
             >
-              {level === "MASTER" && (
-                <span className="absolute inset-0 rounded-xl bg-white/20 animate-pulse" />
-              )}
-              <span className="relative flex items-center gap-2">
+              <span className="flex items-center gap-2">
                 <GraduationCap size={20} />
-                Nos Masters
+                Masters
               </span>
             </button>
           </div>
@@ -128,44 +99,55 @@ export default function Formations() {
             ))}
           </div>
         ) : (
-          <Swiper
-            modules={[Autoplay]}
-            autoplay={{
-              delay: 4000,
-              disableOnInteraction: false,
-              pauseOnMouseEnter: true,
-            }}
-            loop={formations.length > 4}
-            spaceBetween={32}
-            breakpoints={{
-              0: { slidesPerView: 1.1 },
-              640: { slidesPerView: 2 },
-              1024: { slidesPerView: 4 },
-            }}
-            className="!pb-8"
-          >
-            {formations.map((f) => (
-              <SwiperSlide key={f.id} className="!overflow-visible">
-                <FormationCard formation={f} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        )}
-      </div>
+          <>
+            <Swiper
+              modules={[Autoplay]}
+              autoplay={{
+                delay: 4000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+              }}
+              loop={formations.length > 4}
+              spaceBetween={32}
+              breakpoints={{
+                0: { slidesPerView: 1.1 },
+                640: { slidesPerView: 2 },
+                1024: { slidesPerView: 4 },
+              }}
+              className="!pb-8"
+            >
+              {formations.map((f) => (
+                <SwiperSlide key={f.id} className="!overflow-visible">
+                  <FormationCard formation={f} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
 
-      {/* 🌊 VAGUE EN BAS */}
-      <div className="absolute bottom-0 left-0 w-full translate-y-full">
-        <svg
-          viewBox="0 0 1440 60"
-          className="w-full h-[60px]"
-          preserveAspectRatio="none"
-        >
-          <path
-            className="wave-path"
-            d="M0,30 C240,50 480,10 720,30 C960,50 1200,10 1440,30 L1440,60 L0,60 Z"
-            fill="#ffffff"
-          />
-        </svg>
+            {/* ================= CTA : VOIR TOUTES LES FORMATIONS ================= */}
+            <div className="mt-12 flex justify-center">
+              <Link
+                to="/formationsList"
+                className="
+                  group inline-flex items-center gap-3
+                  px-8 py-4 rounded-2xl
+                  font-bold text-white
+                  bg-gradient-to-r from-[#1b5e7a] to-secondary
+                  shadow-lg
+                  hover:shadow-2xl
+                  transition-all duration-300
+                  hover:-translate-y-1
+                "
+              >
+                <Eye size={20} />
+                Voir toutes les formations
+                <ArrowUpRight
+                  size={18}
+                  className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
+                />
+              </Link>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );
@@ -177,47 +159,89 @@ export default function Formations() {
 
 function FormationCard({ formation }: { formation: Formation }) {
   return (
-    <Link
-      to={`/formations/${formation.id}`}
-      className="relative block group"
-    >
-      {/* CARTE PRINCIPALE */}
-      <div className="relative h-[420px] rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+    <Link to={`/formations/${formation.id}`} className="relative block group">
+      <div className="
+        relative h-[420px] rounded-3xl overflow-hidden
+        shadow-xl hover:shadow-2xl
+        transition-all duration-500 hover:-translate-y-2
+      ">
         {/* IMAGE */}
-        <div className="absolute inset-0">
-          <img
-            src={resolveMediaUrl(formation.coverImageUrl)}
-            alt={formation.title}
-            className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
-          />
-        </div>
+        <img
+          src={resolveMediaUrl(formation.coverImageUrl)}
+          alt={formation.title}
+          className="
+            absolute inset-0 w-full h-full
+            object-cover object-top
+            transition-transform duration-700
+            group-hover:scale-110
+          "
+        />
 
-        {/* OVERLAY GRADIENT */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-90 group-hover:opacity-95 transition-opacity" />
+        {/* OVERLAY */}
+        <div className="
+          absolute inset-0
+          bg-gradient-to-t
+          from-black/80 via-black/40 to-black/30
+        " />
 
-        {/* CONTENU */}
-        <div className="absolute inset-0 flex flex-col justify-end p-6">
-          {/* TITRE */}
-          <h3 className="text-white font-bold text-lg leading-tight mb-4 line-clamp-2 group-hover:text-secondary transition-colors">
+        {/* ================= CENTRE ================= */}
+        <div className="
+          absolute inset-0 flex flex-col
+          items-center justify-center
+          text-center px-6
+        ">
+          <h3 className="
+            text-white font-bold text-xl
+            leading-snug mb-3 line-clamp-2
+            group-hover:text-secondary transition-colors
+          ">
             {formation.title}
           </h3>
 
-          {/* BADGE + BOUTON */}
-          <div className="flex items-center justify-between">
-            {/* Badge niveau */}
-            <span className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white text-xs font-semibold border border-white/30">
-              Formation {formation.level}
-            </span>
+          <span className="
+            px-4 py-1.5 rounded-full
+            bg-white/20 backdrop-blur-sm
+            text-white text-xs font-semibold
+            border border-white/30
+          ">
+            Programme
+          </span>
+        </div>
 
-            {/* Bouton détail */}
-            <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#1b5e7a] to-secondary flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-12 transition-all duration-300">
-              <ArrowUpRight size={20} className="text-white" />
-            </div>
+        {/* ================= BAS ================= */}
+        <div className="
+          absolute bottom-0 left-0 w-full
+          p-6 flex items-center justify-between
+        ">
+          {/* NIVEAU */}
+          <span className="
+            px-4 py-2 rounded-full
+            bg-secondary text-white
+            text-xs font-bold tracking-wide
+          ">
+            {formation.level}
+          </span>
+
+          {/* ACTION */}
+          <div className="
+            w-12 h-12 rounded-full
+            bg-gradient-to-r from-[#1b5e7a] to-secondary
+            flex items-center justify-center
+            shadow-lg
+            group-hover:scale-110 group-hover:rotate-12
+            transition-all duration-300
+          ">
+            <ArrowUpRight size={20} className="text-white" />
           </div>
         </div>
 
-        {/* BORDURE ANIMÉE */}
-        <div className="absolute inset-0 rounded-3xl ring-2 ring-transparent group-hover:ring-secondary/50 transition-all duration-300" />
+        {/* BORDURE */}
+        <div className="
+          absolute inset-0 rounded-3xl
+          ring-2 ring-transparent
+          group-hover:ring-secondary/50
+          transition-all duration-300
+        " />
       </div>
     </Link>
   );

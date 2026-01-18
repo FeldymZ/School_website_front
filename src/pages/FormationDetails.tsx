@@ -27,7 +27,7 @@ export default function FormationDetailsPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-secondary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <div className="w-16 h-10 border-4 border-secondary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-gray-600 text-lg font-bold">Chargement...</p>
         </div>
       </div>
@@ -91,7 +91,7 @@ export default function FormationDetailsPage() {
   return (
     <div className="w-full bg-gray-50 min-h-screen">
       {/* ================= HERO ================= */}
-      <div className="relative h-[22rem] md:h-[26rem] lg:h-[30rem] overflow-hidden">
+      <div className="relative h-[22rem] md:h-[26rem] lg:h-[25rem] overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center bg-fixed"
           style={{ backgroundImage: `url(${resolveMediaUrl(heroImage)})` }}
@@ -186,13 +186,10 @@ export default function FormationDetailsPage() {
             {formation.pdfUrl && (
               <div className="bg-white rounded-2xl shadow-lg p-8 text-center space-y-5">
                 <h3 className="text-2xl font-normal text-gray-900">
-                  Et maintenant ?
+                 Vous voulez en savoir plus sur cette formation  ?
                 </h3>
 
-                <p className="text-gray-600 text-base leading-relaxed font-bold">
-                  Téléchargez la maquette pour découvrir le programme complet
-                  ainsi que le coût de la scolarité.
-                </p>
+
 
                 <a
                   href={resolveMediaUrl(formation.pdfUrl)}

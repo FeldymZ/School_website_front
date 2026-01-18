@@ -28,7 +28,7 @@ export default function Banner() {
   return (
     <section
       className="
-        h-[55vh] sm:h-[60vh] md:h-[65vh] lg:h-[75vh]
+        h-[55vh] sm:h-[60vh] md:h-[65vh] lg:h-[80vh]
 
       "
     >
