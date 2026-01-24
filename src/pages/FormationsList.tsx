@@ -38,36 +38,30 @@ export default function FormationsList() {
   }, [level]);
 
   return (
-    <section className="w-full py-24 bg-gray-50">
+    <section className="w-full pt-5 pb-10 bg-gray-50">
       <div className="max-w-7xl mx-auto px-6">
 
-        {/* ================= HEADER ================= */}
-        <div className="mb-10 flex items-center gap-3">
-          {/* ICÔNE EXACTE */}
-          <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-secondary">
-            <GraduationCap size={22} className="text-white" />
+        {/* ================= HEADER + FILTRE ================= */}
+        <div className="mb-6 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+          {/* TITRE */}
+          <div className="flex-shrink-0">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-secondary">
+                <GraduationCap size={22} className="text-white" />
+              </div>
+              <h1 className="text-2xl md:text-3xl font-bold text-[#1b5e7a]">
+                Toutes nos formations
+              </h1>
+            </div>
           </div>
 
-          <h1 className="text-2xl md:text-3xl font-bold text-[#1b5e7a]">
-            Toutes nos formations
-          </h1>
-        </div>
-
-        <p className="text-gray-600 text-lg max-w-2xl mb-16">
-          Découvrez l'ensemble de nos formations en Licence et Master
-        </p>
-
-        {/* ================= FILTRE ================= */}
-        <div className="flex justify-center mb-16">
-          <div className="flex items-center gap-2 bg-white p-2 rounded-2xl shadow-lg border border-gray-200">
+          {/* FILTRE */}
+          <div className="flex items-center gap-2 bg-white p-2 rounded-2xl shadow-lg border border-gray-200 w-fit">
             <div className="bg-[#00a8e8] p-2 rounded-xl">
               <Filter size={18} className="text-white" />
             </div>
 
-            <FilterButton
-              active={level === "ALL"}
-              onClick={() => setLevel("ALL")}
-            >
+            <FilterButton active={level === "ALL"} onClick={() => setLevel("ALL")}>
               Toutes
             </FilterButton>
 
@@ -87,11 +81,13 @@ export default function FormationsList() {
           </div>
         </div>
 
-        {/* Compteur de résultats */}
+        {/* ================= COMPTEUR ================= */}
         {!loading && (
-          <div className="text-center mb-8">
+          <div className="mb-4">
             <p className="text-gray-500 font-medium">
-              {formations.length} formation{formations.length > 1 ? 's' : ''} disponible{formations.length > 1 ? 's' : ''}
+              {formations.length} formation
+              {formations.length > 1 ? "s" : ""} disponible
+              {formations.length > 1 ? "s" : ""}
             </p>
           </div>
         )}
@@ -100,7 +96,10 @@ export default function FormationsList() {
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-[380px] bg-white rounded-2xl shadow-md animate-pulse border border-gray-200" />
+              <div
+                key={i}
+                className="h-[380px] bg-white rounded-2xl shadow-md animate-pulse border border-gray-200"
+              />
             ))}
           </div>
         ) : (
@@ -111,9 +110,9 @@ export default function FormationsList() {
           </div>
         )}
 
-        {/* Message si aucune formation */}
+        {/* ================= EMPTY ================= */}
         {!loading && formations.length === 0 && (
-          <div className="text-center py-16">
+          <div className="text-center py-12">
             <div className="bg-gray-200 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
               <GraduationCap size={40} className="text-gray-500" />
             </div>
@@ -136,36 +135,37 @@ function FormationItem({ formation }: { formation: Formation }) {
     <Link
       to={`/formations/${formation.id}`}
       className="
-        group bg-white rounded-2xl overflow-hidden
+        group relative bg-white rounded-2xl overflow-hidden
         shadow-md hover:shadow-xl
         transition-all duration-300
         hover:-translate-y-2
         border border-gray-200
       "
     >
-      {/* Badge niveau en absolu */}
       <div className="absolute top-4 right-4 z-10">
-        <span className={`
-          px-4 py-2 rounded-xl font-bold text-xs uppercase shadow-lg
-          ${formation.level === "LICENCE"
-            ? "bg-[#00a8e8] text-white"
-            : "bg-[#003d5c] text-white"
-          }
-        `}>
+        <span
+          className={`
+            px-4 py-2 rounded-xl font-bold text-xs uppercase shadow-lg
+            ${
+              formation.level === "LICENCE"
+                ? "bg-[#00a8e8] text-white"
+                : "bg-[#003d5c] text-white"
+            }
+          `}
+        >
           {formation.level}
         </span>
       </div>
 
-      {/* IMAGE */}
       <div className="h-48 overflow-hidden bg-gray-100">
         <img
           src={resolveMediaUrl(formation.coverImageUrl)}
           alt={formation.title}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          loading="lazy"
         />
       </div>
 
-      {/* TEXTE */}
       <div className="p-6 space-y-4">
         <h3 className="font-bold text-lg text-[#003d5c] line-clamp-2 min-h-[3.5rem] group-hover:text-[#00a8e8] transition-colors duration-300">
           {formation.title}

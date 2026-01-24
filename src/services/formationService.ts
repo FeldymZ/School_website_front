@@ -44,3 +44,22 @@ export async function fetchFormationDetails(
 
   return response.json();
 }
+
+
+export async function sendFormationBrochure(
+  formationId: number,
+  payload: { name: string; email: string }
+): Promise<void> {
+  const response = await fetch(
+    `${API_BASE_URL}/api/public/formations/initiale/${formationId}/brochure`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Erreur lors de l’envoi de la brochure");
+  }
+}

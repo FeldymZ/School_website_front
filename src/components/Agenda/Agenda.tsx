@@ -12,7 +12,11 @@ import type { AgendaEvent } from "@/types/agenda";
 
 const PRIMARY_COLOR = "#00a8e8";
 
-export default function Agenda() {
+export default function Agenda({
+  showHeader = true,
+}: {
+  showHeader?: boolean;
+}) {
   const [upcoming, setUpcoming] = useState<AgendaEvent[]>([]);
   const [past, setPast] = useState<AgendaEvent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,26 +42,28 @@ export default function Agenda() {
   return (
     <div className="space-y-5">
       {/* ================= TITRE ================= */}
-      <div className="mb-5">
-        <div className="flex items-center gap-3 mb-2.5">
-          <div
-            className="p-3 rounded-xl"
-            style={{ backgroundColor: PRIMARY_COLOR }}
-          >
-            <Calendar size={24} className="text-white" />
+      {showHeader && (
+        <div className="mb-5">
+          <div className="flex items-center gap-3 mb-2.5">
+            <div
+              className="p-3 rounded-xl"
+              style={{ backgroundColor: PRIMARY_COLOR }}
+            >
+              <Calendar size={24} className="text-white" />
+            </div>
+            <h2
+              className="text-xl font-bold"
+              style={{ color: PRIMARY_COLOR }}
+            >
+              Agenda
+            </h2>
           </div>
-          <h2
-            className="text-xl font-bold"
-            style={{ color: PRIMARY_COLOR }}
-          >
-            Agenda
-          </h2>
+          <div
+            className="h-[2px] w-28"
+            style={{ backgroundColor: PRIMARY_COLOR }}
+          />
         </div>
-        <div
-          className="h-[2px] w-28"
-          style={{ backgroundColor: PRIMARY_COLOR }}
-        />
-      </div>
+      )}
 
       {/* ================= À VENIR ================= */}
       <AgendaSection
@@ -137,7 +143,11 @@ function AgendaSection({
                 key={index}
                 className={`
                   h-1.5 rounded-full transition-all duration-300
-                  ${index === currentIndex ? "w-5 bg-white" : "w-1.5 bg-white/40"}
+                  ${
+                    index === currentIndex
+                      ? "w-5 bg-white"
+                      : "w-1.5 bg-white/40"
+                  }
                 `}
               />
             ))}
@@ -168,7 +178,6 @@ function AgendaSection({
         )}
       </div>
 
-      {/* Animation */}
       <style>{`
         @keyframes fadeSlideIn {
           from {
@@ -212,7 +221,6 @@ function AgendaItem({
         }
       `}
     >
-      {/* DATE */}
       <div
         className={`
           min-w-[44px] h-[44px] rounded-lg
@@ -230,7 +238,6 @@ function AgendaItem({
         <span className="text-[9px] uppercase">{month}</span>
       </div>
 
-      {/* CONTENU */}
       <div className="flex-1">
         <h5
           className={`

@@ -70,13 +70,6 @@ export default function ContactSection() {
     >
       <div className="max-w-7xl mx-auto px-6">
 
-        {/* ================= DECOR HAUT ================= */}
-        <div className="flex items-center justify-center gap-4 mb-10">
-          <span className="w-2.5 h-2.5 rounded-full bg-secondary" />
-          <div className="w-40 h-[2px] bg-secondary/70 rounded-full" />
-          <span className="w-2.5 h-2.5 rounded-full bg-secondary" />
-        </div>
-
         {/* ================= TITRE ================= */}
         <div className="text-center mb-10">
           <h2 className="text-4xl md:text-5xl font-bold text-darkBlue mb-4">
@@ -86,6 +79,15 @@ export default function ContactSection() {
             Notre équipe pédagogique est là pour vous accompagner dans votre projet de formation
           </p>
         </div>
+
+        {/* ================= DECOR HAUT ================= */}
+        <div className="flex items-center justify-center gap-4 mb-10">
+          <span className="w-2.5 h-2.5 rounded-full bg-secondary" />
+          <div className="w-40 h-[2px] bg-secondary/70 rounded-full" />
+          <span className="w-2.5 h-2.5 rounded-full bg-secondary" />
+        </div>
+
+
 
         {/* ================= CONTENU ================= */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">

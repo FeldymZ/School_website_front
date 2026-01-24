@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   ChevronDown,
@@ -41,7 +41,6 @@ export default function MainNavbar() {
   const [activeMenu, setActiveMenu] = useState<MenuKey | null>(null);
   const [anchorLeft, setAnchorLeft] = useState(0);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
 
   const location = useLocation();
 
@@ -54,17 +53,22 @@ export default function MainNavbar() {
   };
 
   /* ================================================= */
-  /* ================= SCROLL ======================== */
+  /* ================= ACCUEIL ====================== */
   /* ================================================= */
 
-  useEffect(() => {
-    const onScroll = () => {
-      setIsScrolled(window.scrollY > 40);
-    };
+  const goToHomeTop = () => {
+    setIsMobileOpen(false);
 
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    if (location.pathname !== "/") {
+      window.location.href = "/";
+      return;
+    }
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   /* ================================================= */
   /* ================= CONTACT ====================== */
@@ -79,6 +83,23 @@ export default function MainNavbar() {
     }
 
     document.getElementById("contact")?.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
+
+  /* ================================================= */
+  /* =============== PARTENAIRES ===================== */
+  /* ================================================= */
+
+  const scrollToPartenariats = () => {
+    setIsMobileOpen(false);
+
+    if (location.pathname !== "/") {
+      window.location.href = "/#partenaires";
+      return;
+    }
+
+    document.getElementById("partenaires")?.scrollIntoView({
       behavior: "smooth",
     });
   };
@@ -110,24 +131,23 @@ export default function MainNavbar() {
 
   return (
     <nav
-      className={`
-        sticky z-50 w-full
+      className="
+        sticky top-0 z-50 w-full
         bg-white border-b border-gray-100
-        shadow-sm transition-all duration-300
-        ${isScrolled ? "top-0" : "top-12"}
-      `}
+        shadow-sm
+      "
       onMouseLeave={() => setActiveMenu(null)}
     >
       {/* ================= BAR ================= */}
       <div className="flex items-center justify-between px-6 py-4">
         {/* LOGO */}
-        <Link to="/" onClick={() => setIsMobileOpen(false)}>
+        <button onClick={goToHomeTop}>
           <img
             src="/logo.png"
             alt="ESIITECH"
             className="h-12 transition-transform hover:scale-105"
           />
-        </Link>
+        </button>
 
         {/* ================= DESKTOP MENU ================= */}
         <ul className="hidden lg:flex items-center gap-10 font-semibold text-gray-800">
@@ -148,14 +168,6 @@ export default function MainNavbar() {
                 {label}
               </span>
               <ChevronDown size={14} />
-              <span
-                className="
-                  absolute -bottom-2 left-0
-                  h-[2px] w-0 bg-secondary
-                  transition-all duration-300
-                  group-hover:w-full
-                "
-              />
             </li>
           ))}
 
@@ -198,13 +210,48 @@ export default function MainNavbar() {
       </div>
 
       {/* ================= MOBILE MENU ================= */}
-      {isMobileOpen && !isScrolled && (
+      {isMobileOpen && (
         <div className="lg:hidden absolute top-full left-0 w-full bg-white shadow-xl border-t">
           <ul className="flex flex-col divide-y font-semibold">
-            <MobileLink to="/" label="Accueil" onClick={() => setIsMobileOpen(false)} />
-            <MobileLink to="/formationsList" label="Formations" onClick={() => setIsMobileOpen(false)} />
-            <MobileLink to="/vie-etudiante" label="Vie étudiante" onClick={() => setIsMobileOpen(false)} />
-            <MobileLink to="/partenariats" label="Partenariats" onClick={() => setIsMobileOpen(false)} />
+            {/* ✅ ACCUEIL → HAUT DU HOME */}
+            <li>
+              <button
+                onClick={goToHomeTop}
+                className="w-full text-left px-6 py-4 hover:bg-gray-50 hover:text-secondary transition"
+              >
+                Accueil
+              </button>
+            </li>
+
+            <li>
+              <Link
+                to="/formationsList"
+                onClick={() => setIsMobileOpen(false)}
+                className="block px-6 py-4 hover:bg-gray-50 hover:text-secondary transition"
+              >
+                Formations
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                to="/vie-etudiante"
+                onClick={() => setIsMobileOpen(false)}
+                className="block px-6 py-4 hover:bg-gray-50 hover:text-secondary transition"
+              >
+                Vie étudiante
+              </Link>
+            </li>
+
+            <li>
+              <button
+                onClick={scrollToPartenariats}
+                className="w-full text-left px-6 py-4 hover:bg-gray-50 hover:text-secondary transition"
+              >
+                Partenariats
+              </button>
+            </li>
+
             <li>
               <button
                 onClick={scrollToContact}
@@ -217,7 +264,7 @@ export default function MainNavbar() {
         </div>
       )}
 
-      {/* ================= MEGA MENUS ================= */}
+      {/* ================= MEGA MENUS DESKTOP ================= */}
       {activeMenu === "formations" && (
         <MegaMenuFormations anchorLeft={anchorLeft} />
       )}
@@ -235,29 +282,5 @@ export default function MainNavbar() {
           />
         )}
     </nav>
-  );
-}
-
-/* ================= MOBILE LINK ================= */
-
-function MobileLink({
-  to,
-  label,
-  onClick,
-}: {
-  to: string;
-  label: string;
-  onClick: () => void;
-}) {
-  return (
-    <li>
-      <Link
-        to={to}
-        onClick={onClick}
-        className="block px-6 py-4 hover:bg-gray-50 hover:text-secondary transition"
-      >
-        {label}
-      </Link>
-    </li>
   );
 }

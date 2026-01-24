@@ -6,7 +6,7 @@ export const esiitechMenu: MegaMenuData = [
     title: "L'ÉCOLE",
     items: [
       { label: "Histoire", path: "/esiitech/histoire" },
-      { label: "Mot du DG", path: "/esiitech/mot-du-dg" },
+      { label: "Mot du DG", path: "/mot-du-dg" },
     ],
   },
 ];

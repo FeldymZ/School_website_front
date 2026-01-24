@@ -23,7 +23,7 @@ export default function Testimonials() {
 
   if (loading) {
     return (
-      <section className="w-full py-24 bg-gradient-to-br from-[#083a52] to-[#00a8e8]">
+      <section className="w-full py-24 bg-gradient-to-br from-[#8C8C8C] via-[#A6A6A6] to-[#C0C0C0]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="animate-pulse text-center text-white">
             Chargement des témoignages...
@@ -52,8 +52,9 @@ export default function Testimonials() {
             />
             <defs>
               <linearGradient id="gradient-testimonials" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#083a52" />
-                <stop offset="100%" stopColor="#00a8e8" />
+                <stop offset="0%" stopColor="#8C8C8C" />
+                <stop offset="50%" stopColor="#A6A6A6" />
+                <stop offset="100%" stopColor="#C0C0C0" />
               </linearGradient>
             </defs>
           </svg>
@@ -61,7 +62,7 @@ export default function Testimonials() {
 
         <div className="max-w-7xl mx-auto px-6">
           {/* CONTAINER BLEU AVEC MOTIFS */}
-          <div className="relative rounded-[32px] bg-man p-12 md:p-16 text-white overflow-hidden shadow-2xl">
+          <div className="relative rounded-[32px] bg-gradient-to-br from-[#8C8C8C] via-[#A6A6A6] to-[#C0C0C0] p-12 md:p-16 text-white overflow-hidden shadow-2xl">
 
             {/* MOTIFS DÉCORATIFS */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
@@ -140,8 +141,9 @@ export default function Testimonials() {
             />
             <defs>
               <linearGradient id="gradient-testimonials-bottom" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#083a52" />
-                <stop offset="100%" stopColor="#00a8e8" />
+                <stop offset="0%" stopColor="#8C8C8C" />
+                <stop offset="50%" stopColor="#A6A6A6" />
+                <stop offset="100%" stopColor="#C0C0C0" />
               </linearGradient>
             </defs>
           </svg>

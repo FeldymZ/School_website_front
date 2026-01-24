@@ -7,6 +7,7 @@ import FormationDetailsPage from "@/pages/FormationDetails";
 import ActualitesPage from "@/pages/Actualites";
 import ActualiteDetailsPage from "@/pages/ActualiteDetails";
 import FormationsList from "@/pages/FormationsList";
+import MotDuDG from "./pages/MotDuDG";
 
 export const router = createBrowserRouter([
   {
@@ -51,6 +52,15 @@ export const router = createBrowserRouter([
           </div>
         ),
       },
+
+    /* ================= MOT DU DIRECTEUR GÉNÉRAL ================= */
+
+      {
+          path: "mot-du-dg",
+          element: <MotDuDG />,
+    },
+
+
     ],
   },
 ]);

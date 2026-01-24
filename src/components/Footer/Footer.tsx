@@ -274,7 +274,7 @@ export default function Footer() {
             <div className="flex items-center gap-8 text-sm text-gray-400">
               <div className="flex items-center gap-2">
                 <span>© ESIITECH</span>
-                <span className="font-bold text-white">2025</span>
+                <span className="font-bold text-white">2026</span>
               </div>
               <span className="hidden md:inline">•</span>
               <span>Tous droits réservés</span>

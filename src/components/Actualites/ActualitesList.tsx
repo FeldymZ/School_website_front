@@ -20,11 +20,8 @@ export default function ActualitesList() {
     async function load() {
       try {
         const list = await fetchActualites();
-
-        // 🔒 EXACTEMENT 3
         const top3 = list.slice(0, 3);
 
-        // 🔄 Récupération du contenu (endpoint détail)
         const detailed = await Promise.all(
           top3.map(async (item) => {
             const res = await fetch(
@@ -47,17 +44,14 @@ export default function ActualitesList() {
     };
   }, []);
 
-  /* ================= EXTRAIT 2/3 ================= */
-  const excerpt = (text?: string, length = 210) => {
-    if (!text) return "";
-    return text.length > length
+  const excerpt = (text?: string, length = 210) =>
+    text && text.length > length
       ? text.slice(0, length).trim() + "…"
-      : text;
-  };
+      : text || "";
 
   return (
     <section>
-      {/* ================= TITRE ================= */}
+      {/* TITRE */}
       <div className="mb-5">
         <div className="flex items-center gap-3 mb-2">
           <div className="bg-[#00a8e8] p-3 rounded-xl">
@@ -67,92 +61,58 @@ export default function ActualitesList() {
             Actualités
           </h2>
         </div>
-        <div className="h-[2px] w-32 bg-secondary" />
+        <div className="h-[3px] w-32 bg-secondary" />
       </div>
 
-      {/* ================= CONTENU ================= */}
       {loading ? (
         <p className="text-gray-500">Chargement…</p>
       ) : (
         <>
-          {/* ================= LISTE ================= */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {actualites.map((actu) => (
               <Link
                 key={actu.id}
                 to={`/actualites/${actu.id}`}
-                className="
-                  group
-                  bg-white
-                  rounded-2xl
-                  overflow-hidden
-                  shadow-md
-                  hover:shadow-2xl
-                  transition-all
-                  duration-300
-                  hover:-translate-y-1
-                "
+                className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all hover:-translate-y-1"
               >
-                {/* IMAGE */}
                 <div className="relative h-64 overflow-hidden">
                   <img
                     src={resolveMediaUrl(actu.coverImageUrl)}
                     alt={actu.title}
-                    className="
-                      w-full h-full object-cover
-                      transition-transform duration-700
-                      group-hover:scale-110
-                    "
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
-
-                  {/* DATE */}
                   <div className="absolute top-4 left-4 bg-white/95 rounded-lg px-3 py-2 shadow">
                     <div className="flex items-center gap-2 text-xs">
                       <Calendar size={14} />
                       <span className="font-semibold">
-                        {new Date(actu.publishedAt).toLocaleDateString(
-                          "fr-FR",
-                          { day: "numeric", month: "short" }
-                        )}
+                        {new Date(actu.publishedAt).toLocaleDateString("fr-FR", {
+                          day: "numeric",
+                          month: "short",
+                        })}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                {/* TEXTE */}
                 <div className="p-6 space-y-4">
                   <h3 className="text-lg font-bold text-gray-900 line-clamp-2">
                     {actu.title}
                   </h3>
-
-                  {/* 🔹 EXTRAIT 2/3 */}
-                  <p className="text-sm text-gray-600 leading-relaxed">
+                  <p className="text-sm text-gray-600">
                     {excerpt(actu.content)}
                   </p>
-
                   <div className="flex items-center gap-2 text-[#1b5e7a] font-semibold text-sm">
-                    Lire la suite
-                    <ArrowRight size={16} />
+                    Lire la suite <ArrowRight size={16} />
                   </div>
                 </div>
               </Link>
             ))}
           </div>
 
-          {/* ================= CTA ================= */}
           <div className="mt-5 flex justify-center">
             <Link
               to="/actualites"
-              className="
-                flex items-center gap-2
-                px-4 py-3
-                border-2 border-[#1b5e7a]
-                rounded-xl
-                font-bold
-                hover:bg-[#1b5e7a]
-                hover:text-white
-                transition
-              "
+              className="flex items-center gap-2 px-4 py-3 border-2 border-[#1b5e7a] rounded-xl font-bold hover:bg-[#1b5e7a] hover:text-white transition"
             >
               <Eye size={15} />
               Voir toutes les actualités
