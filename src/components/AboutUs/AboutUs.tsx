@@ -64,15 +64,13 @@ export default function AboutUs() {
                 <strong>14 Février 2024</strong>.
               </p>
 
-              <p className="text-gray-700 leading-relaxed">
-                Nous formons uniquement dans les métiers des Nouvelles
-                Technologies de l'Information et de la Communication (NTIC).
-                Nous proposons aux jeunes une offre de formation dans des
-                domaines tels que la monétique, la cybersécurité, le génie
-                logiciel, le big data, etc.
-              </p>
+
 
               <p className="text-gray-700 leading-relaxed">
+
+                Nous formons dans les métiers des Nouvelles
+                Technologies de l'Information et de la Communication (NTIC).
+
                 L'ESIITECH a ouvert ses portes à la rentrée universitaire
                 2021-2022 et compte à ce jour{" "}
                 <strong>3 promotions</strong> et{" "}
@@ -81,10 +79,7 @@ export default function AboutUs() {
               </p>
 
               <p className="text-gray-700 leading-relaxed">
-                La vision de l'ESIITECH est de former des jeunes dans des métiers
-                des NTIC en adéquation d'une part avec les besoins réels du
-                marché de l'emploi gabonais, et d'autre part avec les évolutions
-                technologiques de l'heure.
+
               </p>
 
               <div className="grid gap-4 pt-6 border-t border-gray-200">
@@ -157,10 +152,7 @@ export default function AboutUs() {
                     Je vous souhaite la bienvenue sur le site de l’École
                     Supérieure d’Ingénierie et d’Innovation Technologique.
                   </p>
-                  <p className="mt-3">
-                    Si vous souhaitez préparer une Licence ou un Master dans
-                    les métiers des NTIC, sachez que vous êtes au bon endroit.
-                  </p>
+
 
                   {/* CTA */}
                   <div className="mt-4 text-center">

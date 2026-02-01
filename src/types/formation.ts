@@ -11,6 +11,8 @@ export interface Formation {
 /* ===== DÉTAIL ===== */
 export interface FormationDetails {
   id: number;
+  coverImageUrl?: string;
+
   title: string;
   description: string;
   galleryImages: string[];

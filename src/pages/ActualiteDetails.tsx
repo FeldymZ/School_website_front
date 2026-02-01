@@ -10,6 +10,32 @@ import { Share2, ArrowLeft, Calendar } from "lucide-react";
 
 import "swiper/css";
 
+/* ================= HTML DISPLAY FIX ================= */
+function formatActualiteHtmlForDisplay(html: string): string {
+  if (!html) return "";
+
+  let output = html;
+
+  // • item<br> → <ul><li>
+  output = output.replace(
+    /<p>\s*((?:•.*?<br>\s*)+)<\/p>/gs,
+    (_: string, list: string) => {
+      const items = list
+        .split("<br>")
+        .map(line => line.replace("•", "").trim())
+        .filter(Boolean);
+
+      return `
+        <ul>
+          ${items.map(item => `<li>${item}</li>`).join("")}
+        </ul>
+      `;
+    }
+  );
+
+  return output;
+}
+
 export default function ActualiteDetailsPage() {
   const { id } = useParams<{ id: string }>();
 
@@ -25,8 +51,20 @@ export default function ActualiteDetailsPage() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  if (loading || !actualite) {
-    return null;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500">Chargement…</p>
+      </div>
+    );
+  }
+
+  if (!actualite) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-red-500">Actualité introuvable</p>
+      </div>
+    );
   }
 
   const publishedDate = new Date(actualite.publishedAt);
@@ -90,10 +128,21 @@ export default function ActualiteDetailsPage() {
               {actualite.title}
             </h1>
 
-            {/* TEXTE PRINCIPAL – PARAGRAPHES OK */}
-            <p className="whitespace-pre-line text-base leading-relaxed text-gray-700 md:text-lg">
-              {actualite.content}
-            </p>
+            {/* TEXTE HTML NORMALISÉ */}
+            <div
+              className="
+                prose prose-lg max-w-none text-gray-700
+                prose-ul:pl-6
+                prose-li:marker:text-secondary
+                prose-li:my-1
+                prose-p:my-3
+              "
+              dangerouslySetInnerHTML={{
+                __html: formatActualiteHtmlForDisplay(
+                  actualite.content
+                ),
+              }}
+            />
 
             {/* INFO PUBLICATION */}
             <div className="rounded-lg bg-secondary/10 p-4 text-sm text-secondary">
@@ -109,7 +158,10 @@ export default function ActualiteDetailsPage() {
             <div className="px-6 pb-8">
               <Swiper
                 modules={[Autoplay]}
-                autoplay={{ delay: 3500, disableOnInteraction: false }}
+                autoplay={{
+                  delay: 3500,
+                  disableOnInteraction: false,
+                }}
                 loop
                 spaceBetween={16}
               >

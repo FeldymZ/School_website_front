@@ -29,19 +29,21 @@ export default function MegaMenuFormations({ anchorLeft }: Props) {
 
   useEffect(() => {
     fetchFormationsByLevel("LICENCE").then((data) => {
-      const cleaned: MenuFormation[] = data.map((f) => ({
-        id: f.id,
-        title: f.title,
-      }));
-      setLicences(cleaned);
+      setLicences(
+        data.map((f) => ({
+          id: f.id,
+          title: f.title,
+        }))
+      );
     });
 
     fetchFormationsByLevel("MASTER").then((data) => {
-      const cleaned: MenuFormation[] = data.map((f) => ({
-        id: f.id,
-        title: f.title,
-      }));
-      setMasters(cleaned);
+      setMasters(
+        data.map((f) => ({
+          id: f.id,
+          title: f.title,
+        }))
+      );
     });
   }, []);
 
@@ -50,8 +52,10 @@ export default function MegaMenuFormations({ anchorLeft }: Props) {
       className="
         absolute top-full z-50
         w-[560px]
-        bg-white border border-gray-200
-        shadow-xl rounded-2xl
+        bg-white
+        border border-gray-200
+        shadow-xl
+        rounded-2xl
         p-5
         max-h-[70vh]
         overflow-y-auto
@@ -60,34 +64,76 @@ export default function MegaMenuFormations({ anchorLeft }: Props) {
     >
       {/* ================= LICENCES ================= */}
       <section className="mb-6">
-        <h4 className="text-xs font-bold uppercase text-center mb-3 sticky top-0 bg-white py-2 z-10">
+        <h4 className="
+          text-xs
+          font-bold
+          uppercase
+          text-center
+          mb-3
+          sticky
+          top-0
+          bg-white
+          py-2
+          z-10
+        ">
           Licences informatiques
         </h4>
 
-        <div className="grid grid-cols-2 gap-2 pr-1">
+        <div className="grid grid-cols-1 gap-1 pr-1">
           {licences.map((f) => (
-            <MenuOptionCard
+            <div
               key={f.id}
-              formationId={f.id}
-              label={cleanFormationTitle(f.title)}
-            />
+              className="
+                rounded-xl
+                transition-colors
+                duration-200
+                hover:bg-[#EAF7FD]
+                hover:text-[#0A2A6A]
+              "
+            >
+              <MenuOptionCard
+                formationId={f.id}
+                label={cleanFormationTitle(f.title)}
+              />
+            </div>
           ))}
         </div>
       </section>
 
       {/* ================= MASTERS ================= */}
       <section>
-        <h4 className="text-xs font-bold uppercase text-center mb-3 sticky top-0 bg-white py-2 z-10">
+        <h4 className="
+          text-xs
+          font-bold
+          uppercase
+          text-center
+          mb-3
+          sticky
+          top-0
+          bg-white
+          py-2
+          z-10
+        ">
           Masters professionnels
         </h4>
 
-        <div className="grid grid-cols-2 gap-2 pr-1">
+        <div className="grid grid-cols-1 gap-1 pr-1">
           {masters.map((f) => (
-            <MenuOptionCard
+            <div
               key={f.id}
-              formationId={f.id}
-              label={cleanFormationTitle(f.title)}
-            />
+              className="
+                rounded-xl
+                transition-colors
+                duration-200
+                hover:bg-[#EAF7FD]
+                hover:text-[#0A2A6A]
+              "
+            >
+              <MenuOptionCard
+                formationId={f.id}
+                label={cleanFormationTitle(f.title)}
+              />
+            </div>
           ))}
         </div>
       </section>

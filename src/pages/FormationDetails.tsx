@@ -13,13 +13,46 @@ import { Download, X } from "lucide-react";
 
 import "swiper/css";
 
+/* ================= HTML DISPLAY FIX ================= */
+function formatHtmlForDisplay(html: string): string {
+  if (!html) return "";
+
+  let output = html;
+
+  output = output.replace(
+    /<p>\s*((?:•.*?<br>\s*)+)<\/p>/gs,
+    (_: string, list: string) => {
+      const items = list
+        .split("<br>")
+        .map((line: string) =>
+          line.replace("•", "").trim()
+        )
+        .filter(Boolean);
+
+      return `
+        <ul>
+          ${items
+            .map(
+              (item: string) =>
+                `<li>${item}</li>`
+            )
+            .join("")}
+        </ul>
+      `;
+    }
+  );
+
+  return output;
+}
+
 export default function FormationDetailsPage() {
   const { id } = useParams<{ id: string }>();
 
-  const [formation, setFormation] = useState<FormationDetails | null>(null);
+  const [formation, setFormation] =
+    useState<FormationDetails | null>(null);
   const [loading, setLoading] = useState(true);
 
-  /* ===== MODAL BROCHURE ===== */
+  /* ================= MODAL BROCHURE ================= */
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -27,7 +60,7 @@ export default function FormationDetailsPage() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  /* ================= CHARGEMENT DÉTAILS ================= */
+  /* ================= LOAD DETAILS ================= */
   useEffect(() => {
     if (!id) return;
 
@@ -36,7 +69,7 @@ export default function FormationDetailsPage() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  /* ================= ENVOI BROCHURE ================= */
+  /* ================= SEND BROCHURE ================= */
   const sendBrochure = async () => {
     if (!name || !email || !id) {
       setError("Veuillez renseigner votre nom et votre email.");
@@ -47,13 +80,18 @@ export default function FormationDetailsPage() {
       setSending(true);
       setError(null);
 
-      await sendFormationBrochure(Number(id), { name, email });
+      await sendFormationBrochure(Number(id), {
+        name,
+        email,
+      });
 
       setSuccess(true);
       setName("");
       setEmail("");
     } catch {
-      setError("Erreur lors de l’envoi de la maquette. Veuillez réessayer.");
+      setError(
+        "Erreur lors de l’envoi de la maquette. Veuillez réessayer."
+      );
     } finally {
       setSending(false);
     }
@@ -64,48 +102,71 @@ export default function FormationDetailsPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-10 border-4 border-secondary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-600 text-lg font-bold">Chargement...</p>
+          <div className="w-16 h-16 border-4 border-[#00A4E0] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-600 text-lg font-bold">
+            Chargement…
+          </p>
         </div>
       </div>
     );
   }
 
-  if (!formation || !formation.galleryImages?.length) {
+  if (!formation) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-red-500 text-xl">Formation introuvable</p>
+        <p className="text-red-500 text-xl">
+          Formation introuvable
+        </p>
       </div>
     );
   }
 
-  const heroImage = formation.galleryImages[0];
-  const sliderImages = formation.galleryImages.slice(1);
+  const heroImage =
+    formation.galleryImages?.[0] ??
+    formation.coverImageUrl;
+
+  const sliderImages =
+    formation.galleryImages?.slice(1) ?? [];
 
   return (
     <div className="w-full bg-gray-50 min-h-screen">
       {/* ================= HERO ================= */}
-      <div className="relative h-[22rem] md:h-[26rem] lg:h-[25rem] overflow-hidden">
+      <div className="relative h-[22rem] md:h-[26rem] overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center bg-fixed"
-          style={{ backgroundImage: `url(${resolveMediaUrl(heroImage)})` }}
+          style={{
+            backgroundImage: `url(${resolveMediaUrl(
+              heroImage
+            )})`,
+          }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/55 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent" />
 
-        <div className="relative h-full max-w-7xl mx-auto px-6 flex items-end pb-16">
-          <h1 className="text-white text-4xl md:text-5xl lg:text-6xl">
+        <div className="relative h-full max-w-7xl mx-auto px-6 flex items-end pb-14">
+          <h1 className="text-white text-4xl md:text-5xl font-bold">
             {formation.title}
           </h1>
         </div>
       </div>
 
-      {/* ================= CONTENU ================= */}
+      {/* ================= CONTENT ================= */}
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
           <div className="lg:col-span-3 bg-white rounded-2xl shadow-sm p-10">
-            <p className="text-gray-700 text-lg leading-relaxed font-bold">
-              {formation.description}
-            </p>
+            <div
+              className="
+                prose prose-lg max-w-none text-gray-700
+                prose-ul:pl-6
+                prose-li:marker:text-[#00A4E0]
+                prose-li:my-1
+                prose-p:my-3
+              "
+              dangerouslySetInnerHTML={{
+                __html: formatHtmlForDisplay(
+                  formation.description ?? ""
+                ),
+              }}
+            />
           </div>
 
           <div className="lg:col-span-2 space-y-6">
@@ -122,6 +183,7 @@ export default function FormationDetailsPage() {
                       <img
                         src={resolveMediaUrl(img)}
                         className="w-full h-full object-cover"
+                        alt=""
                       />
                     </SwiperSlide>
                   ))}
@@ -132,10 +194,10 @@ export default function FormationDetailsPage() {
             <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
               <button
                 onClick={() => setOpen(true)}
-                className="w-full py-4 rounded-xl text-white"
+                className="w-full py-4 rounded-xl text-white font-semibold flex items-center justify-center gap-2"
                 style={{ backgroundColor: "#00A4E0" }}
               >
-                <Download className="inline mr-2" />
+                <Download />
                 Télécharger la maquette
               </button>
             </div>
@@ -160,7 +222,7 @@ export default function FormationDetailsPage() {
 
             {!success ? (
               <>
-                <h2 className="text-2xl mb-6">
+                <h2 className="text-2xl mb-6 font-bold">
                   Recevoir la maquette par email
                 </h2>
 
@@ -168,35 +230,47 @@ export default function FormationDetailsPage() {
                   className="w-full mb-3 px-4 py-3 border rounded-lg"
                   placeholder="Votre nom"
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) =>
+                    setName(e.target.value)
+                  }
                 />
 
                 <input
                   className="w-full mb-3 px-4 py-3 border rounded-lg"
                   placeholder="Votre email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) =>
+                    setEmail(e.target.value)
+                  }
                 />
 
                 {error && (
-                  <p className="text-red-600 text-sm mb-3">{error}</p>
+                  <p className="text-red-600 text-sm mb-3">
+                    {error}
+                  </p>
                 )}
 
                 <button
                   onClick={sendBrochure}
                   disabled={sending}
-                  className="w-full py-3 rounded-lg text-white"
-                  style={{ backgroundColor: "#00A4E0" }}
+                  className="w-full py-3 rounded-lg text-white font-semibold"
+                  style={{
+                    backgroundColor: "#00A4E0",
+                  }}
                 >
-                  {sending ? "Envoi en cours..." : "Recevoir la maquette"}
+                  {sending
+                    ? "Envoi en cours..."
+                    : "Recevoir la maquette"}
                 </button>
               </>
             ) : (
               <div className="text-center">
-                <h3 className="text-green-600 text-xl mb-2">
+                <h3 className="text-green-600 text-xl mb-2 font-bold">
                   Maquette envoyée !
                 </h3>
-                <p>Veuillez vérifier votre boîte mail.</p>
+                <p>
+                  Veuillez vérifier votre boîte mail.
+                </p>
               </div>
             )}
           </div>

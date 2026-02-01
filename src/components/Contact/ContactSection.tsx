@@ -73,7 +73,7 @@ export default function ContactSection() {
         {/* ================= TITRE ================= */}
         <div className="text-center mb-10">
           <h2 className="text-4xl md:text-5xl font-bold text-darkBlue mb-4">
-            Vous avez des questions ?
+            Laissez-nous un message.
           </h2>
           <p className="text-gray-600 max-w-3xl mx-auto">
             Notre équipe pédagogique est là pour vous accompagner dans votre projet de formation

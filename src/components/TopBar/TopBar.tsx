@@ -2,7 +2,7 @@ import { Mail, Phone } from "lucide-react";
 
 export default function Topbar() {
   return (
-    <div className="w-full bg-primary text-white text-xs sm:text-sm font-semibold">
+    <div className="w-full bg-secondary text-white text-xs sm:text-sm font-semibold">
       <div className="flex items-center justify-between px-4 py-3">
         {/* LEFT */}
         <span>Site officiel de l’ESIITech</span>

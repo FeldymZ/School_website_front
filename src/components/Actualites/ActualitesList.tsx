@@ -10,6 +10,22 @@ type ActualiteWithContent = Actualite & {
   content?: string;
 };
 
+/* ================= TEXT EXCERPT FIX ================= */
+function stripHtml(html?: string): string {
+  if (!html) return "";
+  return html
+    .replace(/<[^>]*>/g, "") // supprime balises
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function excerpt(html?: string, length = 210): string {
+  const text = stripHtml(html);
+  return text.length > length
+    ? text.slice(0, length).trim() + "…"
+    : text;
+}
+
 export default function ActualitesList() {
   const [actualites, setActualites] = useState<ActualiteWithContent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -43,11 +59,6 @@ export default function ActualitesList() {
       mounted = false;
     };
   }, []);
-
-  const excerpt = (text?: string, length = 210) =>
-    text && text.length > length
-      ? text.slice(0, length).trim() + "…"
-      : text || "";
 
   return (
     <section>
@@ -98,9 +109,12 @@ export default function ActualitesList() {
                   <h3 className="text-lg font-bold text-gray-900 line-clamp-2">
                     {actu.title}
                   </h3>
+
+                  {/* TEXTE NETTOYÉ (PAS DE HTML) */}
                   <p className="text-sm text-gray-600">
                     {excerpt(actu.content)}
                   </p>
+
                   <div className="flex items-center gap-2 text-[#1b5e7a] font-semibold text-sm">
                     Lire la suite <ArrowRight size={16} />
                   </div>

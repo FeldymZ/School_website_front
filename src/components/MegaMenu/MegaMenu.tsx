@@ -6,17 +6,16 @@ type Props = {
   anchorLeft: number;
 };
 
-export default function MegaMenu({
-  columns,
-  anchorLeft,
-}: Props) {
+export default function MegaMenu({ columns, anchorLeft }: Props) {
   return (
     <div
       className="
         absolute top-full z-50
         w-[480px]
-        bg-white border border-gray-200
-        shadow-xl rounded-2xl
+        bg-white
+        border border-gray-200
+        shadow-xl
+        rounded-2xl
         p-5
       "
       style={{ left: anchorLeft }}
@@ -34,12 +33,14 @@ export default function MegaMenu({
                   to={item.path}
                   className="
                     block
-                    px-3 py-2
-                    rounded-lg
-                    border border-gray-200
+                    px-4 py-2.5
+                    rounded-xl
+                    border border-transparent
                     text-sm font-medium
-                    hover:bg-secondary/10
-                    transition-all
+                    text-gray-800
+                    transition-colors duration-200
+                    hover:bg-[#EAF7FD]
+                    hover:text-[#0A2A6A]
                   "
                 >
                   {item.label}

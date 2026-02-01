@@ -273,6 +273,7 @@ export default function MainNavbar() {
         <MegaMenuPartenariats anchorLeft={anchorLeft} />
       )}
 
+
       {activeMenu &&
         activeMenu !== "formations" &&
         activeMenu !== "partenariats" && (

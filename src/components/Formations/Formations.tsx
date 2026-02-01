@@ -41,9 +41,9 @@ export default function Formations() {
         {/* ================= TITRE ================= */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-5">
-            <GraduationCap size={28} className="text-[#1b5e7a] animate-pulse" />
+            <GraduationCap size={28} className="text-secondary animate-pulse" />
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-              Nos offres de <span className="text-[#1b5e7a]">formation</span>
+              Nos offres de <span className="text-secondary">formation</span>
             </h2>
             <Sparkles size={24} className="text-secondary animate-pulse" />
           </div>

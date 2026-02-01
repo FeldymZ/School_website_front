@@ -16,8 +16,10 @@ export const vieEtudianteMenu: MegaMenuData = [
   {
     title: "VIE ÉTUDIANTE",
     items: [
-      { label: "Activités", path: "/vie-etudiante/activites" },
-      { label: "Bureau", path: "/vie-etudiante/bureau" },
+      { label: "Activités", path: "/vie-etudiante/Activites extrascolaire" },
+
+      { label: "La mutuelle", path: "/vie-etudiante/Mutuelles d'ESIITECH" },
+
     ],
   },
 ];
