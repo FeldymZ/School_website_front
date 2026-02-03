@@ -11,47 +11,42 @@ export async function fetchFormationsByLevel(
   level: FormationLevel,
   options?: { signal?: AbortSignal }
 ): Promise<Formation[]> {
-  const response = await fetch(
+  const res = await fetch(
     `${API_BASE_URL}/api/public/formations/initiale/level/${level}`,
-    {
-      signal: options?.signal,
-    }
+    { signal: options?.signal }
   );
 
-  if (!response.ok) {
+  if (!res.ok) {
     throw new Error("Erreur lors du chargement des formations");
   }
 
-  const data = await response.json();
-  return Array.isArray(data) ? data : [];
+  return res.json();
 }
 
-/* ================= DÉTAILS ================= */
-export async function fetchFormationDetails(
-  id: number,
+/* ================= DÉTAILS PAR SLUG ================= */
+export async function fetchFormationDetailsBySlug(
+  slug: string,
   options?: { signal?: AbortSignal }
 ): Promise<FormationDetails> {
-  const response = await fetch(
-    `${API_BASE_URL}/api/public/formations/initiale/${id}`,
-    {
-      signal: options?.signal,
-    }
+  const res = await fetch(
+    `${API_BASE_URL}/api/public/formations/initiale/slug/${slug}`,
+    { signal: options?.signal }
   );
 
-  if (!response.ok) {
+  if (!res.ok) {
     throw new Error("Formation introuvable");
   }
 
-  return response.json();
+  return res.json();
 }
 
-
-export async function sendFormationBrochure(
-  formationId: number,
+/* ================= BROCHURE PAR SLUG ================= */
+export async function sendFormationBrochureBySlug(
+  slug: string,
   payload: { name: string; email: string }
 ): Promise<void> {
-  const response = await fetch(
-    `${API_BASE_URL}/api/public/formations/initiale/${formationId}/brochure`,
+  const res = await fetch(
+    `${API_BASE_URL}/api/public/formations/initiale/slug/${slug}/brochure`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -59,7 +54,7 @@ export async function sendFormationBrochure(
     }
   );
 
-  if (!response.ok) {
+  if (!res.ok) {
     throw new Error("Erreur lors de l’envoi de la brochure");
   }
 }

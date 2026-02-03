@@ -1,175 +1,135 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { fetchActualiteDetails } from "@/services/actualiteService";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { ArrowLeft, Calendar } from "lucide-react";
+
+import {
+  fetchActualiteBySlug,
+  resolveActualiteSlugFromId,
+} from "@/services/actualiteService";
 import type { ActualiteDetails } from "@/types/actualite";
 import { resolveMediaUrl } from "@/utils/media";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
-import { Share2, ArrowLeft, Calendar } from "lucide-react";
-
 import "swiper/css";
 
 /* ================= HTML DISPLAY FIX ================= */
 function formatActualiteHtmlForDisplay(html: string): string {
   if (!html) return "";
 
-  let output = html;
-
-  // • item<br> → <ul><li>
-  output = output.replace(
+  return html.replace(
     /<p>\s*((?:•.*?<br>\s*)+)<\/p>/gs,
     (_: string, list: string) => {
       const items = list
         .split("<br>")
-        .map(line => line.replace("•", "").trim())
+        .map((line) => line.replace("•", "").trim())
         .filter(Boolean);
 
       return `
         <ul>
-          ${items.map(item => `<li>${item}</li>`).join("")}
+          ${items.map((i) => `<li>${i}</li>`).join("")}
         </ul>
       `;
     }
   );
-
-  return output;
 }
 
 export default function ActualiteDetailsPage() {
-  const { id } = useParams<{ id: string }>();
+  const { param } = useParams<{ param: string }>();
+  const navigate = useNavigate();
 
   const [actualite, setActualite] =
     useState<ActualiteDetails | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!id) return;
+    if (!param) return;
 
-    fetchActualiteDetails(Number(id))
+    // 🔁 CAS 1 : URL LEGACY /actualites/3
+    if (/^\d+$/.test(param)) {
+      resolveActualiteSlugFromId(Number(param))
+        .then((slug) => {
+          navigate(`/actualites/${slug}`, { replace: true });
+        })
+        .catch(() => {
+          navigate("/actualites", { replace: true });
+        });
+
+      return;
+    }
+
+    // ✅ CAS 2 : URL MODERNE /actualites/{slug}
+    fetchActualiteBySlug(param)
       .then(setActualite)
+      .catch(() => navigate("/actualites", { replace: true }))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [param, navigate]);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500">Chargement…</p>
+        Chargement…
       </div>
     );
   }
 
-  if (!actualite) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-red-500">Actualité introuvable</p>
-      </div>
-    );
-  }
+  if (!actualite) return null;
 
   const publishedDate = new Date(actualite.publishedAt);
 
   return (
     <div className="w-full min-h-screen bg-gray-50 py-10">
       <div className="mx-auto max-w-4xl px-4">
-        {/* 🔙 RETOUR */}
+
         <Link
-          to="/"
-          className="mb-4 inline-flex items-center gap-2 text-sm font-medium text-secondary hover:underline"
+          to="/actualites"
+          className="mb-4 inline-flex items-center gap-2 text-sm text-secondary"
         >
           <ArrowLeft size={16} />
           Retour aux actualités
         </Link>
 
-        {/* 📰 CARTE PRINCIPALE */}
-        <div className="overflow-hidden rounded-2xl bg-white shadow-md">
-          {/* IMAGE PRINCIPALE */}
+        <div className="rounded-2xl bg-white shadow-md overflow-hidden">
+
           <img
             src={resolveMediaUrl(actualite.coverImageUrl)}
             alt={actualite.title}
             className="h-[320px] w-full object-cover"
           />
 
-          {/* CONTENU */}
-          <div className="space-y-6 p-6 md:p-8">
-            {/* MÉTADONNÉES */}
-            <div className="flex flex-col gap-3 text-sm text-gray-500 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-2">
-                <Calendar size={16} />
-                {publishedDate.toLocaleDateString("fr-FR", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                })}{" "}
-                à{" "}
-                {publishedDate.toLocaleTimeString("fr-FR", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </div>
+          <div className="p-6 space-y-6">
 
-              <button
-                onClick={() =>
-                  navigator.share?.({
-                    title: actualite.title,
-                    text: actualite.title,
-                    url: window.location.href,
-                  })
-                }
-                className="inline-flex items-center gap-2 rounded-md bg-secondary/10 px-3 py-1.5 text-secondary transition hover:bg-secondary/20"
-              >
-                <Share2 size={16} />
-                Partager
-              </button>
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <Calendar size={16} />
+              {publishedDate.toLocaleDateString("fr-FR")}
             </div>
 
-            {/* TITRE */}
-            <h1 className="text-2xl font-extrabold text-gray-900 md:text-3xl">
+            <h1 className="text-2xl font-extrabold">
               {actualite.title}
             </h1>
 
-            {/* TEXTE HTML NORMALISÉ */}
             <div
-              className="
-                prose prose-lg max-w-none text-gray-700
-                prose-ul:pl-6
-                prose-li:marker:text-secondary
-                prose-li:my-1
-                prose-p:my-3
-              "
+              className="prose max-w-none"
               dangerouslySetInnerHTML={{
                 __html: formatActualiteHtmlForDisplay(
                   actualite.content
                 ),
               }}
             />
-
-            {/* INFO PUBLICATION */}
-            <div className="rounded-lg bg-secondary/10 p-4 text-sm text-secondary">
-              Publié le{" "}
-              <strong>
-                {publishedDate.toLocaleDateString("fr-FR")}
-              </strong>
-            </div>
           </div>
 
-          {/* 🖼️ GALERIE */}
           {actualite.galleryImages?.length > 0 && (
             <div className="px-6 pb-8">
               <Swiper
                 modules={[Autoplay]}
-                autoplay={{
-                  delay: 3500,
-                  disableOnInteraction: false,
-                }}
+                autoplay={{ delay: 3500 }}
                 loop
                 spaceBetween={16}
               >
-                {actualite.galleryImages.map((img, index) => (
-                  <SwiperSlide key={index}>
+                {actualite.galleryImages.map((img, i) => (
+                  <SwiperSlide key={i}>
                     <img
                       src={resolveMediaUrl(img)}
-                      alt=""
                       className="h-[260px] w-full rounded-xl object-cover"
                     />
                   </SwiperSlide>
@@ -177,17 +137,6 @@ export default function ActualiteDetailsPage() {
               </Swiper>
             </div>
           )}
-        </div>
-
-        {/* 🔙 RETOUR ACCUEIL */}
-        <div className="mt-8 text-center">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 rounded-lg bg-secondary px-6 py-3 font-semibold text-white transition hover:bg-secondary/90"
-          >
-            <ArrowLeft size={18} />
-            Retour à l’accueil
-          </Link>
         </div>
       </div>
     </div>

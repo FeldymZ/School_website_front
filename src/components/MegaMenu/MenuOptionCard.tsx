@@ -2,16 +2,16 @@ import { Link } from "react-router-dom";
 
 type Props = {
   label: string;
-  formationId: number;
+  formationSlug: string;
 };
 
 export default function MenuOptionCard({
   label,
-  formationId,
+  formationSlug,
 }: Props) {
   return (
     <Link
-      to={`/formations/${formationId}`}
+      to={`/formations/${formationSlug}`}
       className="
         block
         w-full

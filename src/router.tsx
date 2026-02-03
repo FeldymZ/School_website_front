@@ -7,14 +7,14 @@ import FormationDetailsPage from "@/pages/FormationDetails";
 import ActualitesPage from "@/pages/Actualites";
 import ActualiteDetailsPage from "@/pages/ActualiteDetails";
 import FormationsList from "@/pages/FormationsList";
-import MotDuDG from "./pages/MotDuDG";
+import MotDuDG from "@/pages/MotDuDG";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-      /* ================= ACCUEIL ================= */
+      /* ================= HOME ================= */
       {
         index: true,
         element: <Home />,
@@ -22,11 +22,11 @@ export const router = createBrowserRouter([
 
       /* ================= FORMATIONS ================= */
       {
-        path: "formationsList", // ✅ ICI
+        path: "formationsList",
         element: <FormationsList />,
       },
       {
-        path: "formations/:id",
+        path: "formations/:slug",
         element: <FormationDetailsPage />,
       },
 
@@ -35,8 +35,14 @@ export const router = createBrowserRouter([
         path: "actualites",
         element: <ActualitesPage />,
       },
+
+      /**
+       * ✅ UNIQUE ROUTE DÉTAIL
+       * - /actualites/3        (legacy)
+       * - /actualites/mon-slug (canonique)
+       */
       {
-        path: "actualites/:id",
+        path: "actualites/:param",
         element: <ActualiteDetailsPage />,
       },
 
@@ -53,14 +59,11 @@ export const router = createBrowserRouter([
         ),
       },
 
-    /* ================= MOT DU DIRECTEUR GÉNÉRAL ================= */
-
+      /* ================= MOT DU DG ================= */
       {
-          path: "mot-du-dg",
-          element: <MotDuDG />,
-    },
-
-
+        path: "mot-du-dg",
+        element: <MotDuDG />,
+      },
     ],
   },
 ]);

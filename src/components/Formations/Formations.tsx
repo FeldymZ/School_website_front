@@ -117,7 +117,7 @@ export default function Formations() {
               className="!pb-8"
             >
               {formations.map((f) => (
-                <SwiperSlide key={f.id} className="!overflow-visible">
+                <SwiperSlide key={f.slug} className="!overflow-visible">
                   <FormationCard formation={f} />
                 </SwiperSlide>
               ))}
@@ -159,7 +159,7 @@ export default function Formations() {
 
 function FormationCard({ formation }: { formation: Formation }) {
   return (
-    <Link to={`/formations/${formation.id}`} className="relative block group">
+    <Link to={`/formations/${formation.slug}`} className="relative block group">
       <div className="
         relative h-[420px] rounded-3xl overflow-hidden
         shadow-xl hover:shadow-2xl

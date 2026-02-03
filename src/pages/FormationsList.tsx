@@ -105,7 +105,7 @@ export default function FormationsList() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {formations.map((f) => (
-              <FormationItem key={f.id} formation={f} />
+              <FormationItem key={f.slug} formation={f} />
             ))}
           </div>
         )}
@@ -133,7 +133,7 @@ export default function FormationsList() {
 function FormationItem({ formation }: { formation: Formation }) {
   return (
     <Link
-      to={`/formations/${formation.id}`}
+      to={`/formations/${formation.slug}`}
       className="
         group relative bg-white rounded-2xl overflow-hidden
         shadow-md hover:shadow-xl

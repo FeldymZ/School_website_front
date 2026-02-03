@@ -9,7 +9,7 @@ type Props = {
 
 /* ================= TYPE LOCAL POUR LE MENU ================= */
 
-type MenuFormation = Pick<Formation, "id" | "title">;
+type MenuFormation = Pick<Formation, "slug" | "title">;
 
 /* ================= UTIL ================= */
 
@@ -31,7 +31,7 @@ export default function MegaMenuFormations({ anchorLeft }: Props) {
     fetchFormationsByLevel("LICENCE").then((data) => {
       setLicences(
         data.map((f) => ({
-          id: f.id,
+          slug: f.slug,
           title: f.title,
         }))
       );
@@ -40,7 +40,7 @@ export default function MegaMenuFormations({ anchorLeft }: Props) {
     fetchFormationsByLevel("MASTER").then((data) => {
       setMasters(
         data.map((f) => ({
-          id: f.id,
+          slug: f.slug,
           title: f.title,
         }))
       );
@@ -65,16 +65,8 @@ export default function MegaMenuFormations({ anchorLeft }: Props) {
       {/* ================= LICENCES ================= */}
       <section className="mb-6">
         <h4 className="
-          text-xs
-          font-bold
-          uppercase
-          text-center
-          mb-3
-          sticky
-          top-0
-          bg-white
-          py-2
-          z-10
+          text-xs font-bold uppercase text-center mb-3
+          sticky top-0 bg-white py-2 z-10
         ">
           Licences informatiques
         </h4>
@@ -82,17 +74,14 @@ export default function MegaMenuFormations({ anchorLeft }: Props) {
         <div className="grid grid-cols-1 gap-1 pr-1">
           {licences.map((f) => (
             <div
-              key={f.id}
+              key={f.slug}
               className="
-                rounded-xl
-                transition-colors
-                duration-200
-                hover:bg-[#EAF7FD]
-                hover:text-[#0A2A6A]
+                rounded-xl transition-colors duration-200
+                hover:bg-[#EAF7FD] hover:text-[#0A2A6A]
               "
             >
               <MenuOptionCard
-                formationId={f.id}
+                formationSlug={f.slug}
                 label={cleanFormationTitle(f.title)}
               />
             </div>
@@ -103,16 +92,8 @@ export default function MegaMenuFormations({ anchorLeft }: Props) {
       {/* ================= MASTERS ================= */}
       <section>
         <h4 className="
-          text-xs
-          font-bold
-          uppercase
-          text-center
-          mb-3
-          sticky
-          top-0
-          bg-white
-          py-2
-          z-10
+          text-xs font-bold uppercase text-center mb-3
+          sticky top-0 bg-white py-2 z-10
         ">
           Masters professionnels
         </h4>
@@ -120,17 +101,14 @@ export default function MegaMenuFormations({ anchorLeft }: Props) {
         <div className="grid grid-cols-1 gap-1 pr-1">
           {masters.map((f) => (
             <div
-              key={f.id}
+              key={f.slug}
               className="
-                rounded-xl
-                transition-colors
-                duration-200
-                hover:bg-[#EAF7FD]
-                hover:text-[#0A2A6A]
+                rounded-xl transition-colors duration-200
+                hover:bg-[#EAF7FD] hover:text-[#0A2A6A]
               "
             >
               <MenuOptionCard
-                formationId={f.id}
+                formationSlug={f.slug}
                 label={cleanFormationTitle(f.title)}
               />
             </div>

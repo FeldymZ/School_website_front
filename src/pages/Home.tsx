@@ -26,39 +26,42 @@ export default function Home() {
       <KeyFigures />
 
       {/* ================= ACTUALITÉS + AGENDA ================= */}
-      <section className="w-full bg-gray-50 py-20">
-  <div className="max-w-7xl mx-auto px-6">
+      <section className="relative w-full py-20 bg-white overflow-hidden">
+        {/* BACKGROUND ANIMÉ */}
 
-    {/* ================= TITRE COMMUN ================= */}
-    <div className="mb-12 text-center">
-      <div className="flex items-center justify-center gap-3 mb-4">
-        <span className="w-2.5 h-2.5 rounded-full bg-[#00a8e8]" />
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-          Actualités & Agenda
-        </h2>
-        <span className="w-2.5 h-2.5 rounded-full bg-[#00a8e8]" />
-      </div>
 
-      <div className="h-[2px] w-40 bg-[#00a8e8] mx-auto" />
-    </div>
+        {/* OVERLAY POUR LISIBILITÉ */}
+        <div className="absolute inset-0 bg-white" />
 
-    {/* ================= CONTENU ================= */}
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
+        {/* CONTENT */}
+        <div className="relative z-10 max-w-7xl mx-auto px-6">
+          {/* ================= TITRE COMMUN ================= */}
+          <div className="mb-12 text-center">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#00a8e8]" />
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                Actualités & Agenda
+              </h2>
+              <span className="w-2.5 h-2.5 rounded-full bg-[#00a8e8]" />
+            </div>
 
-      {/* ===== ACTUALITÉS (70%) ===== */}
-      <div className="lg:col-span-2">
-        <ActualitesList />
-      </div>
+            <div className="h-[2px] w-40 bg-[#00a8e8] mx-auto" />
+          </div>
 
-      {/* ===== AGENDA (30%) ===== */}
-      <div className="lg:col-span-1">
-        <Agenda />
-      </div>
+          {/* ================= CONTENU ================= */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
+            {/* ===== ACTUALITÉS (70%) ===== */}
+            <div className="lg:col-span-2">
+              <ActualitesList />
+            </div>
 
-    </div>
-  </div>
-</section>
-
+            {/* ===== AGENDA (30%) ===== */}
+            <div className="lg:col-span-1">
+              <Agenda />
+            </div>
+          </div>
+        </div>
+      </section>
 
       <PartnersSection />
       <Testimonials />

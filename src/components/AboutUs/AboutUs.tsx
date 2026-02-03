@@ -15,7 +15,7 @@ export default function AboutUs() {
     <section className="relative w-full py-10 overflow-hidden bg-white">
       {/* ================== BACKGROUND ================== */}
       <NetworkBackground />
-      <div className="absolute inset-0 bg-white/85" />
+      <div className="absolute inset-0 bg-man/20" />
 
       {/* ================== CONTENU ================== */}
       <div className="relative max-w-7xl mx-auto px-6">

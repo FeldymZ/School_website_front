@@ -1,20 +1,24 @@
 export type FormationLevel = "LICENCE" | "MASTER";
 
-/* ===== LISTE ===== */
+/* =========================
+   LISTE (PUBLIC)
+   ========================= */
 export interface Formation {
-  id: number;
+  slug: string;               // ✅ SLUG PUBLIC
   title: string;
   coverImageUrl: string;
   level: FormationLevel;
 }
 
-/* ===== DÉTAIL ===== */
+/* =========================
+   DÉTAILS (PUBLIC)
+   ========================= */
 export interface FormationDetails {
-  id: number;
-  coverImageUrl?: string;
+  slug: string;               // ✅ SLUG PUBLIC
 
   title: string;
   description: string;
+  coverImageUrl?: string;
   galleryImages: string[];
   pdfUrl?: string | null;
   level: FormationLevel;

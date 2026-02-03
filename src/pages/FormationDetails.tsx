@@ -2,16 +2,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { resolveMediaUrl } from "@/utils/media";
 import {
-  fetchFormationDetails,
-  sendFormationBrochure,
+  fetchFormationDetailsBySlug,
+  sendFormationBrochureBySlug,
 } from "@/services/formationService";
 import type { FormationDetails } from "@/types/formation";
 
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
 import { Download, X } from "lucide-react";
-
-import "swiper/css";
 
 /* ================= HTML DISPLAY FIX ================= */
 function formatHtmlForDisplay(html: string): string {
@@ -31,12 +27,7 @@ function formatHtmlForDisplay(html: string): string {
 
       return `
         <ul>
-          ${items
-            .map(
-              (item: string) =>
-                `<li>${item}</li>`
-            )
-            .join("")}
+          ${items.map((item) => `<li>${item}</li>`).join("")}
         </ul>
       `;
     }
@@ -46,7 +37,7 @@ function formatHtmlForDisplay(html: string): string {
 }
 
 export default function FormationDetailsPage() {
-  const { id } = useParams<{ id: string }>();
+  const { slug } = useParams<{ slug: string }>();
 
   const [formation, setFormation] =
     useState<FormationDetails | null>(null);
@@ -62,16 +53,16 @@ export default function FormationDetailsPage() {
 
   /* ================= LOAD DETAILS ================= */
   useEffect(() => {
-    if (!id) return;
+    if (!slug) return;
 
-    fetchFormationDetails(Number(id))
+    fetchFormationDetailsBySlug(slug)
       .then(setFormation)
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [slug]);
 
   /* ================= SEND BROCHURE ================= */
   const sendBrochure = async () => {
-    if (!name || !email || !id) {
+    if (!slug || !name || !email) {
       setError("Veuillez renseigner votre nom et votre email.");
       return;
     }
@@ -80,7 +71,7 @@ export default function FormationDetailsPage() {
       setSending(true);
       setError(null);
 
-      await sendFormationBrochure(Number(id), {
+      await sendFormationBrochureBySlug(slug, {
         name,
         email,
       });
@@ -125,9 +116,6 @@ export default function FormationDetailsPage() {
     formation.galleryImages?.[0] ??
     formation.coverImageUrl;
 
-  const sliderImages =
-    formation.galleryImages?.slice(1) ?? [];
-
   return (
     <div className="w-full bg-gray-50 min-h-screen">
       {/* ================= HERO ================= */}
@@ -170,27 +158,6 @@ export default function FormationDetailsPage() {
           </div>
 
           <div className="lg:col-span-2 space-y-6">
-            {sliderImages.length > 0 && (
-              <div className="rounded-3xl overflow-hidden shadow-xl bg-white">
-                <Swiper
-                  modules={[Autoplay]}
-                  autoplay={{ delay: 3500 }}
-                  loop
-                  className="h-[420px]"
-                >
-                  {sliderImages.map((img, i) => (
-                    <SwiperSlide key={i}>
-                      <img
-                        src={resolveMediaUrl(img)}
-                        className="w-full h-full object-cover"
-                        alt=""
-                      />
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-              </div>
-            )}
-
             <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
               <button
                 onClick={() => setOpen(true)}
@@ -254,9 +221,7 @@ export default function FormationDetailsPage() {
                   onClick={sendBrochure}
                   disabled={sending}
                   className="w-full py-3 rounded-lg text-white font-semibold"
-                  style={{
-                    backgroundColor: "#00A4E0",
-                  }}
+                  style={{ backgroundColor: "#00A4E0" }}
                 >
                   {sending
                     ? "Envoi en cours..."

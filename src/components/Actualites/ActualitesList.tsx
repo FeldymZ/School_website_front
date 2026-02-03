@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Newspaper, Calendar, Eye } from "lucide-react";
 
-import { fetchActualites } from "@/services/actualiteService";
+import { fetchActualites, fetchActualiteBySlug } from "@/services/actualiteService";
 import type { Actualite } from "@/types/actualite";
 import { resolveMediaUrl } from "@/utils/media";
 
@@ -10,13 +10,10 @@ type ActualiteWithContent = Actualite & {
   content?: string;
 };
 
-/* ================= TEXT EXCERPT FIX ================= */
+/* ================= TEXT EXCERPT ================= */
 function stripHtml(html?: string): string {
   if (!html) return "";
-  return html
-    .replace(/<[^>]*>/g, "") // supprime balises
-    .replace(/\s+/g, " ")
-    .trim();
+  return html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
 }
 
 function excerpt(html?: string, length = 210): string {
@@ -40,15 +37,14 @@ export default function ActualitesList() {
 
         const detailed = await Promise.all(
           top3.map(async (item) => {
-            const res = await fetch(
-              `https://api-test.esiitech-gabon.com/api/public/actualites/${item.id}`
-            );
-            const data = await res.json();
-            return { ...item, content: data.content };
+            const details = await fetchActualiteBySlug(item.slug);
+            return { ...item, content: details.content };
           })
         );
 
         if (mounted) setActualites(detailed);
+      } catch (e) {
+        console.error("Erreur chargement actualités :", e);
       } finally {
         if (mounted) setLoading(false);
       }
@@ -83,7 +79,7 @@ export default function ActualitesList() {
             {actualites.map((actu) => (
               <Link
                 key={actu.id}
-                to={`/actualites/${actu.id}`}
+                to={`/actualites/${actu.slug}`}
                 className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all hover:-translate-y-1"
               >
                 <div className="relative h-64 overflow-hidden">
@@ -110,7 +106,6 @@ export default function ActualitesList() {
                     {actu.title}
                   </h3>
 
-                  {/* TEXTE NETTOYÉ (PAS DE HTML) */}
                   <p className="text-sm text-gray-600">
                     {excerpt(actu.content)}
                   </p>
