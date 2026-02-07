@@ -64,13 +64,9 @@ export default function AboutUs() {
                 <strong>14 Février 2024</strong>.
               </p>
 
-
-
               <p className="text-gray-700 leading-relaxed">
-
-                Nous formons dans les métiers des Nouvelles
-                Technologies de l'Information et de la Communication (NTIC).
-
+                Nous formons dans les métiers des Nouvelles Technologies de
+                l'Information et de la Communication (NTIC).
                 L'ESIITECH a ouvert ses portes à la rentrée universitaire
                 2021-2022 et compte à ce jour{" "}
                 <strong>3 promotions</strong> et{" "}
@@ -78,28 +74,53 @@ export default function AboutUs() {
                 <strong>70 % sont des étudiants boursiers de l'État</strong>.
               </p>
 
-              <p className="text-gray-700 leading-relaxed">
-
-              </p>
-
-              <div className="grid gap-4 pt-6 border-t border-gray-200">
-                <div className="flex items-center gap-3">
-                  <Target className="text-[#00A4E0] w-5 h-5" />
-                  <span className="text-sm font-semibold text-gray-700">
-                    Formation orientée marché
-                  </span>
+              {/* ================== VALEURS + PARTENAIRES ================== */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t border-gray-200">
+                {/* TEXTES */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <Target className="text-[#00A4E0] w-5 h-5" />
+                    <span className="text-sm font-semibold text-gray-700">
+                      Formation orientée marché
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Lightbulb className="text-[#00A4E0] w-5 h-5" />
+                    <span className="text-sm font-semibold text-gray-700">
+                      Innovation technologique
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Users className="text-[#00A4E0] w-5 h-5" />
+                    <span className="text-sm font-semibold text-gray-700">
+                      Accompagnement personnalisé
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <Lightbulb className="text-[#00A4E0] w-5 h-5" />
-                  <span className="text-sm font-semibold text-gray-700">
-                    Innovation technologique
-                  </span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Users className="text-[#00A4E0] w-5 h-5" />
-                  <span className="text-sm font-semibold text-gray-700">
-                    Accompagnement personnalisé
-                  </span>
+
+                {/* PARTENAIRES */}
+                <div className="flex flex-col items-center">
+                  <h4 className="text-sm font-bold uppercase tracking-wider text-gray-600 mb-4">
+                    Partenaires officiels
+                  </h4>
+
+                  <div className="flex items-center justify-center gap-8 flex-wrap">
+                    <img
+                      src="/images/ministere.png"
+                      alt="ANBG"
+                      className="h-16 md:h-20 object-contain transition-transform hover:scale-105"
+                    />
+                    <img
+                      src="/images/anbg.png"
+                      alt="Ministère"
+                      className="h-16 md:h-20 object-contain transition-transform hover:scale-105"
+                    />
+                    <img
+                      src="/images/sosup.png"
+                      alt="SOSUP"
+                      className="h-16 md:h-20 object-contain transition-transform hover:scale-105"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -120,7 +141,7 @@ export default function AboutUs() {
               </div>
             </div>
 
-            {/* CONTAINER — s’étire pour matcher la hauteur */}
+            {/* CONTAINER */}
             <div className="bg-white rounded-3xl shadow-xl border border-gray-100 flex-1">
               <div className="p-8 flex flex-col h-full">
                 <div className="flex justify-center mb-6">
@@ -153,8 +174,6 @@ export default function AboutUs() {
                     Supérieure d’Ingénierie et d’Innovation Technologique.
                   </p>
 
-
-                  {/* CTA */}
                   <div className="mt-4 text-center">
                     <Link
                       to="/mot-du-dg"

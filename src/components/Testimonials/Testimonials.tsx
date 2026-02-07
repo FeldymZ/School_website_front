@@ -60,7 +60,7 @@ export default function Testimonials() {
             <div className="text-center mb-14">
               <div className="inline-flex items-center gap-3 mb-4">
                 <Quote size={24} className="opacity-60" />
-                <h2 className="text-3xl md:text-4xl font-bold">Témoignages</h2>
+                <h2 className="text-3xl md:text-4xl font-bold">Commentaires</h2>
                 <Quote size={24} className="opacity-60 rotate-180" />
               </div>
               <div className="h-[2px] w-32 bg-white/40 mx-auto" />

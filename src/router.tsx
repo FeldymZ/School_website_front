@@ -3,11 +3,15 @@ import App from "./App";
 
 /* ================= PAGES ================= */
 import Home from "@/pages/Home";
+import FormationsList from "@/pages/FormationsList";
 import FormationDetailsPage from "@/pages/FormationDetails";
 import ActualitesPage from "@/pages/Actualites";
 import ActualiteDetailsPage from "@/pages/ActualiteDetails";
-import FormationsList from "@/pages/FormationsList";
 import MotDuDG from "@/pages/MotDuDG";
+
+/* ================= ACTIVITÉS ================= */
+import ActivitesPublicList from "@/pages/public/ActivitesPublicList";
+import ActivitePublicDetail from "@/pages/public/ActivitePublicDetail";
 
 export const router = createBrowserRouter([
   {
@@ -15,14 +19,11 @@ export const router = createBrowserRouter([
     element: <App />,
     children: [
       /* ================= HOME ================= */
-      {
-        index: true,
-        element: <Home />,
-      },
+      { index: true, element: <Home /> },
 
       /* ================= FORMATIONS ================= */
       {
-        path: "formationsList",
+        path: "formations",
         element: <FormationsList />,
       },
       {
@@ -35,15 +36,28 @@ export const router = createBrowserRouter([
         path: "actualites",
         element: <ActualitesPage />,
       },
-
-      /**
-       * ✅ UNIQUE ROUTE DÉTAIL
-       * - /actualites/3        (legacy)
-       * - /actualites/mon-slug (canonique)
-       */
       {
         path: "actualites/:param",
         element: <ActualiteDetailsPage />,
+
+
+      },
+
+
+      {
+  path: "formationsList",
+  element: <FormationsList />,
+},
+
+
+      /* ================= ACTIVITÉS ================= */
+      {
+        path: "activites",
+        element: <ActivitesPublicList />,
+      },
+      {
+        path: "activites/:slug",
+        element: <ActivitePublicDetail />,
       },
 
       /* ================= CONTACT ================= */

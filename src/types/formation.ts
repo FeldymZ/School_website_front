@@ -23,3 +23,10 @@ export interface FormationDetails {
   pdfUrl?: string | null;
   level: FormationLevel;
 }
+
+// types/publicFormation.ts
+export interface PublicFormationDetails {
+  galleryImages: string[];
+}
+
+

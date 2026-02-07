@@ -6,7 +6,12 @@ import { resolveMediaUrl } from "@/utils/media";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, EffectFade } from "swiper/modules";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -16,8 +21,9 @@ export default function Banner() {
   const [banners, setBanners] = useState<BannerType[]>([]);
   const [loading, setLoading] = useState(true);
   const [videoErrorIndex, setVideoErrorIndex] = useState<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  /* ================= PARALLAX SCROLL (SECTION-BASED) ================= */
+  /* ================= PARALLAX SCROLL ================= */
 
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -26,13 +32,8 @@ export default function Banner() {
     offset: ["start start", "end start"],
   });
 
-  // Media bouge lentement
   const mediaY = useTransform(scrollYProgress, [0, 1], [0, 160]);
-
-  // Contenu bouge moins (profondeur)
   const contentY = useTransform(scrollYProgress, [0, 1], [0, -80]);
-
-  // Léger fade progressif
   const overlayOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   /* ================= DATA ================= */
@@ -61,8 +62,10 @@ export default function Banner() {
         modules={[Autoplay, Pagination, EffectFade]}
         effect="fade"
         loop
+        speed={1500}
         autoplay={{ delay: 7000, disableOnInteraction: false }}
         pagination={{ clickable: true }}
+        onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
         className="h-full"
       >
         {banners.map((banner, index) => {
@@ -72,7 +75,7 @@ export default function Banner() {
 
           return (
             <SwiperSlide key={banner.id} className="relative">
-              {/* ================= MEDIA (PARALLAX SCROLL) ================= */}
+              {/* ================= MEDIA ================= */}
               <motion.div
                 style={{ y: mediaY }}
                 className="absolute inset-0 scale-110 will-change-transform"
@@ -104,87 +107,111 @@ export default function Banner() {
                 style={{ opacity: overlayOpacity }}
               />
 
-              {/* ================= CONTENT (PARALLAX SCROLL) ================= */}
+              {/* ================= CONTENT ================= */}
               <div className="relative z-10 h-full flex items-center justify-center">
-                <motion.div
-                  style={{ y: contentY }}
-                  className="text-center text-white px-6 md:px-12"
-                >
-                  <h1 className="
-                    text-xl
-                    sm:text-2xl
-                    md:text-3xl
-                    lg:text-4xl
-                    font-bold
-                    drop-shadow-lg
-                  ">
-                    {banner.title}
-                  </h1>
+                <AnimatePresence mode="wait">
+                  {activeIndex === index && (
+                    <motion.div
+                      key={`content-${banner.id}`}
+                      style={{ y: contentY }}
+                      initial={{ opacity: 0, y: 40 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -40 }}
+                      transition={{ duration: 0.8, ease: "easeOut" }}
+                      className="text-center text-white px-6 md:px-12"
+                    >
+                      <h1
+                        className="
+                          text-xl
+                          sm:text-2xl
+                          md:text-3xl
+                          lg:text-4xl
+                          font-bold
+                          drop-shadow-lg
+                        "
+                      >
+                        {banner.title}
+                      </h1>
 
-                  {banner.subtitle && (
-                    <p className="
-                      mt-4
-                      text-3xl
-                      sm:text-4xl
-                      md:text-5xl
-                      lg:text-6xl
-                      font-extrabold
-                      drop-shadow-2xl
-                    ">
-                      {banner.subtitle}
-                    </p>
-                  )}
+                      {banner.subtitle && (
+                        <p
+                          className="
+                            mt-4
+                            text-3xl
+                            sm:text-4xl
+                            md:text-5xl
+                            lg:text-6xl
+                            font-extrabold
+                            drop-shadow-2xl
+                          "
+                        >
+                          {banner.subtitle}
+                        </p>
+                      )}
 
-                  {banner.subtitleAlt && (
-                    <p className="
-                      mt-4
-                      text-sm
-                      sm:text-base
-                      md:text-lg
-                      text-gray-200
-                      drop-shadow-md
-                    ">
-                      {banner.subtitleAlt}
-                    </p>
+                      {banner.subtitleAlt && (
+                        <p
+                          className="
+                            mt-4
+                            text-sm
+                            sm:text-base
+                            md:text-lg
+                            text-gray-200
+                            drop-shadow-md
+                          "
+                        >
+                          {banner.subtitleAlt}
+                        </p>
+                      )}
+                    </motion.div>
                   )}
-                </motion.div>
+                </AnimatePresence>
               </div>
 
               {/* ================= BUTTON ================= */}
               {banner.buttonLabel && banner.buttonUrl && (
-                <motion.div
-                  style={{ y: contentY }}
-                  className="
-                    absolute
-                    bottom-6
-                    right-6
-                    md:bottom-10
-                    md:right-10
-                    z-20
-                  "
-                >
-                  <a
-                    href={banner.buttonUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="
-                      inline-block
-                      px-8
-                      py-4
-                      rounded-xl
-                      bg-primary
-                      text-white
-                      font-bold
-                      shadow-2xl
-                      hover:bg-primary/90
-                      hover:scale-105
-                      transition-all
-                      duration-300
-                    "
-                  >
-                    {banner.buttonLabel}
-                  </a>
-                </motion.div>
+                <AnimatePresence mode="wait">
+                  {activeIndex === index && (
+                    <motion.div
+                      key={`button-${banner.id}`}
+                      style={{ y: contentY }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 20 }}
+                      transition={{ duration: 0.5 }}
+                      className="
+                        absolute
+                        bottom-6
+                        right-6
+                        md:bottom-10
+                        md:right-10
+                        z-20
+                      "
+                    >
+                      <a
+                        href={banner.buttonUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="
+                          inline-block
+                          px-8
+                          py-4
+                          rounded-xl
+                          bg-primary
+                          text-white
+                          font-bold
+                          shadow-2xl
+                          hover:bg-primary/90
+                          hover:scale-105
+                          transition-all
+                          duration-300
+                        "
+                      >
+                        {banner.buttonLabel}
+                      </a>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               )}
             </SwiperSlide>
           );

@@ -96,7 +96,7 @@
               <div className="flex items-center justify-center gap-3 mb-4">
                 <TrendingUp size={24} className="text-secondary animate-pulse" />
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                  Chiffres clés 2026
+                  Chiffres clés
                 </h2>
                 <TrendingUp size={24} className="text-secondary animate-pulse" />
               </div>

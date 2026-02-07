@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
 import { Banner } from "@/components/Banner";
 import Formations from "@/components/Formations/Formations";
 import KeyFigures from "@/components/KeyFigures/KeyFigures";
@@ -11,12 +14,42 @@ import AboutUs from "@/components/AboutUs/AboutUs";
 import PartnersSection from "@/components/Partenaires/Partenaires";
 
 export default function Home() {
+  const location = useLocation();
+
+  /* ================= SCROLL CONTROLE ================= */
+  useEffect(() => {
+  const params = new URLSearchParams(location.search);
+  const targetId = params.get("scroll");
+
+  if (!targetId) return;
+
+  let attempts = 0;
+  const MAX_ATTEMPTS = 20;
+
+  const tryScroll = () => {
+    const element = document.getElementById(targetId);
+
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+
+    attempts++;
+    if (attempts < MAX_ATTEMPTS) {
+      setTimeout(tryScroll, 100);
+    }
+  };
+
+  tryScroll();
+}, [location.search]);
+
+
   return (
     <>
       {/* HERO */}
       <Banner />
 
-      {/* Qui sommes nous */}
+      {/* QUI SOMMES-NOUS */}
       <AboutUs />
 
       {/* FORMATIONS */}
@@ -25,17 +58,14 @@ export default function Home() {
       {/* CHIFFRES CLÉS */}
       <KeyFigures />
 
-      {/* ================= ACTUALITÉS + AGENDA ================= */}
-      <section className="relative w-full py-20 bg-white overflow-hidden">
-        {/* BACKGROUND ANIMÉ */}
-
-
-        {/* OVERLAY POUR LISIBILITÉ */}
+      {/* ================= ACTUALITÉS & AGENDA ================= */}
+      <section
+        id="actualites-agenda"
+        className="relative w-full py-20 bg-white overflow-hidden"
+      >
         <div className="absolute inset-0 bg-white" />
 
-        {/* CONTENT */}
         <div className="relative z-10 max-w-7xl mx-auto px-6">
-          {/* ================= TITRE COMMUN ================= */}
           <div className="mb-12 text-center">
             <div className="flex items-center justify-center gap-3 mb-4">
               <span className="w-2.5 h-2.5 rounded-full bg-[#00a8e8]" />
@@ -48,14 +78,11 @@ export default function Home() {
             <div className="h-[2px] w-40 bg-[#00a8e8] mx-auto" />
           </div>
 
-          {/* ================= CONTENU ================= */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
-            {/* ===== ACTUALITÉS (70%) ===== */}
             <div className="lg:col-span-2">
               <ActualitesList />
             </div>
 
-            {/* ===== AGENDA (30%) ===== */}
             <div className="lg:col-span-1">
               <Agenda />
             </div>

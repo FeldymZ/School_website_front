@@ -1,15 +1,16 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   ChevronDown,
   ArrowUpRight,
   Menu,
   X,
+  Mail,
+  Sparkles,
 } from "lucide-react";
 
 import MegaMenu from "../MegaMenu/MegaMenu";
 import MegaMenuFormations from "../MegaMenu/MegaMenuFormations";
-import MegaMenuPartenariats from "../MegaMenu/MegaMenuPartenariats";
 
 import {
   esiitechMenu,
@@ -19,94 +20,61 @@ import {
 import type { MegaMenuData } from "@/types/menu";
 
 /* ================= TYPES ================= */
-
-type MenuKey =
-  | "esiitech"
-  | "formations"
-  | "vie"
-  | "partenariats";
+type MenuKey = "esiitech" | "formations" | "vie";
 
 /* ================= CONSTANTES ================= */
-
 const MENU_WIDTHS: Record<MenuKey, number> = {
   esiitech: 480,
   formations: 560,
   vie: 480,
-  partenariats: 420,
 };
 
 /* ================= COMPONENT ================= */
-
 export default function MainNavbar() {
   const [activeMenu, setActiveMenu] = useState<MenuKey | null>(null);
   const [anchorLeft, setAnchorLeft] = useState(0);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const location = useLocation();
+  const navigate = useNavigate();
 
   const staticMenus: Record<
-    Exclude<MenuKey, "formations" | "partenariats">,
+    Exclude<MenuKey, "formations">,
     MegaMenuData
   > = {
     esiitech: esiitechMenu,
     vie: vieEtudianteMenu,
   };
 
-  /* ================================================= */
-  /* ================= ACCUEIL ====================== */
-  /* ================================================= */
+  /* ================= NAVIGATION ================= */
 
   const goToHomeTop = () => {
     setIsMobileOpen(false);
 
     if (location.pathname !== "/") {
-      window.location.href = "/";
+      navigate("/");
       return;
     }
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  /* ================================================= */
-  /* ================= CONTACT ====================== */
-  /* ================================================= */
-
-  const scrollToContact = () => {
+  const goToActualitesAgenda = () => {
     setIsMobileOpen(false);
-
-    if (location.pathname !== "/") {
-      window.location.href = "/#contact";
-      return;
-    }
-
-    document.getElementById("contact")?.scrollIntoView({
-      behavior: "smooth",
-    });
+    navigate("/?scroll=actualites-agenda");
   };
 
-  /* ================================================= */
-  /* =============== PARTENAIRES ===================== */
-  /* ================================================= */
-
-  const scrollToPartenariats = () => {
+  const goToContact = () => {
     setIsMobileOpen(false);
-
-    if (location.pathname !== "/") {
-      window.location.href = "/#partenaires";
-      return;
-    }
-
-    document.getElementById("partenaires")?.scrollIntoView({
-      behavior: "smooth",
-    });
+    navigate("/?scroll=contact");
   };
 
-  /* ================================================= */
-  /* ============= POSITION MEGA MENU =============== */
-  /* ================================================= */
+  const goToPartenaires = () => {
+    setIsMobileOpen(false);
+    navigate("/?scroll=partenaires");
+  };
+
+  /* ================= MEGA MENU POSITION ================= */
 
   const openMenu = (key: MenuKey, el: HTMLElement) => {
     const rect = el.getBoundingClientRect();
@@ -131,93 +99,151 @@ export default function MainNavbar() {
 
   return (
     <nav
-      className="
-        sticky top-0 z-50 w-full
-        bg-white border-b border-gray-100
-        shadow-sm
-      "
+      className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-xl border-b-2 border-gray-100 shadow-lg"
       onMouseLeave={() => setActiveMenu(null)}
     >
-      {/* ================= BAR ================= */}
-      <div className="flex items-center justify-between px-6 py-4">
+      <div className="flex items-center justify-between px-8 py-5">
         {/* LOGO */}
         <button onClick={goToHomeTop}>
           <img
             src="/logo.png"
             alt="ESIITECH"
-            className="h-12 transition-transform hover:scale-105"
+            className="h-14 lg:h-16"
           />
         </button>
 
         {/* ================= DESKTOP MENU ================= */}
-        <ul className="hidden lg:flex items-center gap-10 font-semibold text-gray-800">
+        <ul className="hidden lg:flex items-center gap-6 font-bold text-gray-800">
+
           {[
             ["esiitech", "ESIITECH"],
             ["formations", "Formations"],
             ["vie", "Vie étudiante"],
-            ["partenariats", "Partenariats"],
           ].map(([key, label]) => (
             <li
               key={key}
               onMouseEnter={(e) =>
                 openMenu(key as MenuKey, e.currentTarget)
               }
-              className="group relative flex items-center gap-1 cursor-pointer"
+              className="group relative flex items-center gap-2 cursor-pointer py-2"
             >
-              <span className="group-hover:text-secondary transition">
+              <span className="relative group-hover:text-[#00A4E0] transition-colors duration-300 text-base">
                 {label}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#00A4E0] to-[#0077A8] group-hover:w-full transition-all duration-300" />
               </span>
-              <ChevronDown size={14} />
+              <ChevronDown
+                size={16}
+                className="group-hover:text-[#00A4E0] group-hover:translate-y-0.5 transition-all duration-300"
+              />
             </li>
           ))}
 
-          <li>
+          {/* ✅ PARTENARIATS (AJOUT MINIMAL) */}
+          <li className="relative group">
             <button
-              onClick={scrollToContact}
-              className="hover:text-secondary transition"
+              onClick={goToPartenaires}
+              className="relative py-2 text-base hover:text-[#00A4E0] transition-colors duration-300"
+            >
+              Partenariats
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#00A4E0] to-[#0077A8] group-hover:w-full transition-all duration-300" />
+            </button>
+          </li>
+
+          <li className="relative group">
+            <button
+              onClick={goToActualitesAgenda}
+              className="relative py-2 text-base hover:text-[#00A4E0] transition-colors duration-300"
+            >
+              Actualités & Agenda
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#00A4E0] to-[#0077A8] group-hover:w-full transition-all duration-300" />
+            </button>
+          </li>
+
+          <li className="relative group">
+            <button
+              onClick={goToContact}
+              className="relative py-2 text-base hover:text-[#00A4E0] transition-colors duration-300"
             >
               Contact
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#00A4E0] to-[#0077A8] group-hover:w-full transition-all duration-300" />
             </button>
           </li>
         </ul>
 
-        {/* ================= FOAD ================= */}
-        <a
-          href="https://foad.esiitech-gabon.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="
-            hidden lg:flex items-center gap-2
-            px-5 py-2.5 rounded-xl
-            font-bold
-            text-secondary
-            border-2 border-secondary
-            hover:bg-secondary hover:text-white
-            transition-all duration-300
-          "
-        >
-          <ArrowUpRight size={16} />
-          Accéder au FOAD
-        </a>
+        {/* ================= ACTIONS ================= */}
+        <div className="hidden lg:flex items-center gap-4">
+          <a
+            href="https://sauce.o2switch.net:2096/webmaillogout.cgi"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="
+              group relative overflow-hidden
+              flex items-center gap-3
+              px-5 py-3 rounded-xl
+              text-sm font-bold
+              text-gray-700
+              bg-gradient-to-br from-gray-50 to-gray-100
+              border-2 border-gray-200
+              hover:border-gray-300 hover:shadow-lg
+              hover:scale-105 active:scale-95
+              transition-all duration-300
+            "
+          >
+            <div className="w-8 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center">
+              <Mail size={16} className="text-gray-600" />
+            </div>
+            <span>Webmail</span>
+          </a>
+
+          <a
+            href="https://foad.esiitech-gabon.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="
+              group relative overflow-hidden
+              flex items-center gap-3
+              px-6 py-3 rounded-xl
+              text-sm font-bold
+              text-white
+              bg-gradient-to-r from-[#00A4E0] to-[#0077A8]
+              hover:from-[#0088CC] hover:to-[#006699]
+              shadow-xl shadow-[#00A4E0]/40
+              hover:shadow-2xl hover:shadow-[#00A4E0]/60
+              hover:scale-105 active:scale-95
+              transition-all duration-300
+            "
+          >
+            <div className="relative w-8 h-8 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center">
+              <ArrowUpRight size={16} className="text-white" />
+            </div>
+            <span className="relative flex items-center gap-2">
+              Accéder au FOAD
+              <Sparkles size={14} className="animate-pulse" />
+            </span>
+          </a>
+        </div>
 
         {/* ================= MOBILE BUTTON ================= */}
         <button
-          className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition"
+          className="lg:hidden p-3 rounded-xl hover:bg-gradient-to-br hover:from-gray-50 hover:to-gray-100 border-2 border-transparent hover:border-gray-200 transition-all duration-300 hover:scale-110 active:scale-95"
           onClick={() => setIsMobileOpen((v) => !v)}
         >
-          {isMobileOpen ? <X size={28} /> : <Menu size={28} />}
+          {isMobileOpen ? (
+            <X size={28} className="text-gray-700" />
+          ) : (
+            <Menu size={28} className="text-gray-700" />
+          )}
         </button>
       </div>
 
       {/* ================= MOBILE MENU ================= */}
       {isMobileOpen && (
-        <div className="lg:hidden absolute top-full left-0 w-full bg-white shadow-xl border-t">
-          <ul className="flex flex-col divide-y font-semibold">
-            {/* ✅ ACCUEIL → HAUT DU HOME */}
+        <div className="lg:hidden absolute top-full w-full bg-white/95 backdrop-blur-xl border-t-2 shadow-2xl">
+          <ul className="flex flex-col divide-y-2 divide-gray-100 font-bold">
             <li>
               <button
                 onClick={goToHomeTop}
-                className="w-full text-left px-6 py-4 hover:bg-gray-50 hover:text-secondary transition"
+                className="w-full px-8 py-5 text-left text-gray-800 hover:text-[#00A4E0] transition-all"
               >
                 Accueil
               </button>
@@ -227,26 +253,16 @@ export default function MainNavbar() {
               <Link
                 to="/formationsList"
                 onClick={() => setIsMobileOpen(false)}
-                className="block px-6 py-4 hover:bg-gray-50 hover:text-secondary transition"
+                className="block px-8 py-5 text-gray-800 hover:text-[#00A4E0] transition-all"
               >
                 Formations
               </Link>
             </li>
 
             <li>
-              <Link
-                to="/vie-etudiante"
-                onClick={() => setIsMobileOpen(false)}
-                className="block px-6 py-4 hover:bg-gray-50 hover:text-secondary transition"
-              >
-                Vie étudiante
-              </Link>
-            </li>
-
-            <li>
               <button
-                onClick={scrollToPartenariats}
-                className="w-full text-left px-6 py-4 hover:bg-gray-50 hover:text-secondary transition"
+                onClick={goToPartenaires}
+                className="w-full px-8 py-5 text-left text-gray-800 hover:text-[#00A4E0] transition-all"
               >
                 Partenariats
               </button>
@@ -254,8 +270,17 @@ export default function MainNavbar() {
 
             <li>
               <button
-                onClick={scrollToContact}
-                className="w-full text-left px-6 py-4 hover:bg-gray-50 hover:text-secondary transition"
+                onClick={goToActualitesAgenda}
+                className="w-full px-8 py-5 text-left text-gray-800 hover:text-[#00A4E0] transition-all"
+              >
+                Actualités & Agenda
+              </button>
+            </li>
+
+            <li>
+              <button
+                onClick={goToContact}
+                className="w-full px-8 py-5 text-left text-gray-800 hover:text-[#00A4E0] transition-all"
               >
                 Contact
               </button>
@@ -264,24 +289,17 @@ export default function MainNavbar() {
         </div>
       )}
 
-      {/* ================= MEGA MENUS DESKTOP ================= */}
+      {/* ================= MEGA MENUS ================= */}
       {activeMenu === "formations" && (
         <MegaMenuFormations anchorLeft={anchorLeft} />
       )}
 
-      {activeMenu === "partenariats" && (
-        <MegaMenuPartenariats anchorLeft={anchorLeft} />
+      {activeMenu && activeMenu !== "formations" && (
+        <MegaMenu
+          columns={staticMenus[activeMenu]}
+          anchorLeft={anchorLeft}
+        />
       )}
-
-
-      {activeMenu &&
-        activeMenu !== "formations" &&
-        activeMenu !== "partenariats" && (
-          <MegaMenu
-            columns={staticMenus[activeMenu]}
-            anchorLeft={anchorLeft}
-          />
-        )}
     </nav>
   );
 }

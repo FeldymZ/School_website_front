@@ -54,7 +54,6 @@ export default function ActualiteDetailsPage() {
         .catch(() => {
           navigate("/actualites", { replace: true });
         });
-
       return;
     }
 
@@ -80,7 +79,6 @@ export default function ActualiteDetailsPage() {
   return (
     <div className="w-full min-h-screen bg-gray-50 py-10">
       <div className="mx-auto max-w-4xl px-4">
-
         <Link
           to="/actualites"
           className="mb-4 inline-flex items-center gap-2 text-sm text-secondary"
@@ -90,15 +88,17 @@ export default function ActualiteDetailsPage() {
         </Link>
 
         <div className="rounded-2xl bg-white shadow-md overflow-hidden">
+          {/* ================= IMAGE COVER ================= */}
+          <div className="relative w-full h-[240px] md:h-[360px] lg:h-[480px]">
+            <img
+              src={resolveMediaUrl(actualite.coverImageUrl)}
+              alt={actualite.title}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          </div>
 
-          <img
-            src={resolveMediaUrl(actualite.coverImageUrl)}
-            alt={actualite.title}
-            className="h-[320px] w-full object-cover"
-          />
-
+          {/* ================= CONTENU ================= */}
           <div className="p-6 space-y-6">
-
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <Calendar size={16} />
               {publishedDate.toLocaleDateString("fr-FR")}
@@ -118,20 +118,27 @@ export default function ActualiteDetailsPage() {
             />
           </div>
 
+          {/* ================= GALLERY (NO CROP) ================= */}
           {actualite.galleryImages?.length > 0 && (
             <div className="px-6 pb-8">
               <Swiper
                 modules={[Autoplay]}
-                autoplay={{ delay: 3500 }}
+                autoplay={{
+                  delay: 3000,
+                  disableOnInteraction: false,
+                }}
                 loop
                 spaceBetween={16}
               >
                 {actualite.galleryImages.map((img, i) => (
                   <SwiperSlide key={i}>
-                    <img
-                      src={resolveMediaUrl(img)}
-                      className="h-[260px] w-full rounded-xl object-cover"
-                    />
+                    <div className="h-[260px] w-full rounded-xl bg-gray-100 flex items-center justify-center">
+                      <img
+                        src={resolveMediaUrl(img)}
+                        alt=""
+                        className="max-h-full max-w-full object-contain"
+                      />
+                    </div>
                   </SwiperSlide>
                 ))}
               </Swiper>

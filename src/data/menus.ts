@@ -1,4 +1,4 @@
-import type { MegaMenuData } from "../types/menu";
+import type { MegaMenuData } from "@/types/menu";
 
 /* ================= ESIITECH ================= */
 export const esiitechMenu: MegaMenuData = [
@@ -16,10 +16,14 @@ export const vieEtudianteMenu: MegaMenuData = [
   {
     title: "VIE ÉTUDIANTE",
     items: [
-      { label: "Activités", path: "/vie-etudiante/Activites extrascolaire" },
-
-      { label: "La mutuelle", path: "/vie-etudiante/Mutuelles d'ESIITECH" },
-
+      {
+        label: "Activités",
+        path: "/activites", // ✅ LISTING PUBLIC
+      },
+      {
+        label: "La mutuelle",
+        path: "/vie-etudiante/mutuelle",
+      },
     ],
   },
 ];

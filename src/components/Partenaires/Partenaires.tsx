@@ -82,7 +82,7 @@ export default function PartnersSection() {
             <span className="w-3 h-3 rounded-full bg-[#6fd3ff] animate-pulse" />
 
             <h2 className="text-2xl md:text-3xl font-semibold text-gray-800">
-              Nos <span className="font-bold">Partenaires</span>
+              Notre réseau <span className="font-bold"> d'Entreprises Partenaires</span>
             </h2>
 
             <span className="w-3 h-3 rounded-full bg-[#6fd3ff] animate-pulse" />
