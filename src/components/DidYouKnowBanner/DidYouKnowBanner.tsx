@@ -57,8 +57,8 @@ export default function DidYouKnowBanner() {
 
         {/* Contenu */}
         <div className="flex items-center gap-6 px-10 py-3 text-white">
-          {/* Bloc titre */}
-          <div className="flex items-center gap-3 shrink-0">
+          {/* Bloc titre - CACHÉ SUR MOBILE */}
+          <div className="hidden md:flex items-center gap-3 shrink-0">
             <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
               <Info size={22} />
             </div>
@@ -68,7 +68,7 @@ export default function DidYouKnowBanner() {
             </span>
           </div>
 
-          {/* Séparateur */}
+          {/* Séparateur - CACHÉ SUR MOBILE */}
           <div className="hidden md:block w-px h-10 bg-white/30" />
 
           {/* Texte défilant */}

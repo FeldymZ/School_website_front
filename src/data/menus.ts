@@ -5,7 +5,7 @@ export const esiitechMenu: MegaMenuData = [
   {
     title: "L'ÉCOLE",
     items: [
-      { label: "Histoire", path: "/esiitech/histoire" },
+      { label: "ESIITech", path: "/a-propos" }, // ✅ CHANGÉ vers la page À propos
       { label: "Mot du DG", path: "/mot-du-dg" },
     ],
   },

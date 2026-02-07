@@ -12,6 +12,7 @@ import MotDuDG from "@/pages/MotDuDG";
 /* ================= ACTIVITÉS ================= */
 import ActivitesPublicList from "@/pages/public/ActivitesPublicList";
 import ActivitePublicDetail from "@/pages/public/ActivitePublicDetail";
+import AProposPage from "./pages/apropos/AProposPage";
 
 export const router = createBrowserRouter([
   {
@@ -20,6 +21,12 @@ export const router = createBrowserRouter([
     children: [
       /* ================= HOME ================= */
       { index: true, element: <Home /> },
+
+      /* ================= À PROPOS ================= */
+      {
+        path: "a-propos",
+        element: <AProposPage />, // ✅ NOUVELLE ROUTE
+      },
 
       /* ================= FORMATIONS ================= */
       {
@@ -30,6 +37,10 @@ export const router = createBrowserRouter([
         path: "formations/:slug",
         element: <FormationDetailsPage />,
       },
+      {
+        path: "formationsList",
+        element: <FormationsList />,
+      },
 
       /* ================= ACTUALITÉS ================= */
       {
@@ -39,16 +50,7 @@ export const router = createBrowserRouter([
       {
         path: "actualites/:param",
         element: <ActualiteDetailsPage />,
-
-
       },
-
-
-      {
-  path: "formationsList",
-  element: <FormationsList />,
-},
-
 
       /* ================= ACTIVITÉS ================= */
       {
