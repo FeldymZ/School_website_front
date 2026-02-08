@@ -185,154 +185,164 @@ export default function FormationDetailsPage() {
         </div>
       </div>
 
-      {/* ================= CONTENT ================= */}
-      <div className="max-w-7xl mx-auto px-6 py-16 space-y-12">
-        {/* ================= DESCRIPTION ================= */}
-        <div className="bg-white rounded-3xl shadow-xl border border-gray-200 p-10 md:p-12">
-          <div className="flex items-center gap-3 mb-8 pb-6 border-b border-gray-200">
-            <div className="w-12 h-12 bg-gradient-to-br from-[#00A4E0] to-[#0077A8] rounded-xl flex items-center justify-center">
-              <FileText className="w-6 h-6 text-white" />
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900">
-              Description de la formation
-            </h2>
-          </div>
+      {/* ================= CONTENT - GRID LAYOUT ================= */}
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-          <div
-            className="
-              prose prose-lg max-w-none text-gray-700
-              prose-ul:pl-6
-              prose-li:marker:text-[#00A4E0]
-              prose-p:my-3
-            "
-            dangerouslySetInnerHTML={{
-              __html: formatHtmlForDisplay(formation.description ?? ""),
-            }}
-          />
-        </div>
-
-        {/* ================= GALERIE AVEC SLIDER AUTO ================= */}
-        {hasGallery && (
-          <div className="bg-white rounded-3xl shadow-xl border border-gray-200 p-8 md:p-10">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-12 h-12 bg-gradient-to-br from-[#00A4E0] to-[#0077A8] rounded-xl flex items-center justify-center">
-                <Images className="w-6 h-6 text-white" />
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900">
-                Galerie de la formation
-              </h2>
-            </div>
-
-            {/* Slider principal */}
-            <div className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden mb-6">
-              {gallery.map((img, index) => (
-                <div
-                  key={index}
-                  className={`absolute inset-0 transition-opacity duration-700 ${
-                    index === currentGalleryIndex ? "opacity-100" : "opacity-0"
-                  }`}
-                >
-                  <img
-                    src={resolveMediaUrl(img.url)}
-                    alt={`Galerie ${index + 1}`}
-                    className="w-full h-full object-cover cursor-pointer"
-                    onClick={() => setSelectedImage(resolveMediaUrl(img.url))}
-                  />
+          {/* ================= COLONNE GAUCHE: DESCRIPTION ================= */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-200 p-10 md:p-12 h-full">
+              <div className="flex items-center gap-3 mb-8 pb-6 border-b border-gray-200">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#00A4E0] to-[#0077A8] rounded-xl flex items-center justify-center">
+                  <FileText className="w-6 h-6 text-white" />
                 </div>
-              ))}
-
-              {/* Boutons navigation */}
-              {gallery.length > 1 && (
-                <>
-                  <button
-                    onClick={goToPreviousGallery}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 z-10
-                               w-12 h-12 rounded-full bg-white/20 hover:bg-white/30
-                               backdrop-blur-sm flex items-center justify-center
-                               text-white hover:scale-110 transition-all duration-300"
-                  >
-                    <ChevronLeft size={28} />
-                  </button>
-
-                  <button
-                    onClick={goToNextGallery}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 z-10
-                               w-12 h-12 rounded-full bg-white/20 hover:bg-white/30
-                               backdrop-blur-sm flex items-center justify-center
-                               text-white hover:scale-110 transition-all duration-300"
-                  >
-                    <ChevronRight size={28} />
-                  </button>
-
-                  {/* Indicateurs */}
-                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-2">
-                    {gallery.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setCurrentGalleryIndex(index)}
-                        className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                          index === currentGalleryIndex
-                            ? "bg-white w-8"
-                            : "bg-white/50 hover:bg-white/75"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-
-            {/* Miniatures */}
-            <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3">
-              {gallery.map((img, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentGalleryIndex(index)}
-                  className={`relative overflow-hidden rounded-lg transition-all duration-300 ${
-                    index === currentGalleryIndex
-                      ? "ring-4 ring-[#00A4E0] scale-105"
-                      : "hover:scale-105 opacity-70 hover:opacity-100"
-                  }`}
-                >
-                  <img
-                    src={resolveMediaUrl(img.url)}
-                    alt={`Miniature ${index + 1}`}
-                    className="w-full h-20 object-cover"
-                  />
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* ================= MAQUETTE ================= */}
-        {hasPdf && (
-          <div className="bg-white rounded-3xl shadow-xl border border-gray-200 p-8 space-y-6 max-w-md mx-auto">
-            <div className="text-center space-y-3">
-              <div className="inline-flex w-16 h-16 bg-gradient-to-br from-[#00A4E0] to-[#0077A8] rounded-xl items-center justify-center">
-                <Download className="w-8 h-8 text-white" />
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Description de la formation
+                </h2>
               </div>
-              <h3 className="text-xl font-bold text-gray-900">
-                Télécharger la maquette
-              </h3>
-              <p className="text-gray-600 text-sm">
-                Recevez la maquette complète par email
-              </p>
-            </div>
 
-            <button
-              onClick={() => setOpen(true)}
-              className="w-full py-4 rounded-xl text-white font-bold
-                         bg-gradient-to-r from-[#00A4E0] to-[#0077A8]
-                         hover:shadow-xl hover:shadow-blue-500/30
-                         hover:scale-105 active:scale-95 transition-all duration-300
-                         flex items-center justify-center gap-3"
-            >
-              <Download size={20} />
-              <span>Obtenir la maquette</span>
-            </button>
+              <div
+                className="
+                  prose prose-lg max-w-none text-gray-700
+                  prose-ul:pl-6
+                  prose-li:marker:text-[#00A4E0]
+                  prose-p:my-3
+                "
+                dangerouslySetInnerHTML={{
+                  __html: formatHtmlForDisplay(formation.description ?? ""),
+                }}
+              />
+            </div>
           </div>
-        )}
+
+          {/* ================= COLONNE DROITE: GALERIE + MAQUETTE ================= */}
+          <div className="lg:col-span-1 space-y-8">
+
+            {/* ================= GALERIE AVEC SLIDER AUTO ================= */}
+            {hasGallery && (
+              <div className="bg-white rounded-3xl shadow-xl border border-gray-200 p-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 bg-gradient-to-br from-[#00A4E0] to-[#0077A8] rounded-xl flex items-center justify-center">
+                    <Images className="w-5 h-5 text-white" />
+                  </div>
+                  <h2 className="text-xl font-bold text-gray-900">
+                    Galerie
+                  </h2>
+                </div>
+
+                {/* Slider principal */}
+                <div className="relative h-[300px] rounded-2xl overflow-hidden mb-4">
+                  {gallery.map((img, index) => (
+                    <div
+                      key={index}
+                      className={`absolute inset-0 transition-opacity duration-700 ${
+                        index === currentGalleryIndex ? "opacity-100" : "opacity-0"
+                      }`}
+                    >
+                      <img
+                        src={resolveMediaUrl(img.url)}
+                        alt={`Galerie ${index + 1}`}
+                        className="w-full h-full object-cover cursor-pointer"
+                        onClick={() => setSelectedImage(resolveMediaUrl(img.url))}
+                      />
+                    </div>
+                  ))}
+
+                  {/* Boutons navigation */}
+                  {gallery.length > 1 && (
+                    <>
+                      <button
+                        onClick={goToPreviousGallery}
+                        className="absolute left-2 top-1/2 -translate-y-1/2 z-10
+                                   w-10 h-10 rounded-full bg-white/20 hover:bg-white/30
+                                   backdrop-blur-sm flex items-center justify-center
+                                   text-white hover:scale-110 transition-all duration-300"
+                      >
+                        <ChevronLeft size={24} />
+                      </button>
+
+                      <button
+                        onClick={goToNextGallery}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 z-10
+                                   w-10 h-10 rounded-full bg-white/20 hover:bg-white/30
+                                   backdrop-blur-sm flex items-center justify-center
+                                   text-white hover:scale-110 transition-all duration-300"
+                      >
+                        <ChevronRight size={24} />
+                      </button>
+
+                      {/* Indicateurs */}
+                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex gap-2">
+                        {gallery.map((_, index) => (
+                          <button
+                            key={index}
+                            onClick={() => setCurrentGalleryIndex(index)}
+                            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                              index === currentGalleryIndex
+                                ? "bg-white w-6"
+                                : "bg-white/50 hover:bg-white/75"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Miniatures */}
+                <div className="grid grid-cols-4 gap-2">
+                  {gallery.slice(0, 4).map((img, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentGalleryIndex(index)}
+                      className={`relative overflow-hidden rounded-lg transition-all duration-300 ${
+                        index === currentGalleryIndex
+                          ? "ring-2 ring-[#00A4E0] scale-105"
+                          : "hover:scale-105 opacity-70 hover:opacity-100"
+                      }`}
+                    >
+                      <img
+                        src={resolveMediaUrl(img.url)}
+                        alt={`Miniature ${index + 1}`}
+                        className="w-full h-16 object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ================= MAQUETTE ================= */}
+            {hasPdf && (
+              <div className="bg-white rounded-3xl shadow-xl border border-gray-200 p-6 space-y-6">
+                <div className="text-center space-y-3">
+                  <div className="inline-flex w-14 h-14 bg-gradient-to-br from-[#00A4E0] to-[#0077A8] rounded-xl items-center justify-center">
+                    <Download className="w-7 h-7 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900">
+                    Télécharger la maquette
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    Recevez la maquette complète par email
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => setOpen(true)}
+                  className="w-full py-3 rounded-xl text-white font-bold
+                             bg-gradient-to-r from-[#00A4E0] to-[#0077A8]
+                             hover:shadow-xl hover:shadow-blue-500/30
+                             hover:scale-105 active:scale-95 transition-all duration-300
+                             flex items-center justify-center gap-2"
+                >
+                  <Download size={18} />
+                  <span>Obtenir la maquette</span>
+                </button>
+              </div>
+            )}
+
+          </div>
+        </div>
       </div>
 
       {/* ================= LIGHTBOX GALERIE ================= */}

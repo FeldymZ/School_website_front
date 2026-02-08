@@ -186,11 +186,10 @@ export default function ActivitePublicDetail() {
             )}
 
             {/* Description */}
-            <div className="prose prose-lg max-w-none">
-              <div className="text-gray-700 text-lg leading-relaxed whitespace-pre-line">
-                {activite.contenu}
-              </div>
-            </div>
+            <div
+              className="prose prose-lg max-w-none"
+              dangerouslySetInnerHTML={{ __html: activite.contenu }}
+            />
           </div>
         </div>
       </div>

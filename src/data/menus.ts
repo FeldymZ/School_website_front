@@ -5,8 +5,8 @@ export const esiitechMenu: MegaMenuData = [
   {
     title: "L'ÉCOLE",
     items: [
-      { label: "ESIITech", path: "/a-propos" }, // ✅ CHANGÉ vers la page À propos
-      { label: "Mot du DG", path: "/mot-du-dg" },
+      { label: "ESIITECH", path: "/a-propos" }, // ✅ CHANGÉ vers la page À propos
+      { label: "MOT DU DG", path: "/mot-du-dg" },
     ],
   },
 ];
@@ -17,11 +17,11 @@ export const vieEtudianteMenu: MegaMenuData = [
     title: "VIE ÉTUDIANTE",
     items: [
       {
-        label: "Activités",
+        label: "ACTIVITES",
         path: "/activites", // ✅ LISTING PUBLIC
       },
       {
-        label: "La mutuelle",
+        label: "LA MUTUELLE",
         path: "/vie-etudiante/mutuelle",
       },
     ],
