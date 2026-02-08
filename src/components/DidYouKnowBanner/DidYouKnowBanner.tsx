@@ -74,11 +74,11 @@ export default function DidYouKnowBanner() {
           {/* Texte défilant */}
           <div className="relative flex-1 overflow-hidden">
             <div className="whitespace-nowrap animate-marquee font-semibold text-base md:text-lg tracking-wide">
-              ESIITech est une école Cisco Académique
+             L'ESIITECH est membre du programme CISCO ACADEMY
               <span className="mx-10">•</span>
-              ESIITech est une école Cisco Académique
+           L'ESIITECH est membre du programme CISCO ACADEMY
               <span className="mx-10">•</span>
-              ESIITech est une école Cisco Académique
+           L'ESIITECH est membre du programme CISCO ACADEMY
             </div>
           </div>
         </div>

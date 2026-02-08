@@ -7,7 +7,6 @@ import {
   MapPin,
   Phone,
   ArrowUpRight,
-
 } from "lucide-react";
 
 /* ========================================================= */
@@ -29,7 +28,7 @@ export default function Footer() {
         style={{
           backgroundImage: `linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
                            linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)`,
-          backgroundSize: '50px 50px'
+          backgroundSize: "50px 50px",
         }}
       />
 
@@ -48,12 +47,10 @@ export default function Footer() {
                   className="relative h-16 transition-transform duration-500 group-hover:scale-110"
                 />
               </Link>
-
-
             </div>
 
             <p className="text-gray-400 text-sm leading-relaxed font-light">
-             - École Supérieure d'Ingénierie et d'Innovations Technologiques -
+              - École Supérieure d&apos;Ingénierie et d&apos;Innovations Technologiques -
             </p>
 
             <div className="space-y-4">
@@ -78,7 +75,10 @@ export default function Footer() {
                   </div>
                   <div className="flex-1">
                     <p className="text-xs text-gray-500 mb-0.5">Téléphone</p>
-                    <a href="tel:+24176237638" className="font-medium hover:text-cyan-400 transition-colors">
+                    <a
+                      href="tel:+24176237638"
+                      className="font-medium hover:text-cyan-400 transition-colors"
+                    >
                       +241 76 23 76 38
                     </a>
                   </div>
@@ -93,7 +93,10 @@ export default function Footer() {
                   </div>
                   <div className="flex-1">
                     <p className="text-xs text-gray-500 mb-0.5">Email</p>
-                    <a href="mailto:contact@esiitech-gabon.com" className="font-medium hover:text-cyan-400 transition-colors">
+                    <a
+                      href="mailto:contact@esiitech-gabon.com"
+                      className="font-medium hover:text-cyan-400 transition-colors"
+                    >
                       contact@esiitech-gabon.com
                     </a>
                   </div>
@@ -106,9 +109,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-3 mb-8">
               <div className="w-1.5 h-8 bg-gradient-to-b from-blue-500 via-cyan-400 to-blue-500 rounded-full" />
-              <h3 className="text-white font-black text-xl">
-                Ressources
-              </h3>
+              <h3 className="text-white font-black text-xl">Ressources</h3>
             </div>
 
             <ul className="space-y-5">
@@ -128,7 +129,7 @@ export default function Footer() {
                 </a>
               </li>
 
-              <li>
+              {/* <li>
                 <Link
                   to="#"
                   className="group relative flex items-center gap-3 text-gray-400 hover:text-white transition-all duration-300"
@@ -139,22 +140,25 @@ export default function Footer() {
                     Trombinoscope
                   </span>
                 </Link>
-              </li>
+              </li> */}
 
               <li>
-                <Link
-                  to="#"
+                <a
+                  href="https://sauce.o2switch.net:2096/webmaillogout.cgi"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group relative flex items-center gap-3 text-gray-400 hover:text-white transition-all duration-300"
                 >
                   <div className="absolute -inset-2 bg-gradient-to-r from-blue-600/10 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="relative w-2 h-2 bg-blue-500 rounded-full group-hover:bg-cyan-400 transition-all duration-300 group-hover:scale-150" />
                   <span className="relative flex-1 group-hover:translate-x-2 transition-transform duration-300">
-                    Messagerie Elèctronique
+                    Messagerie Électronique
                   </span>
-                </Link>
+                  <ArrowUpRight size={16} className="relative opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-cyan-400" />
+                </a>
               </li>
 
-              <li>
+              {/* <li>
                 <Link
                   to="#"
                   className="group relative flex items-center gap-3 text-gray-400 hover:text-white transition-all duration-300"
@@ -165,9 +169,9 @@ export default function Footer() {
                     Authentifier un diplôme
                   </span>
                 </Link>
-              </li>
+              </li> */}
 
-              <li>
+              {/* <li>
                 <Link
                   to="/contact"
                   className="group relative flex items-center gap-3 text-gray-400 hover:text-white transition-all duration-300"
@@ -178,19 +182,15 @@ export default function Footer() {
                     Nous contacter
                   </span>
                 </Link>
-              </li>
+              </li> */}
             </ul>
-
-
           </div>
 
           {/* ===== COLONNE 3 : RESEAUX SOCIAUX ===== */}
           <div>
             <div className="flex items-center gap-3 mb-8">
               <div className="w-1.5 h-8 bg-gradient-to-b from-blue-500 via-cyan-400 to-blue-500 rounded-full" />
-              <h3 className="text-white font-black text-xl">
-                Suivez-nous
-              </h3>
+              <h3 className="text-white font-black text-xl">Suivez-nous</h3>
             </div>
 
             <p className="text-gray-400 text-sm leading-relaxed mb-4">
@@ -204,7 +204,6 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="group relative"
               >
-                <div className="absolute inset-0 bg-blue-600 rounded-2xl blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-500" />
                 <div className="relative bg-gradient-to-br from-gray-800 to-gray-900 hover:from-blue-600 hover:to-blue-700 p-4 rounded-2xl transition-all duration-300 hover:scale-105 border border-gray-700 hover:border-blue-500">
                   <Facebook size={24} className="mb-2" />
                   <p className="text-xs font-bold">Facebook</p>
@@ -217,7 +216,6 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="group relative"
               >
-                <div className="absolute inset-0 bg-blue-500 rounded-2xl blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-500" />
                 <div className="relative bg-gradient-to-br from-gray-800 to-gray-900 hover:from-blue-500 hover:to-blue-600 p-4 rounded-2xl transition-all duration-300 hover:scale-105 border border-gray-700 hover:border-blue-400">
                   <Linkedin size={24} className="mb-2" />
                   <p className="text-xs font-bold">LinkedIn</p>
@@ -230,7 +228,6 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="group relative"
               >
-                <div className="absolute inset-0 bg-pink-500 rounded-2xl blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-500" />
                 <div className="relative bg-gradient-to-br from-gray-800 to-gray-900 hover:from-pink-500 hover:to-purple-600 p-4 rounded-2xl transition-all duration-300 hover:scale-105 border border-gray-700 hover:border-pink-400">
                   <Instagram size={24} className="mb-2" />
                   <p className="text-xs font-bold">Instagram</p>
@@ -243,7 +240,6 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="group relative"
               >
-                <div className="absolute inset-0 bg-cyan-400 rounded-2xl blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-500" />
                 <div className="relative bg-gradient-to-br from-gray-800 to-gray-900 hover:from-cyan-400 hover:to-blue-500 p-4 rounded-2xl transition-all duration-300 hover:scale-105 border border-gray-700 hover:border-cyan-400">
                   <svg
                     width="24"
@@ -258,36 +254,20 @@ export default function Footer() {
                 </div>
               </a>
             </div>
-
-
           </div>
         </div>
       </div>
 
       {/* ================= COPYRIGHT ================= */}
       <div className="relative border-t border-gray-800/50 backdrop-blur-sm">
-        {/* Ligne gradient en haut */}
-        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent" />
-
         <div className="max-w-7xl mx-auto px-6 py-3">
           <div className="flex flex-col md:flex-row texte-left gap-6">
             <div className="flex items-center gap-8 text-sm text-gray-400">
-              <div className="flex items-center gap-2">
-                <span>© ESIITECH</span>
-                <span className="font-bold text-white">2026</span>
-              </div>
-              <span className="hidden md:inline">•</span>
-              <span>Tous droits réservés</span>
+              <span>© ESIITECH 2026 — Tous droits réservés</span>
             </div>
-
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-400">Site réalisé par</span>
-
-
-              <span className="font-black text-lg bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
-                ESIITECH
-              </span>
-            </div>
+            <span className="font-black text-lg bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
+              Site réalisé par ESIITECH
+            </span>
           </div>
         </div>
       </div>

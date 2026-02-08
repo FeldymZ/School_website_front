@@ -5,7 +5,7 @@ import {
   ArrowUpRight,
   Menu,
   X,
-  Mail,
+
   Sparkles,
 } from "lucide-react";
 
@@ -59,10 +59,6 @@ export default function MainNavbar() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const goToActualitesAgenda = () => {
-    setIsMobileOpen(false);
-    navigate("/?scroll=actualites-agenda");
-  };
 
   const goToContact = () => {
     setIsMobileOpen(false);
@@ -149,15 +145,7 @@ export default function MainNavbar() {
             </button>
           </li>
 
-          <li className="relative group">
-            <button
-              onClick={goToActualitesAgenda}
-              className="relative py-2 text-base hover:text-[#00A4E0] transition-colors duration-300"
-            >
-              Actualités & Agenda
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#00A4E0] to-[#0077A8] group-hover:w-full transition-all duration-300" />
-            </button>
-          </li>
+
 
           <li className="relative group">
             <button
@@ -172,28 +160,7 @@ export default function MainNavbar() {
 
         {/* ================= ACTIONS ================= */}
         <div className="hidden lg:flex items-center gap-4">
-          <a
-            href="https://sauce.o2switch.net:2096/webmaillogout.cgi"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="
-              group relative overflow-hidden
-              flex items-center gap-3
-              px-5 py-3 rounded-xl
-              text-sm font-bold
-              text-gray-700
-              bg-gradient-to-br from-gray-50 to-gray-100
-              border-2 border-gray-200
-              hover:border-gray-300 hover:shadow-lg
-              hover:scale-105 active:scale-95
-              transition-all duration-300
-            "
-          >
-            <div className="w-8 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center">
-              <Mail size={16} className="text-gray-600" />
-            </div>
-            <span>Webmail</span>
-          </a>
+
 
           <a
             href="https://foad.esiitech-gabon.com/"
@@ -268,14 +235,7 @@ export default function MainNavbar() {
               </button>
             </li>
 
-            <li>
-              <button
-                onClick={goToActualitesAgenda}
-                className="w-full px-8 py-5 text-left text-gray-800 hover:text-[#00A4E0] transition-all"
-              >
-                Actualités & Agenda
-              </button>
-            </li>
+
 
             <li>
               <button
