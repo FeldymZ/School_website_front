@@ -1,8 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Newspaper, Calendar, Eye } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Newspaper,
+  Calendar,
+  Eye,
+} from "lucide-react";
 
-import { fetchActualites, fetchActualiteBySlug } from "@/services/actualiteService";
+import {
+  fetchActualites,
+  fetchActualiteBySlug,
+} from "@/services/actualiteService";
 import type { Actualite } from "@/types/actualite";
 import { resolveMediaUrl } from "@/utils/media";
 
@@ -58,7 +67,7 @@ export default function ActualitesList() {
 
   return (
     <section>
-      {/* TITRE */}
+      {/* ================= TITRE ================= */}
       <div className="mb-5">
         <div className="flex items-center gap-3 mb-2">
           <div className="bg-[#00a8e8] p-3 rounded-xl">
@@ -75,6 +84,7 @@ export default function ActualitesList() {
         <p className="text-gray-500">Chargement…</p>
       ) : (
         <>
+          {/* ================= LISTE ================= */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {actualites.map((actu) => (
               <Link
@@ -118,14 +128,27 @@ export default function ActualitesList() {
             ))}
           </div>
 
-          <div className="mt-5 flex justify-center">
+          {/* ================= CTA : VOIR TOUTES LES ACTUALITÉS ================= */}
+          <div className="mt-12 flex justify-center">
             <Link
               to="/actualites"
-              className="flex items-center gap-2 px-4 py-3 border-2 border-[#1b5e7a] rounded-xl font-bold hover:bg-[#1b5e7a] hover:text-white transition"
+              className="
+                group inline-flex items-center gap-3
+                px-8 py-4 rounded-2xl
+                font-bold text-white
+                bg-gradient-to-r from-[#1b5e7a] to-secondary
+                shadow-lg
+                hover:shadow-2xl
+                transition-all duration-300
+                hover:-translate-y-1
+              "
             >
-              <Eye size={15} />
+              <Eye size={20} />
               Voir toutes les actualités
-              <ArrowRight size={15} />
+              <ArrowUpRight
+                size={18}
+                className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
+              />
             </Link>
           </div>
         </>

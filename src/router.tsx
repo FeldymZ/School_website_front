@@ -12,7 +12,10 @@ import MotDuDG from "@/pages/MotDuDG";
 /* ================= ACTIVITÉS ================= */
 import ActivitesPublicList from "@/pages/public/ActivitesPublicList";
 import ActivitePublicDetail from "@/pages/public/ActivitePublicDetail";
-import AProposPage from "./pages/apropos/AProposPage";
+
+import NosDéfisPage from "./pages/nosDefis/NosDéfisPage";
+import NosMissionsPage from "./pages/apropos/NosMissionsPage";
+import CiscoNetworkingAcademyPage from "./pages/Cisco/CiscoNetworkingAcademyPage";
 
 export const router = createBrowserRouter([
   {
@@ -24,8 +27,13 @@ export const router = createBrowserRouter([
 
       /* ================= À PROPOS ================= */
       {
-        path: "a-propos",
-        element: <AProposPage />, // ✅ NOUVELLE ROUTE
+        path: "nos-missions",
+        element: <NosMissionsPage />, // ✅ NOUVELLE ROUTE
+      },
+
+      {
+        path: "nos-defis",
+        element: <NosDéfisPage />, // ✅ NOUVELLE ROUTE
       },
 
       /* ================= FORMATIONS ================= */
@@ -41,6 +49,12 @@ export const router = createBrowserRouter([
         path: "formationsList",
         element: <FormationsList />,
       },
+
+      {
+        path:"Cisco-Networking-Academy",
+        element: <CiscoNetworkingAcademyPage />,
+      }
+       ,
 
       /* ================= ACTUALITÉS ================= */
       {

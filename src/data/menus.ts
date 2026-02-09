@@ -5,8 +5,12 @@ export const esiitechMenu: MegaMenuData = [
   {
     title: "L'ÉCOLE",
     items: [
-      { label: "ESIITECH", path: "/a-propos" }, // ✅ CHANGÉ vers la page À propos
+       // ✅ CHANGÉ vers la page Nos Missions
+
+      { label: "NOS DEFIS", path: "/nos-defis" },
+      { label: "NOS MISSIONS", path: "/nos-missions" },
       { label: "MOT DU DG", path: "/mot-du-dg" },
+      {label:"CISCO NETWORKING ACADEMY", path:"/Cisco-Networking-Academy"},
     ],
   },
 ];
@@ -17,11 +21,11 @@ export const vieEtudianteMenu: MegaMenuData = [
     title: "VIE ÉTUDIANTE",
     items: [
       {
-        label: "ACTIVITES",
+        label: "ACTIVITES DE L'ECOLE",
         path: "/activites", // ✅ LISTING PUBLIC
       },
       {
-        label: "LA MUTUELLE",
+        label: "LA MUTUELLE DES ETUDIANTS",
         path: "/vie-etudiante/mutuelle",
       },
     ],

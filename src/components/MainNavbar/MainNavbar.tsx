@@ -102,8 +102,9 @@ export default function MainNavbar() {
         <ul className="hidden lg:flex items-center gap-8 font-bold text-gray-800">
           {[
             ["esiitech", "ESIITECH"],
+             ["formations", "FORMATIONS"],
             ["vie", "VIE ETUDIANTE"],
-            ["formations", "FORMATIONS"],
+
           ].map(([key, label]) => (
             <li
               key={key}
@@ -123,23 +124,26 @@ export default function MainNavbar() {
             </li>
           ))}
 
-          <li>
-            <button
-              onClick={goToPartenaires}
-              className="hover:text-[#00A4E0] transition-colors"
-            >
-              PARTENAIRES
-            </button>
-          </li>
+         <li className="group relative flex items-center cursor-pointer py-2">
+  <button
+    onClick={goToPartenaires}
+    className="relative transition-colors duration-300 group-hover:text-[#00A4E0]"
+  >
+    PARTENAIRES
+    <span className="absolute left-0 -bottom-1 h-0.5 w-0 bg-gradient-to-r from-[#00A4E0] to-[#0077A8] transition-all duration-300 group-hover:w-full" />
+  </button>
+</li>
 
-          <li>
-            <button
-              onClick={goToContact}
-              className="hover:text-[#00A4E0] transition-colors"
-            >
-              CONTACT
-            </button>
-          </li>
+<li className="group relative flex items-center cursor-pointer py-2">
+  <button
+    onClick={goToContact}
+    className="relative transition-colors duration-300 group-hover:text-[#00A4E0]"
+  >
+    CONTACT
+    <span className="absolute left-0 -bottom-1 h-0.5 w-0 bg-gradient-to-r from-[#00A4E0] to-[#0077A8] transition-all duration-300 group-hover:w-full" />
+  </button>
+</li>
+
         </ul>
 
         {/* ================= ACTIONS ================= */}
@@ -219,6 +223,20 @@ export default function MainNavbar() {
                 ))}
             </li>
 
+
+
+            {/* FORMATIONS */}
+            <li>
+              <Link
+                to="/formationsList"
+                onClick={() => setIsMobileOpen(false)}
+                className="block px-8 py-5 hover:bg-gray-50"
+              >
+                FORMATIONS
+              </Link>
+            </li>
+
+
             {/* VIE ÉTUDIANTE */}
             <li>
               <button
@@ -248,17 +266,6 @@ export default function MainNavbar() {
                     {item.label}
                   </Link>
                 ))}
-            </li>
-
-            {/* FORMATIONS */}
-            <li>
-              <Link
-                to="/formationsList"
-                onClick={() => setIsMobileOpen(false)}
-                className="block px-8 py-5 hover:bg-gray-50"
-              >
-                FORMATIONS
-              </Link>
             </li>
 
             <li>
