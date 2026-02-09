@@ -1,10 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { X, Info, Code } from "lucide-react";
 
+import { fetchActiveBannerMessage } from "@/services/bannerMessage.service";
+import type { BannerMessagePublic } from "@/types/bannerMessage";
+
+
+/* ================= TYPES ================= */
 type BannerState = "open" | "collapsed";
 
+/* ================= COMPONENT ================= */
 export default function DidYouKnowBanner() {
   const [state, setState] = useState<BannerState>("open");
+  const [banner, setBanner] = useState<BannerMessagePublic | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  /* ================= LOAD ================= */
+  useEffect(() => {
+    async function load() {
+      try {
+        const data = await fetchActiveBannerMessage();
+        setBanner(data);
+      } catch (e) {
+        console.error("Erreur BannerMessage :", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    load();
+  }, []);
+
+  /* Aucun message → rien à afficher */
+  if (loading || !banner) return null;
 
   /* ================= MODE COLLAPSÉ ================= */
   if (state === "collapsed") {
@@ -22,7 +49,6 @@ export default function DidYouKnowBanner() {
           transition-all duration-300
         "
         aria-label="Afficher le message"
-        title="Afficher le message"
       >
         <Code size={22} className="text-white" />
       </button>
@@ -57,28 +83,27 @@ export default function DidYouKnowBanner() {
 
         {/* Contenu */}
         <div className="flex items-center gap-6 px-10 py-3 text-white">
-          {/* Bloc titre - CACHÉ SUR MOBILE */}
+          {/* Titre */}
           <div className="hidden md:flex items-center gap-3 shrink-0">
             <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
               <Info size={22} />
             </div>
 
             <span className="text-lg md:text-xl font-bold whitespace-nowrap">
-              Le saviez-vous ?
+              {banner.title ?? "Le saviez-vous ?"}
             </span>
           </div>
 
-          {/* Séparateur - CACHÉ SUR MOBILE */}
           <div className="hidden md:block w-px h-10 bg-white/30" />
 
           {/* Texte défilant */}
           <div className="relative flex-1 overflow-hidden">
-            <div className="whitespace-nowrap animate-marquee font-semibold text-base md:text-lg tracking-wide">
-             L'ESIITECH est membre du programme CISCO ACADEMY
+            <div className="banner-marquee font-semibold text-base md:text-lg tracking-wide">
+              <span>{banner.content}</span>
               <span className="mx-10">•</span>
-           L'ESIITECH est membre du programme CISCO ACADEMY
+              <span>{banner.content}</span>
               <span className="mx-10">•</span>
-           L'ESIITECH est membre du programme CISCO ACADEMY
+              <span>{banner.content}</span>
             </div>
           </div>
         </div>

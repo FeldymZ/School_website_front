@@ -13,9 +13,11 @@ export default function App() {
       <MainNavbar />
 
       {/* CONTENU DES PAGES */}
-      <Outlet />
+      <main className="relative z-0">
+        <Outlet />
+      </main>
 
-      {/* POP-UP GLOBAL */}
+      {/* BANNIÈRE GLOBALE (PUBLIC) */}
       <DidYouKnowBanner />
     </div>
   );
