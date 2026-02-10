@@ -241,7 +241,7 @@ export default function MainNavbar() {
                 onClick={closeMobile}
                 className="block px-8 py-5 hover:bg-gray-50"
               >
-                FORMATIONS
+                FORMATIONS INITIALES
               </Link>
             </li>
 
