@@ -5,12 +5,10 @@ export const esiitechMenu: MegaMenuData = [
   {
     title: "L'ÉCOLE",
     items: [
-       // ✅ CHANGÉ vers la page Nos Missions
-
       { label: "NOS DEFIS", path: "/nos-defis" },
       { label: "NOS MISSIONS", path: "/nos-missions" },
       { label: "MOT DU DG", path: "/mot-du-dg" },
-      {label:"CISCO NETWORKING ACADEMY", path:"/Cisco-Networking-Academy"},
+      { label: "CISCO NETWORKING ACADEMY", path: "/Cisco-Networking-Academy" },
     ],
   },
 ];
@@ -22,11 +20,11 @@ export const vieEtudianteMenu: MegaMenuData = [
     items: [
       {
         label: "ACTIVITES DE L'ECOLE",
-        path: "/activites", // ✅ LISTING PUBLIC
+        path: "/activites",
       },
       {
         label: "LA MUTUELLE DES ETUDIANTS",
-        path: "/vie-etudiante/mutuelle",
+        path: "https://mutuelle.esiitech-gabon.com/", // ✅ LIEN EXTERNE
       },
     ],
   },

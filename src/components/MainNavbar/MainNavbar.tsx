@@ -40,9 +40,13 @@ export default function MainNavbar() {
 
   /* ================= NAVIGATION ================= */
 
-  const goToHomeTop = () => {
+  const closeMobile = () => {
     setIsMobileOpen(false);
     setMobileOpenMenu(null);
+  };
+
+  const goToHomeTop = () => {
+    closeMobile();
 
     if (location.pathname !== "/") {
       navigate("/");
@@ -53,14 +57,12 @@ export default function MainNavbar() {
   };
 
   const goToContact = () => {
-    setIsMobileOpen(false);
-    setMobileOpenMenu(null);
+    closeMobile();
     navigate("/?scroll=contact");
   };
 
   const goToPartenaires = () => {
-    setIsMobileOpen(false);
-    setMobileOpenMenu(null);
+    closeMobile();
     navigate("/?scroll=partenaires");
   };
 
@@ -93,7 +95,7 @@ export default function MainNavbar() {
       onMouseLeave={() => setActiveMenu(null)}
     >
       <div className="flex items-center justify-between px-8 py-4">
-        {/* LOGO */}
+        {/* ================= LOGO ================= */}
         <button onClick={goToHomeTop}>
           <img src="/logo.png" alt="ESIITECH" className="h-14 lg:h-16" />
         </button>
@@ -102,9 +104,8 @@ export default function MainNavbar() {
         <ul className="hidden lg:flex items-center gap-8 font-bold text-gray-800">
           {[
             ["esiitech", "ESIITECH"],
-             ["formations", "FORMATIONS"],
+            ["formations", "FORMATIONS"],
             ["vie", "VIE ETUDIANTE"],
-
           ].map(([key, label]) => (
             <li
               key={key}
@@ -124,29 +125,26 @@ export default function MainNavbar() {
             </li>
           ))}
 
-         <li className="group relative flex items-center cursor-pointer py-2">
-  <button
-    onClick={goToPartenaires}
-    className="relative transition-colors duration-300 group-hover:text-[#00A4E0]"
-  >
-    PARTENAIRES
-    <span className="absolute left-0 -bottom-1 h-0.5 w-0 bg-gradient-to-r from-[#00A4E0] to-[#0077A8] transition-all duration-300 group-hover:w-full" />
-  </button>
-</li>
+          <li className="group relative flex items-center cursor-pointer py-2">
+            <button
+              onClick={goToPartenaires}
+              className="relative group-hover:text-[#00A4E0]"
+            >
+              PARTENAIRES
+            </button>
+          </li>
 
-<li className="group relative flex items-center cursor-pointer py-2">
-  <button
-    onClick={goToContact}
-    className="relative transition-colors duration-300 group-hover:text-[#00A4E0]"
-  >
-    CONTACT
-    <span className="absolute left-0 -bottom-1 h-0.5 w-0 bg-gradient-to-r from-[#00A4E0] to-[#0077A8] transition-all duration-300 group-hover:w-full" />
-  </button>
-</li>
-
+          <li className="group relative flex items-center cursor-pointer py-2">
+            <button
+              onClick={goToContact}
+              className="relative group-hover:text-[#00A4E0]"
+            >
+              CONTACT
+            </button>
+          </li>
         </ul>
 
-        {/* ================= ACTIONS ================= */}
+        {/* ================= ACTION DESKTOP ================= */}
         <div className="hidden lg:flex items-center gap-4">
           <a
             href="https://foad.esiitech-gabon.com/"
@@ -192,7 +190,7 @@ export default function MainNavbar() {
               </button>
             </li>
 
-            {/* ESIITECH */}
+            {/* ================= ESIITECH ================= */}
             <li>
               <button
                 onClick={() =>
@@ -211,33 +209,43 @@ export default function MainNavbar() {
               </button>
 
               {mobileOpenMenu === "esiitech" &&
-                esiitechMenu[0].items.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    onClick={() => setIsMobileOpen(false)}
-                    className="block pl-14 py-3 text-sm text-gray-600 hover:text-[#00A4E0]"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+                esiitechMenu[0].items.map((item) =>
+                  item.path.startsWith("http") ? (
+                    <a
+                      key={item.path}
+                      href={item.path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={closeMobile}
+                      className="block pl-14 py-3 text-sm text-gray-600 hover:text-[#00A4E0]"
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      onClick={closeMobile}
+                      className="block pl-14 py-3 text-sm text-gray-600 hover:text-[#00A4E0]"
+                    >
+                      {item.label}
+                    </Link>
+                  )
+                )}
             </li>
 
-
-
-            {/* FORMATIONS */}
+            {/* ================= FORMATIONS ================= */}
             <li>
               <Link
                 to="/formationsList"
-                onClick={() => setIsMobileOpen(false)}
+                onClick={closeMobile}
                 className="block px-8 py-5 hover:bg-gray-50"
               >
                 FORMATIONS
               </Link>
             </li>
 
-
-            {/* VIE ÉTUDIANTE */}
+            {/* ================= VIE ÉTUDIANTE ================= */}
             <li>
               <button
                 onClick={() =>
@@ -256,16 +264,29 @@ export default function MainNavbar() {
               </button>
 
               {mobileOpenMenu === "vie" &&
-                vieEtudianteMenu[0].items.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    onClick={() => setIsMobileOpen(false)}
-                    className="block pl-14 py-3 text-sm text-gray-600 hover:text-[#00A4E0]"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+                vieEtudianteMenu[0].items.map((item) =>
+                  item.path.startsWith("http") ? (
+                    <a
+                      key={item.path}
+                      href={item.path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={closeMobile}
+                      className="block pl-14 py-3 text-sm text-gray-600 hover:text-[#00A4E0]"
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      onClick={closeMobile}
+                      className="block pl-14 py-3 text-sm text-gray-600 hover:text-[#00A4E0]"
+                    >
+                      {item.label}
+                    </Link>
+                  )
+                )}
             </li>
 
             <li>
