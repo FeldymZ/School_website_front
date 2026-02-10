@@ -4,7 +4,6 @@ import { X, Info, Code } from "lucide-react";
 import { fetchActiveBannerMessage } from "@/services/bannerMessage.service";
 import type { BannerMessagePublic } from "@/types/bannerMessage";
 
-
 /* ================= TYPES ================= */
 type BannerState = "open" | "collapsed";
 
@@ -42,8 +41,8 @@ export default function DidYouKnowBanner() {
           fixed bottom-6 right-6 z-[9999]
           px-4 py-3
           rounded-2xl
-          bg-gradient-to-br from-[#00A4E0] to-[#0077A8]
-          shadow-2xl
+          bg-[#c10101]
+          shadow-2xl shadow-black/40
           flex items-center justify-center
           hover:scale-110 active:scale-95
           transition-all duration-300
@@ -62,9 +61,9 @@ export default function DidYouKnowBanner() {
         className="
           relative overflow-hidden
           rounded-3xl
-          shadow-2xl
-          border border-[#00A4E0]/30
-          bg-gradient-to-r from-[#00A4E0] to-[#0077A8]
+          shadow-2xl shadow-black/40
+          border border-white/20
+          bg-[#c10101]
         "
       >
         {/* Bouton réduire */}
