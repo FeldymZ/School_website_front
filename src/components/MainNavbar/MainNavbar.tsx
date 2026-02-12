@@ -104,7 +104,7 @@ export default function MainNavbar() {
         <ul className="hidden lg:flex items-center gap-8 font-bold text-gray-800">
           {[
             ["esiitech", "ESIITECH"],
-            ["formations", "FORMATIONS"],
+            ["formations", "FORMATIONS INITIALES"],
             ["vie", "VIE ETUDIANTE"],
           ].map(([key, label]) => (
             <li
