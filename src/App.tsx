@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 import TopBar from "./components/TopBar/TopBar";
 import MainNavbar from "./components/MainNavbar/MainNavbar";
 import DidYouKnowBanner from "./components/DidYouKnowBanner/DidYouKnowBanner";
+import PanierDrawer from "./components/common/PanierDrawer";
 
 export default function App() {
   return (
@@ -19,6 +20,9 @@ export default function App() {
 
       {/* BANNIÈRE GLOBALE (PUBLIC) */}
       <DidYouKnowBanner />
+       <PanierDrawer /> {/* 🔥 GLOBAL */}
+
     </div>
+
   );
 }

@@ -27,6 +27,7 @@ export default function FormationsList() {
           if (mounted) setFormations(data);
         }
       } finally {
+        
         if (mounted) setLoading(false);
       }
     };

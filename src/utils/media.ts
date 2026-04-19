@@ -1,18 +1,20 @@
 const API_BASE_URL = "https://api-test.esiitech-gabon.com";
 
-export function resolveMediaUrl(mediaUrl?: unknown): string {
-  if (typeof mediaUrl !== "string" || !mediaUrl.trim()) {
+export function resolveMediaUrl(mediaUrl?: string | null): string {
+
+  if (!mediaUrl || !mediaUrl.trim()) {
     return "/placeholder.jpg";
   }
 
-  // URL absolue
-  if (mediaUrl.startsWith("http")) {
+  // URL absolue (http / https)
+  if (/^https?:\/\//i.test(mediaUrl)) {
     return mediaUrl;
   }
 
-  // 🔥 NORMALISATION ICI
+  // Normalisation du chemin
   const normalized =
     mediaUrl.startsWith("/") ? mediaUrl : `/${mediaUrl}`;
 
-  return `${API_BASE_URL}${normalized}`;
+  // 🔥 évite double slash
+  return `${API_BASE_URL.replace(/\/$/, "")}${normalized}`;
 }

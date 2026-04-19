@@ -9,22 +9,32 @@ import {
 
 import MegaMenu from "../MegaMenu/MegaMenu";
 import MegaMenuFormations from "../MegaMenu/MegaMenuFormations";
+import MegaMenuFormationContinue from "../MegaMenu/MegaMenuFormationContinue";
 
 import { esiitechMenu, vieEtudianteMenu } from "@/data/menus";
 import type { MegaMenuData } from "@/types/menu";
 
 /* ================= TYPES ================= */
-type MenuKey = "esiitech" | "vie" | "formations";
+
+type MenuKey =
+  | "esiitech"
+  | "vie"
+  | "formations"
+  | "formationsContinue";
 
 /* ================= CONSTANTES ================= */
+
 const MENU_WIDTHS: Record<MenuKey, number> = {
   esiitech: 480,
   vie: 480,
   formations: 560,
+  formationsContinue: 420,
 };
 
 /* ================= COMPONENT ================= */
+
 export default function MainNavbar() {
+
   const [activeMenu, setActiveMenu] = useState<MenuKey | null>(null);
   const [anchorLeft, setAnchorLeft] = useState(0);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -33,7 +43,7 @@ export default function MainNavbar() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const staticMenus: Record<Exclude<MenuKey, "formations">, MegaMenuData> = {
+  const staticMenus: Record<Exclude<MenuKey, "formations" | "formationsContinue">, MegaMenuData> = {
     esiitech: esiitechMenu,
     vie: vieEtudianteMenu,
   };
@@ -66,20 +76,24 @@ export default function MainNavbar() {
     navigate("/?scroll=partenaires");
   };
 
-  /* ================= MEGA MENU POSITION (DESKTOP) ================= */
+  /* ================= MEGA MENU POSITION ================= */
 
   const openMenu = (key: MenuKey, el: HTMLElement) => {
+
     const rect = el.getBoundingClientRect();
     const nav = el.closest("nav");
+
     if (!nav) return;
 
     const navRect = nav.getBoundingClientRect();
     const menuWidth = MENU_WIDTHS[key];
 
     const center = rect.left - navRect.left + rect.width / 2;
+
     let left = center - menuWidth / 2;
 
     const MARGIN = 12;
+
     left = Math.max(
       MARGIN,
       Math.min(left, navRect.width - menuWidth - MARGIN)
@@ -87,6 +101,7 @@ export default function MainNavbar() {
 
     setAnchorLeft(left);
     setActiveMenu(key);
+
   };
 
   return (
@@ -94,19 +109,26 @@ export default function MainNavbar() {
       className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-xl border-b border-gray-200 shadow-md"
       onMouseLeave={() => setActiveMenu(null)}
     >
+
       <div className="flex items-center justify-between px-8 py-4">
+
         {/* ================= LOGO ================= */}
+
         <button onClick={goToHomeTop}>
           <img src="/logo.png" alt="ESIITECH" className="h-14 lg:h-16" />
         </button>
 
         {/* ================= DESKTOP MENU ================= */}
+
         <ul className="hidden lg:flex items-center gap-8 font-bold text-gray-800">
+
           {[
             ["esiitech", "ESIITECH"],
             ["formations", "FORMATIONS INITIALES"],
+            ["formationsContinue", "FORMATIONS CONTINUES"],
             ["vie", "VIE ETUDIANTE"],
           ].map(([key, label]) => (
+
             <li
               key={key}
               onMouseEnter={(e) =>
@@ -114,25 +136,24 @@ export default function MainNavbar() {
               }
               className="group relative flex items-center gap-1 cursor-pointer py-2"
             >
+
               <span className="relative transition-colors duration-300 group-hover:text-[#00A4E0]">
                 {label}
+
                 <span className="absolute left-0 -bottom-1 h-0.5 w-0 bg-gradient-to-r from-[#00A4E0] to-[#0077A8] transition-all duration-300 group-hover:w-full" />
+
               </span>
+
               <ChevronDown
                 size={16}
                 className="transition-transform duration-300 group-hover:rotate-180 group-hover:text-[#00A4E0]"
               />
+
             </li>
+
           ))}
 
-          <li className="group relative flex items-center cursor-pointer py-2">
-            <button
-              onClick={goToPartenaires}
-              className="relative group-hover:text-[#00A4E0]"
-            >
-              PARTENAIRES
-            </button>
-          </li>
+          
 
           <li className="group relative flex items-center cursor-pointer py-2">
             <button
@@ -142,10 +163,13 @@ export default function MainNavbar() {
               CONTACT
             </button>
           </li>
+
         </ul>
 
         {/* ================= ACTION DESKTOP ================= */}
+
         <div className="hidden lg:flex items-center gap-4">
+
           <a
             href="https://foad.esiitech-gabon.com/"
             target="_blank"
@@ -163,9 +187,11 @@ export default function MainNavbar() {
             Accéder au FOAD
             <Sparkles size={14} className="animate-pulse" />
           </a>
+
         </div>
 
         {/* ================= MOBILE BUTTON ================= */}
+
         <button
           className="lg:hidden p-3 rounded-xl hover:bg-gray-100 transition"
           onClick={() => {
@@ -175,12 +201,17 @@ export default function MainNavbar() {
         >
           {isMobileOpen ? <X size={26} /> : <Menu size={26} />}
         </button>
+
       </div>
 
       {/* ================= MOBILE MENU ================= */}
+
       {isMobileOpen && (
+
         <div className="lg:hidden bg-white border-t shadow-2xl">
+
           <ul className="flex flex-col font-bold divide-y">
+
             <li>
               <button
                 onClick={goToHomeTop}
@@ -190,54 +221,9 @@ export default function MainNavbar() {
               </button>
             </li>
 
-            {/* ================= ESIITECH ================= */}
-            <li>
-              <button
-                onClick={() =>
-                  setMobileOpenMenu(
-                    mobileOpenMenu === "esiitech" ? null : "esiitech"
-                  )
-                }
-                className="w-full px-8 py-5 flex justify-between hover:bg-gray-50"
-              >
-                ESIITECH
-                <ChevronDown
-                  className={`transition ${
-                    mobileOpenMenu === "esiitech" ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-
-              {mobileOpenMenu === "esiitech" &&
-                esiitechMenu[0].items.map((item) =>
-                  item.path.startsWith("http") ? (
-                    <a
-                      key={item.path}
-                      href={item.path}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={closeMobile}
-                      className="block pl-14 py-3 text-sm text-gray-600 hover:text-[#00A4E0]"
-                    >
-                      {item.label}
-                    </a>
-                  ) : (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      onClick={closeMobile}
-                      className="block pl-14 py-3 text-sm text-gray-600 hover:text-[#00A4E0]"
-                    >
-                      {item.label}
-                    </Link>
-                  )
-                )}
-            </li>
-
-            {/* ================= FORMATIONS ================= */}
             <li>
               <Link
-                to="/formationsList"
+                to="/formations"
                 onClick={closeMobile}
                 className="block px-8 py-5 hover:bg-gray-50"
               >
@@ -245,58 +231,27 @@ export default function MainNavbar() {
               </Link>
             </li>
 
-            {/* ================= VIE ÉTUDIANTE ================= */}
             <li>
-              <button
-                onClick={() =>
-                  setMobileOpenMenu(
-                    mobileOpenMenu === "vie" ? null : "vie"
-                  )
-                }
-                className="w-full px-8 py-5 flex justify-between hover:bg-gray-50"
+              <Link
+                to="/formations-continues"
+                onClick={closeMobile}
+                className="block px-8 py-5 hover:bg-gray-50"
               >
-                VIE ETUDIANTE
-                <ChevronDown
-                  className={`transition ${
-                    mobileOpenMenu === "vie" ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-
-              {mobileOpenMenu === "vie" &&
-                vieEtudianteMenu[0].items.map((item) =>
-                  item.path.startsWith("http") ? (
-                    <a
-                      key={item.path}
-                      href={item.path}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={closeMobile}
-                      className="block pl-14 py-3 text-sm text-gray-600 hover:text-[#00A4E0]"
-                    >
-                      {item.label}
-                    </a>
-                  ) : (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      onClick={closeMobile}
-                      className="block pl-14 py-3 text-sm text-gray-600 hover:text-[#00A4E0]"
-                    >
-                      {item.label}
-                    </Link>
-                  )
-                )}
+                FORMATIONS CONTINUES
+              </Link>
             </li>
 
             <li>
-              <button
-                onClick={goToPartenaires}
-                className="w-full px-8 py-5 text-left hover:bg-gray-50"
+              <Link
+                to="/activites"
+                onClick={closeMobile}
+                className="block px-8 py-5 hover:bg-gray-50"
               >
-                PARTENAIRES
-              </button>
+                ACTIVITÉS
+              </Link>
             </li>
+
+            
 
             <li>
               <button
@@ -306,21 +261,30 @@ export default function MainNavbar() {
                 CONTACT
               </button>
             </li>
+
           </ul>
+
         </div>
+
       )}
 
       {/* ================= DESKTOP MEGA MENUS ================= */}
+
       {activeMenu === "formations" && (
         <MegaMenuFormations anchorLeft={anchorLeft} />
       )}
 
-      {activeMenu && activeMenu !== "formations" && (
+      {activeMenu === "formationsContinue" && (
+        <MegaMenuFormationContinue anchorLeft={anchorLeft} />
+      )}
+
+      {activeMenu && activeMenu !== "formations" && activeMenu !== "formationsContinue" && (
         <MegaMenu
           columns={staticMenus[activeMenu]}
           anchorLeft={anchorLeft}
         />
       )}
+
     </nav>
   );
 }
