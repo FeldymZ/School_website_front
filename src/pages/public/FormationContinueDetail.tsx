@@ -9,7 +9,7 @@ import {
   CheckCircle,
 } from "lucide-react"
 
-import { fetchPublicFormationContinueBySlug } from "@/services/FormationsContinuesPublicService"
+import { fetchPublicFormationContinueBySlug, sendDemandeDevisFormationContinue } from "@/services/FormationsContinuesPublicService"
 import { resolveMediaUrl } from "@/utils/media"
 
 import { sanitizeHTML } from "@/utils/sanitize"
@@ -113,7 +113,7 @@ export default function FormationContinueDetail() {
   const handleAddToCart = () => {
     add({
       formationId: formation.id,
-      titre: formation.titre,
+      titre: formation.libelle,
       prix: formation.prix,
       participants,
       slug: formation.slug,
@@ -146,7 +146,7 @@ export default function FormationContinueDetail() {
             <div className="space-y-3">
               <h1 className="text-white text-4xl md:text-6xl font-black drop-shadow-2xl leading-tight max-w-4xl
                              [text-shadow:0_2px_20px_rgba(0,0,0,0.5)]">
-                {formation.titre}
+                {formation.libelle}
               </h1>
               <div className="h-1.5 w-28 bg-[#00A4E0] rounded-full" />
             </div>
@@ -180,7 +180,7 @@ export default function FormationContinueDetail() {
 
               {/* TITRE dans la card */}
               <div className="mb-6 pb-6 border-b border-gray-100">
-                <h2 className="text-2xl font-black text-gray-900 leading-tight">{formation.titre}</h2>
+                <h2 className="text-2xl font-black text-gray-900 leading-tight">{formation.libelle}</h2>
               </div>
 
               <div className="flex items-center gap-3 mb-6 pb-5 border-b border-gray-100">
@@ -290,11 +290,13 @@ export default function FormationContinueDetail() {
               {/* DIVIDER */}
               <div className="flex items-center gap-3">
                 <div className="flex-1 h-px bg-gray-100" />
-                <span className="text-[11px] text-gray-400 uppercase tracking-wider font-bold">ou</span>
+             
+            
                 <div className="flex-1 h-px bg-gray-100" />
               </div>
 
-             
+              {/* DEVIS FORM */}
+           
 
             </div>
           </div>
