@@ -101,7 +101,7 @@ export default function FormationsContinuesList() {
               </div>
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                  Formations continues
+                  Catalogue des formations
                 </h1>
                 <p className="text-gray-500 text-sm mt-1 flex items-center gap-1.5">
                   <Sparkles size={13} className="text-[#00A4E0]" />
