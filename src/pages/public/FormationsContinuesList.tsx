@@ -3,13 +3,11 @@ import { Link, useSearchParams } from "react-router-dom"
 import { fetchPublicFormationsContinues } from "@/services/FormationsContinuesPublicService"
 import { fetchCategories } from "@/services/catalogue.service"
 import { resolveMediaUrl } from "@/utils/media"
-import { sanitizeHTML } from "@/utils/sanitize"
 import {
   ChevronDown,
   Tag,
   Layers,
   BookOpen,
-  ArrowRight,
   Sparkles,
   GraduationCap,
 } from "lucide-react"
@@ -71,7 +69,7 @@ export default function FormationsContinuesList() {
   const handleCategorieChange = (value: string) => {
     const params: any = {}
     if (value) params.cat = value
-    setSearchParams(params) // reset sous-cat
+    setSearchParams(params)
   }
 
   const handleSousCategorieChange = (value: string) => {
@@ -167,8 +165,7 @@ export default function FormationsContinuesList() {
                 <div className="h-44 bg-gray-200 animate-pulse" />
                 <div className="p-5 space-y-2.5">
                   <div className="h-4 bg-gray-200 rounded-lg animate-pulse w-4/5" />
-                  <div className="h-3 bg-gray-200 rounded animate-pulse w-full" />
-                  <div className="h-3 bg-gray-200 rounded animate-pulse w-3/4" />
+                  <div className="h-3 bg-gray-200 rounded animate-pulse w-2/5" />
                 </div>
               </div>
             ))}
@@ -209,7 +206,7 @@ export default function FormationsContinuesList() {
                   {f.coverUrl ? (
                     <img
                       src={resolveMediaUrl(f.coverUrl)}
-                      alt={f.titre}
+                      alt={f.libelle}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                   ) : (
@@ -223,22 +220,20 @@ export default function FormationsContinuesList() {
                 {/* CONTENT */}
                 <div className="p-5 space-y-3">
                   <h3 className="font-bold text-[#003d5c] line-clamp-2 group-hover:text-[#00A4E0] transition-colors leading-snug">
-                    {f.titre}
+                    {f.libelle}
                   </h3>
 
-                  {f.description && (
-                    <div
-                      className="text-xs text-gray-500 line-clamp-2 leading-relaxed"
-                      dangerouslySetInnerHTML={{ __html: sanitizeHTML(f.description) }}
-                    />
-                  )}
-
-                  <div className="flex items-center justify-end pt-1">
-                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#00A4E0]
-                                     group-hover:gap-2.5 transition-all duration-200">
-                      Voir la formation
-                      <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
-                    </span>
+                  <div className="flex items-center gap-3 flex-wrap">
+                    {f.prix != null && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-50 text-[#00A4E0] text-xs font-bold border border-blue-100">
+                        Prix : {f.prix.toLocaleString()} FCFA
+                      </span>
+                    )}
+                    {f.duree != null && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-gray-50 text-gray-600 text-xs font-semibold border border-gray-100">
+                        Durée : {f.duree} {f.uniteDuree}
+                      </span>
+                    )}
                   </div>
                 </div>
               </Link>

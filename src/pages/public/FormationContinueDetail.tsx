@@ -131,7 +131,7 @@ export default function FormationContinueDetail() {
     <div className="w-full bg-gradient-to-br from-gray-50 via-blue-50/20 to-indigo-50/20 min-h-screen">
 
       {/* ===== HERO ===== */}
-      <div className="relative h-[26rem] md:h-[36rem] overflow-hidden">
+      <div className="relative h-[18rem] md:h-[23rem] overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
