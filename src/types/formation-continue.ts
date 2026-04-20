@@ -17,16 +17,12 @@ export interface SousCategorieFormationContinue {
 
 export interface FormationContinue {
   id: number
-  titre: string
+  libelle: string       // ✅ renommé depuis titre
   description: string
   slug: string
 
-  
-
   coverUrl: string | null
   pdfUrl: string | null
-
-  /* 🔥 AJOUT BACKEND */
 
   prix?: number
   duree?: number
@@ -36,8 +32,6 @@ export interface FormationContinue {
 }
 
 /* ================= DEMANDE DEVIS ================= */
-
-
 
 export interface DemandeDevisItem {
   slug: string
