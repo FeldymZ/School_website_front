@@ -7,6 +7,8 @@ import {
   ShoppingCart,
   Users,
   CheckCircle,
+  Target,
+  Award,
 } from "lucide-react"
 
 import { fetchPublicFormationContinueBySlug, sendDemandeDevisFormationContinue } from "@/services/FormationsContinuesPublicService"
@@ -174,11 +176,12 @@ export default function FormationContinueDetail() {
       <div className="max-w-6xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
 
-          {/* ===== DESCRIPTION ===== */}
-          <div className="lg:col-span-2">
+          {/* ===== COLONNE GAUCHE ===== */}
+          <div className="lg:col-span-2 space-y-6">
+
+            {/* ===== DESCRIPTION ===== */}
             <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 md:p-10">
 
-              {/* TITRE dans la card */}
               <div className="mb-6 pb-6 border-b border-gray-100">
                 <h2 className="text-2xl font-black text-gray-900 leading-tight">{formation.libelle}</h2>
               </div>
@@ -205,6 +208,59 @@ export default function FormationContinueDetail() {
                 }}
               />
             </div>
+
+            {/* ===== OBJECTIFS ===== */}
+            {formation.objectifs && (
+              <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 md:p-10">
+                <div className="flex items-center gap-3 mb-6 pb-5 border-b border-gray-100">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#00A4E0] to-[#0077A8] rounded-xl blur-md opacity-40" />
+                    <div className="relative w-11 h-11 bg-gradient-to-br from-[#00A4E0] to-[#0077A8] rounded-xl flex items-center justify-center shadow-md">
+                      <Target className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-700">Objectifs</h3>
+                </div>
+
+                <div
+                  className="prose prose-lg max-w-none
+                             prose-headings:text-gray-900 prose-headings:font-bold
+                             prose-p:text-gray-600 prose-p:leading-relaxed
+                             prose-li:text-gray-600
+                             prose-a:text-[#00A4E0] prose-a:no-underline hover:prose-a:underline"
+                  dangerouslySetInnerHTML={{
+                    __html: sanitizeHTML(formatHtmlForDisplay(formation.objectifs)),
+                  }}
+                />
+              </div>
+            )}
+
+            {/* ===== COMPÉTENCES ===== */}
+            {formation.competences && (
+              <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 md:p-10">
+                <div className="flex items-center gap-3 mb-6 pb-5 border-b border-gray-100">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#00A4E0] to-[#0077A8] rounded-xl blur-md opacity-40" />
+                    <div className="relative w-11 h-11 bg-gradient-to-br from-[#00A4E0] to-[#0077A8] rounded-xl flex items-center justify-center shadow-md">
+                      <Award className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-700">Compétences acquises</h3>
+                </div>
+
+                <div
+                  className="prose prose-lg max-w-none
+                             prose-headings:text-gray-900 prose-headings:font-bold
+                             prose-p:text-gray-600 prose-p:leading-relaxed
+                             prose-li:text-gray-600
+                             prose-a:text-[#00A4E0] prose-a:no-underline hover:prose-a:underline"
+                  dangerouslySetInnerHTML={{
+                    __html: sanitizeHTML(formatHtmlForDisplay(formation.competences)),
+                  }}
+                />
+              </div>
+            )}
+
           </div>
 
           {/* ===== SIDEBAR ===== */}
@@ -290,13 +346,8 @@ export default function FormationContinueDetail() {
               {/* DIVIDER */}
               <div className="flex items-center gap-3">
                 <div className="flex-1 h-px bg-gray-100" />
-             
-            
                 <div className="flex-1 h-px bg-gray-100" />
               </div>
-
-              {/* DEVIS FORM */}
-           
 
             </div>
           </div>

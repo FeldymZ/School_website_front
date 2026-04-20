@@ -17,12 +17,15 @@ export interface SousCategorieFormationContinue {
 
 export interface FormationContinue {
   id: number
-  libelle: string       // ✅ renommé depuis titre
+  libelle: string
   description: string
   slug: string
 
   coverUrl: string | null
   pdfUrl: string | null
+
+  objectifs?: string   // ✅ AJOUT
+  competences?: string // ✅ AJOUT
 
   prix?: number
   duree?: number
