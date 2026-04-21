@@ -113,7 +113,7 @@ export default function PanierPage() {
           <div className="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
             <ShoppingBag className="text-gray-400" size={32} />
           </div>
-          <h2 className="text-2xl font-black text-gray-900 mb-2">Panier vide</h2>
+          <h2 className="text-2xl font-black text-gray-900 mb-2">Demande vide</h2>
           <p className="text-gray-500 text-sm mb-8">Ajoutez des formations pour commencer.</p>
           <button
             onClick={() => navigate("/formations-continues")}
@@ -146,7 +146,7 @@ export default function PanierPage() {
               </div>
               <div>
                 <h1 className="text-2xl font-black bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                  Mon panier
+                  Ma demande
                 </h1>
                 <p className="text-gray-500 text-sm mt-0.5">
                   {items.length} formation{items.length > 1 ? "s" : ""} sélectionnée{items.length > 1 ? "s" : ""}

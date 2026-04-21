@@ -280,9 +280,9 @@ export default function FormationContinueDetail() {
                 <div className="absolute inset-0 bg-gradient-to-r from-[#0077A8] to-[#00A4E0] opacity-0 group-hover:opacity-100 transition-opacity" />
                 <span className="relative text-white flex items-center gap-2">
                   {added ? (
-                    <><CheckCircle size={16} /> Ajouté au panier !</>
+                    <><CheckCircle size={16} /> Ajouté à la demande !</>
                   ) : (
-                    <><ShoppingCart size={16} /> Ajouter au panier</>
+                    <><ShoppingCart size={16} /> Ajouter à la demande</>
                   )}
                 </span>
               </button>
@@ -294,7 +294,7 @@ export default function FormationContinueDetail() {
                            hover:border-[#00A4E0] hover:text-[#00A4E0] hover:bg-blue-50
                            transition-all duration-200 hover:scale-[1.01] active:scale-[0.99]"
               >
-                Voir le panier
+                Voir à la demande
               </button>
 
             </div>
