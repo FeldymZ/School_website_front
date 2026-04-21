@@ -250,14 +250,20 @@ export default function FormationsContinuesList() {
                     </p>
 
                     {/* PRIX */}
-                    <p className="text-sm font-semibold">
-                      <span className="text-gray-400 font-semibold">Prix :</span>{" "}
-                      {f.prix != null && f.afficherPrix ? (
-                        <span className="text-[#00A4E0] font-bold">{f.prix.toLocaleString()} FCFA</span>
-                      ) : (
-                        <span className="text-orange-500 font-bold">Sur devis</span>
-                      )}
-                    </p>
+                    {f.prix != null && f.afficherPrix ? (
+                      <p className="text-sm font-semibold">
+                        <span className="text-gray-400 font-semibold">Prix :</span>{" "}
+                        <span className="text-[#00A4E0] font-bold">
+                          {f.prix.toLocaleString()} FCFA
+                        </span>
+                      </p>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg
+                                       bg-orange-50 text-orange-500 text-xs font-bold border border-orange-100 w-fit">
+                        <MessageCircle size={11} />
+                        Sur devis
+                      </span>
+                    )}
 
                   </div>
                 </Link>
