@@ -282,7 +282,7 @@ export default function FormationContinueDetail() {
                   {added ? (
                     <><CheckCircle size={16} /> Ajouté à la demande !</>
                   ) : (
-                    <><ShoppingCart size={16} /> Ajouter la demande</>
+                    <><ShoppingCart size={16} /> Ajouter à la demande</>
                   )}
                 </span>
               </button>
@@ -294,7 +294,7 @@ export default function FormationContinueDetail() {
                            hover:border-[#00A4E0] hover:text-[#00A4E0] hover:bg-blue-50
                            transition-all duration-200 hover:scale-[1.01] active:scale-[0.99]"
               >
-                Voir à la demande
+                Voir la demande
               </button>
 
             </div>
