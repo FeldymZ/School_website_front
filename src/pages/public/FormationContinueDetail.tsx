@@ -294,7 +294,7 @@ export default function FormationContinueDetail() {
                            hover:border-[#00A4E0] hover:text-[#00A4E0] hover:bg-blue-50
                            transition-all duration-200 hover:scale-[1.01] active:scale-[0.99]"
               >
-                Voir la demande
+                Voir ma demande
               </button>
 
             </div>
