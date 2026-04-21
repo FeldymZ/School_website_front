@@ -17,6 +17,10 @@ export interface SousCategorieFormationContinue {
 
 export interface FormationContinue {
   id: number
+
+  // 🔥 IMPORTANT
+  reference?: number
+
   libelle: string
   description: string
   slug: string
@@ -24,12 +28,21 @@ export interface FormationContinue {
   coverUrl: string | null
   pdfUrl: string | null
 
-  objectifs?: string   // ✅ AJOUT
-  competences?: string // ✅ AJOUT
+  objectifs?: string
+  competences?: string
 
   prix?: number
+
+  // ✅ AJOUT CRITIQUE
+  afficherPrix?: boolean
+
   duree?: number
-  uniteDuree?: "JOURS" | "MOIS" | "ANNEES"
+
+  // ✅ AJOUT SEMAINE
+  uniteDuree?: "JOURS" | "SEMAINES" | "MOIS" | "ANNEES"
+
+  // 🔥 recommandé
+  enabled?: boolean
 
   sousCategorie?: SousCategorieFormationContinue
 }

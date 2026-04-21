@@ -2,35 +2,33 @@
 
 import { usePanier, PanierItem } from "@/store/usePanier"
 import { resolveMediaUrl } from "@/utils/media"
-
+import { useNavigate } from "react-router-dom"
+import { sendDemandeDevisGlobal } from "@/services/FormationsContinuesPublicService"
+import { useState } from "react"
 import {
-  ShoppingCart,
   Trash2,
   Users,
-  Banknote,
-  InboxIcon,
-  ArrowRight,
-  Sparkles,
-  AlertCircle,
   CheckCircle,
+  ShoppingBag,
+  Banknote,
+  MessageCircle,
   User,
   Mail,
   Phone,
   Building2,
+  AlertCircle,
   Send,
+  ArrowLeft,
 } from "lucide-react"
 
-import { useNavigate } from "react-router-dom"
-import { sendDemandeDevisGlobal } from "@/services/FormationsContinuesPublicService"
-import { useState } from "react"
-
 const inputCls =
-  "w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#00A4E0]/30 focus:border-[#00A4E0] text-sm transition-all bg-white"
+  "w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 " +
+  "focus:ring-[#00A4E0]/30 focus:border-[#00A4E0] text-sm bg-white font-medium transition-all"
 
 export default function PanierPage() {
 
   const navigate = useNavigate()
-  const { items, remove, updateParticipants } = usePanier()
+  const { items, remove, updateParticipants, clear } = usePanier()
 
   const [client, setClient] = useState({
     nomClient: "",
@@ -41,13 +39,17 @@ export default function PanierPage() {
   })
 
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError]     = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
 
-  const total = items.reduce(
-    (sum: number, i: PanierItem) => sum + (i.prix ?? 0) * i.participants,
-    0
-  )
+  /* ================= LOGIQUE ================= */
+  const total = items.reduce((sum, i) => {
+    if (!i.afficherPrix) return sum
+    return sum + (i.prix ?? 0) * i.participants
+  }, 0)
+
+  const hasDevis = items.some(i => !i.afficherPrix)
+  const hasPrix  = items.some(i => i.afficherPrix)
 
   const isInvalid =
     !client.nomClient.trim() ||
@@ -55,40 +57,22 @@ export default function PanierPage() {
     !client.telephone.trim() ||
     (client.entreprise && !client.nomStructure.trim())
 
+  /* ================= SUBMIT ================= */
   const handleSubmit = async () => {
-
-    if (isInvalid) {
-      setError("Veuillez remplir tous les champs")
-      return
-    }
-
-    if (!/\S+@\S+\.\S+/.test(client.email)) {
-      setError("Email invalide")
-      return
-    }
+    if (isInvalid) { setError("Veuillez remplir tous les champs"); return }
+    if (!/\S+@\S+\.\S+/.test(client.email)) { setError("Email invalide"); return }
 
     try {
-
       setLoading(true)
       setError(null)
-
       await sendDemandeDevisGlobal({
         ...client,
-        formations: items.map(i => ({
-          slug: i.slug,
-          participants: i.participants,
-        }))
+        formations: items.map(i => ({ slug: i.slug, participants: i.participants })),
       })
-
       setSuccess(true)
-
+      clear()
     } catch (err) {
-
-      const message =
-        err instanceof Error ? err.message : "Erreur lors de l'envoi"
-
-      setError(message)
-
+      setError(err instanceof Error ? err.message : "Erreur lors de l'envoi")
     } finally {
       setLoading(false)
     }
@@ -97,30 +81,24 @@ export default function PanierPage() {
   /* ================= SUCCESS ================= */
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 flex items-center justify-center px-4">
-        <div className="text-center space-y-6">
-          <div className="flex justify-center">
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-green-400 to-emerald-500 rounded-2xl blur-xl opacity-40 animate-pulse" />
-              <div className="relative w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <CheckCircle className="w-10 h-10 text-white" />
-              </div>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-50/30 flex items-center justify-center p-6">
+        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-12 text-center max-w-md w-full">
+          <div className="relative inline-flex mb-6">
+            <div className="absolute inset-0 bg-green-400 rounded-full blur-xl opacity-20" />
+            <div className="relative w-20 h-20 bg-green-50 rounded-2xl flex items-center justify-center border border-green-100">
+              <CheckCircle className="text-green-500" size={36} />
             </div>
           </div>
-          <div className="space-y-2">
-            <h2 className="text-2xl font-bold text-gray-900">Demande envoyée avec succès !</h2>
-            <p className="text-gray-500">Nous vous contacterons rapidement.</p>
-          </div>
+          <h2 className="text-2xl font-black text-gray-900 mb-2">Demande envoyée !</h2>
+          <p className="text-gray-500 text-sm mb-8">Nous vous contacterons dans les plus brefs délais.</p>
           <button
-            onClick={() => navigate("/formations-continues")}
-            className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white overflow-hidden
-                       hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg shadow-blue-200"
+            onClick={() => navigate("/")}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl
+                       bg-gradient-to-r from-[#00A4E0] to-[#0077A8] text-white font-semibold text-sm
+                       hover:shadow-lg hover:scale-105 transition-all duration-200"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-[#00A4E0] to-[#0077A8]" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0077A8] to-[#00A4E0] opacity-0 group-hover:opacity-100 transition-opacity" />
-            <span className="relative flex items-center gap-2">
-              Voir le catalogue <ArrowRight size={16} />
-            </span>
+            <ArrowLeft size={15} />
+            Retour à l'accueil
           </button>
         </div>
       </div>
@@ -130,30 +108,20 @@ export default function PanierPage() {
   /* ================= EMPTY ================= */
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 flex items-center justify-center px-4">
-        <div className="bg-white rounded-3xl p-16 text-center space-y-6 border border-gray-100 shadow-xl max-w-md w-full">
-          <div className="flex justify-center">
-            <div className="relative">
-              <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl flex items-center justify-center">
-                <InboxIcon className="w-12 h-12 text-gray-400" />
-              </div>
-              <div className="absolute -inset-2 bg-gradient-to-br from-gray-200 to-gray-300 rounded-3xl opacity-20 blur-2xl" />
-            </div>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-50/30 flex items-center justify-center p-6">
+        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-12 text-center max-w-md w-full">
+          <div className="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <ShoppingBag className="text-gray-400" size={32} />
           </div>
-          <div className="space-y-2">
-            <h3 className="text-2xl font-bold text-gray-900">Panier vide</h3>
-            <p className="text-gray-500">Votre panier est vide.</p>
-          </div>
+          <h2 className="text-2xl font-black text-gray-900 mb-2">Panier vide</h2>
+          <p className="text-gray-500 text-sm mb-8">Ajoutez des formations pour commencer.</p>
           <button
             onClick={() => navigate("/formations-continues")}
-            className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white overflow-hidden
-                       hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg shadow-blue-200"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl
+                       bg-gradient-to-r from-[#00A4E0] to-[#0077A8] text-white font-semibold text-sm
+                       hover:shadow-lg hover:scale-105 transition-all duration-200"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-[#00A4E0] to-[#0077A8]" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0077A8] to-[#00A4E0] opacity-0 group-hover:opacity-100 transition-opacity" />
-            <span className="relative flex items-center gap-2">
-              Voir le catalogue <ArrowRight size={16} />
-            </span>
+            Voir les formations
           </button>
         </div>
       </div>
@@ -162,26 +130,25 @@ export default function PanierPage() {
 
   /* ================= MAIN ================= */
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 py-10">
-      <div className="max-w-6xl mx-auto px-6 space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/20">
+      <div className="max-w-6xl mx-auto px-6 py-10 space-y-6">
 
         {/* ===== HEADER ===== */}
         <div className="relative">
           <div className="absolute inset-0 bg-gradient-to-r from-[#00A4E0] to-[#0077A8] rounded-3xl opacity-5 blur-3xl" />
           <div className="relative bg-white/80 backdrop-blur-xl rounded-3xl p-8 border border-white shadow-xl">
             <div className="flex items-center gap-4">
-              <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#00A4E0] to-[#0077A8] rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity" />
-                <div className="relative w-16 h-16 bg-gradient-to-br from-[#00A4E0] to-[#0077A8] rounded-2xl flex items-center justify-center shadow-lg">
-                  <ShoppingCart className="w-8 h-8 text-white" />
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#00A4E0] to-[#0077A8] rounded-2xl blur-xl opacity-50" />
+                <div className="relative w-12 h-12 bg-gradient-to-br from-[#00A4E0] to-[#0077A8] rounded-2xl flex items-center justify-center shadow-lg">
+                  <ShoppingBag className="w-6 h-6 text-white" />
                 </div>
               </div>
               <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                  Panier
+                <h1 className="text-2xl font-black bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+                  Mon panier
                 </h1>
-                <p className="text-gray-600 mt-1 flex items-center gap-2">
-                  <Sparkles size={14} className="text-[#00A4E0]" />
+                <p className="text-gray-500 text-sm mt-0.5">
                   {items.length} formation{items.length > 1 ? "s" : ""} sélectionnée{items.length > 1 ? "s" : ""}
                 </p>
               </div>
@@ -189,121 +156,102 @@ export default function PanierPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
 
-          {/* ===== LISTE + FORM CLIENT ===== */}
-          <div className="lg:col-span-2 space-y-6">
+          {/* ===== LISTE + FORM ===== */}
+          <div className="lg:col-span-2 space-y-4">
 
-            {/* Items */}
-            <div className="space-y-3">
-              {items.map((item: PanierItem, index) => (
-                <div
-                  key={item.formationId}
-                  className="bg-white rounded-2xl border border-gray-100 shadow-md p-5
-                             hover:shadow-lg hover:border-blue-100 transition-all duration-200"
-                  style={{ animation: `fadeIn 0.3s ease-out ${index * 0.06}s both` }}
-                >
-                  <div className="flex items-start justify-between gap-4">
+            {/* ITEMS */}
+            {items.map((item: PanierItem, index) => (
+              <div
+                key={item.formationId}
+                className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6"
+                style={{ animation: `fadeIn 0.3s ease-out ${index * 0.06}s both` }}
+              >
+                <div className="flex items-start gap-4">
 
-                    {/* LEFT */}
-                    <div className="flex items-center gap-4 flex-1 min-w-0">
+                  {/* COVER */}
+                  {item.coverUrl && (
+                    <div className="w-16 h-16 rounded-2xl overflow-hidden flex-shrink-0 bg-gray-100">
+                      <img src={resolveMediaUrl(item.coverUrl)} alt={item.titre} className="w-full h-full object-cover" />
+                    </div>
+                  )}
 
-                      {/* IMAGE */}
-                      <div className="w-16 h-16 rounded-xl overflow-hidden bg-gray-100 border flex-shrink-0">
-                        {item.coverUrl ? (
-                          <img
-                            src={resolveMediaUrl(item.coverUrl)}
-                            alt={item.titre}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#00A4E0] to-[#0077A8]">
-                            <span className="text-white font-bold">
-                              {item.titre.charAt(0)}
-                            </span>
-                          </div>
-                        )}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="font-bold text-gray-900 leading-snug">{item.titre}</h3>
+                      <button
+                        onClick={() => remove(item.formationId)}
+                        className="p-2 rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all flex-shrink-0"
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
+
+                    {/* PRIX */}
+                    {item.afficherPrix ? (
+                      <div className="flex items-center gap-1.5 mt-1">
+                        <Banknote size={13} className="text-[#00A4E0]" />
+                        <span className="text-sm font-bold text-[#00A4E0]">
+                          {item.prix?.toLocaleString()} FCFA / pers.
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-1.5 mt-1">
+                        <MessageCircle size={13} className="text-orange-500" />
+                        <span className="text-sm font-bold text-orange-500">Sur devis</span>
+                      </div>
+                    )}
+
+                    {/* PARTICIPANTS + SOUS-TOTAL */}
+                    <div className="flex items-center justify-between mt-3">
+                      <div className="relative group w-32">
+                        <Users className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#00A4E0] transition-colors" size={13} />
+                        <input
+                          type="number"
+                          value={item.participants}
+                          min={1}
+                          onChange={(e) => updateParticipants(item.formationId, Number(e.target.value))}
+                          className="w-full pl-8 pr-3 py-2 rounded-xl border border-gray-200 text-sm font-bold
+                                     focus:outline-none focus:ring-2 focus:ring-[#00A4E0]/30 focus:border-[#00A4E0] transition-all"
+                        />
                       </div>
 
-                      {/* TEXT */}
-                      <div className="min-w-0">
-                        <h3 className="font-bold text-gray-900 truncate">{item.titre}</h3>
-                        {item.prix && (
-                          <p className="text-xs text-gray-500 flex items-center gap-1 mt-1">
-                            <Banknote size={11} />
-                            {item.prix.toLocaleString()} FCFA / participant
-                          </p>
-                        )}
+                      <div className="text-right">
+                        <p className="text-xs text-gray-400">Sous-total</p>
+                        <p className="font-black text-gray-900">
+                          {item.afficherPrix
+                            ? `${((item.prix ?? 0) * item.participants).toLocaleString()} FCFA`
+                            : "Sur devis"
+                          }
+                        </p>
                       </div>
-
                     </div>
-
-                    {/* DELETE */}
-                    <button
-                      onClick={() => remove(item.formationId)}
-                      className="p-2.5 rounded-xl text-gray-400 hover:text-red-600 hover:bg-red-50
-                                 transition-all duration-200 hover:scale-110 active:scale-95 flex-shrink-0"
-                      title="Supprimer"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-
-                  </div>
-
-                  {/* FOOTER */}
-                  <div className="mt-4 flex items-center justify-between">
-
-                    {/* PARTICIPANTS */}
-                    <div className="relative group">
-                      <Users className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#00A4E0] transition-colors" size={14} />
-                      <input
-                        type="number"
-                        value={item.participants}
-                        min={1}
-                        onChange={(e) =>
-                          updateParticipants(item.formationId, Number(e.target.value))
-                        }
-                        className="pl-9 pr-4 py-2.5 rounded-xl border border-gray-200
-                                   focus:outline-none focus:ring-2 focus:ring-[#00A4E0]/30 focus:border-[#00A4E0]
-                                   text-sm w-32 transition-all bg-white"
-                      />
-                    </div>
-
-                    {/* SOUS-TOTAL */}
-                    <div className="text-right">
-                      <p className="text-xs text-gray-400">Sous-total</p>
-                      <p className="font-bold text-gray-900 text-lg">
-                        {((item.prix ?? 0) * item.participants).toLocaleString()}
-                        <span className="text-xs font-medium text-gray-500 ml-1">FCFA</span>
-                      </p>
-                    </div>
-
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
 
-            {/* Formulaire client */}
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 space-y-5">
-
-              <div className="flex items-center gap-3 pb-5 border-b border-gray-100">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#00A4E0] to-[#0077A8] rounded-xl blur-md opacity-50" />
-                  <div className="relative w-11 h-11 bg-gradient-to-br from-[#00A4E0] to-[#0077A8] rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
-                    <User className="w-5 h-5 text-white" />
+            {/* ===== FORM CLIENT ===== */}
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+              <div className="relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#00A4E0] to-[#0077A8]" />
+                <div className="absolute inset-0 opacity-10"
+                  style={{ backgroundImage: "radial-gradient(circle at 80% 50%, white 1px, transparent 1px)", backgroundSize: "20px 20px" }} />
+                <div className="relative px-6 py-5 flex items-center gap-3">
+                  <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center ring-1 ring-white/30">
+                    <User size={18} className="text-white" />
                   </div>
-                </div>
-                <div>
-                  <h2 className="text-lg font-bold text-gray-900">Informations client</h2>
-                  <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
-                    <Sparkles size={10} className="text-[#00A4E0]" />
-                    Réponse sous 24h
-                  </p>
+                  <div>
+                    <h2 className="font-black text-white">Vos informations</h2>
+                    <p className="text-white/60 text-xs mt-0.5">Requis pour finaliser votre demande</p>
+                  </div>
                 </div>
               </div>
 
-              <div className="space-y-3">
+              <div className="p-6 space-y-4">
 
+                {/* NOM */}
                 <div className="relative group">
                   <User className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#00A4E0] transition-colors" size={15} />
                   <input
@@ -314,16 +262,19 @@ export default function PanierPage() {
                   />
                 </div>
 
+                {/* EMAIL */}
                 <div className="relative group">
                   <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#00A4E0] transition-colors" size={15} />
                   <input
-                    placeholder="Adresse email"
+                    type="email"
+                    placeholder="Email"
                     value={client.email}
                     onChange={(e) => setClient({ ...client, email: e.target.value })}
                     className={inputCls}
                   />
                 </div>
 
+                {/* TELEPHONE */}
                 <div className="relative group">
                   <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#00A4E0] transition-colors" size={15} />
                   <input
@@ -334,109 +285,105 @@ export default function PanierPage() {
                   />
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => setClient({ ...client, entreprise: !client.entreprise })}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border text-sm font-medium transition-all duration-200 ${
-                    client.entreprise
-                      ? "border-[#00A4E0] bg-blue-50 text-[#0077A8]"
-                      : "border-gray-200 bg-white text-gray-500 hover:border-gray-300 hover:bg-gray-50"
-                  }`}
-                >
-                  <Building2 size={15} />
-                  {client.entreprise ? "Demande pour une structure" : "Demande pour une structure ?"}
-                  <span className={`ml-auto w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
-                    client.entreprise ? "border-[#00A4E0] bg-[#00A4E0]" : "border-gray-300"
-                  }`}>
-                    {client.entreprise && <span className="w-2 h-2 bg-white rounded-full" />}
-                  </span>
-                </button>
+                {/* ENTREPRISE TOGGLE */}
+                <label className="flex items-center gap-3 cursor-pointer group w-fit">
+                  <div className={`relative w-10 h-5 rounded-full transition-colors duration-200 ${client.entreprise ? "bg-[#00A4E0]" : "bg-gray-200"}`}>
+                    <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${client.entreprise ? "translate-x-5" : "translate-x-0.5"}`} />
+                    <input type="checkbox" checked={client.entreprise} onChange={(e) => setClient({ ...client, entreprise: e.target.checked })} className="sr-only" />
+                  </div>
+                  <span className="text-sm font-semibold text-gray-600">Inscription au nom d'une entreprise</span>
+                </label>
 
+                {/* NOM STRUCTURE */}
                 {client.entreprise && (
                   <div className="relative group">
-                    <Building2 className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#00A4E0]" size={15} />
+                    <Building2 className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#00A4E0] transition-colors" size={15} />
                     <input
                       placeholder="Nom de la structure"
                       value={client.nomStructure}
                       onChange={(e) => setClient({ ...client, nomStructure: e.target.value })}
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-[#00A4E0]/40 bg-blue-50/30
-                                 focus:outline-none focus:ring-2 focus:ring-[#00A4E0]/30 focus:border-[#00A4E0]
-                                 text-sm transition-all"
+                      className={inputCls}
                     />
                   </div>
                 )}
 
+                {/* ERROR */}
+                {error && (
+                  <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-semibold">
+                    <AlertCircle size={15} className="flex-shrink-0" />
+                    {error}
+                  </div>
+                )}
+
+                {/* SUBMIT */}
+                <button
+                  onClick={handleSubmit}
+                  disabled={loading}
+                  className="group relative w-full py-4 rounded-xl font-bold text-sm text-white overflow-hidden
+                             hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-lg shadow-blue-200
+                             disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100
+                             flex items-center justify-center gap-2"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#00A4E0] to-[#0077A8]" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#0077A8] to-[#00A4E0] opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <span className="relative flex items-center gap-2">
+                    {loading ? (
+                      <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Envoi en cours...</>
+                    ) : (
+                      <><Send size={15} />
+                        {hasDevis && !hasPrix ? "Envoyer demande de devis"
+                          : hasDevis && hasPrix ? "Envoyer commande + devis"
+                          : "Valider la commande"}
+                      </>
+                    )}
+                  </span>
+                </button>
+
               </div>
-
-              {error && (
-                <div className="flex items-center gap-2.5 bg-red-50 border border-red-100 rounded-xl px-4 py-3">
-                  <AlertCircle size={15} className="text-red-500 flex-shrink-0" />
-                  <p className="text-red-600 text-sm">{error}</p>
-                </div>
-              )}
-
-              <button
-                onClick={handleSubmit}
-                disabled={loading || isInvalid}
-                className="group relative w-full py-3.5 rounded-xl text-white font-bold text-sm overflow-hidden
-                           hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-lg shadow-blue-200
-                           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
-                           flex items-center justify-center gap-2"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-[#00A4E0] to-[#0077A8]" />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#0077A8] to-[#00A4E0] opacity-0 group-hover:opacity-100 transition-opacity" />
-                <span className="relative flex items-center gap-2">
-                  {loading ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Envoi en cours...
-                    </>
-                  ) : (
-                    <>
-                      <Send size={16} />
-                      Envoyer la demande
-                    </>
-                  )}
-                </span>
-              </button>
-
             </div>
           </div>
 
-          {/* ===== RÉSUMÉ STICKY ===== */}
-          <div className="lg:col-span-1 sticky top-6">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 space-y-5">
+          {/* ===== RÉSUMÉ ===== */}
+          <div className="sticky top-6">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 space-y-4">
 
-              <h2 className="font-bold text-gray-900 text-lg">Résumé</h2>
+              <h3 className="font-black text-gray-900 text-lg">Résumé</h3>
 
-              <div className="space-y-3 divide-y divide-gray-100">
-                {items.map((item: PanierItem) => (
-                  <div key={item.formationId} className="flex justify-between items-center pt-3 first:pt-0">
-                    <span className="text-sm text-gray-600 truncate max-w-[60%]">{item.titre}</span>
-                    <span className="text-sm font-semibold text-gray-800 flex-shrink-0">
-                      {((item.prix ?? 0) * item.participants).toLocaleString()} FCFA
+              <div className="space-y-3">
+                {items.map(item => (
+                  <div key={item.formationId} className="flex items-start justify-between gap-3 text-sm">
+                    <div className="min-w-0">
+                      <p className="font-semibold text-gray-700 truncate">{item.titre}</p>
+                      <p className="text-xs text-gray-400">{item.participants} participant{item.participants > 1 ? "s" : ""}</p>
+                    </div>
+                    <span className={`font-black flex-shrink-0 ${item.afficherPrix ? "text-gray-900" : "text-orange-500"}`}>
+                      {item.afficherPrix
+                        ? `${((item.prix ?? 0) * item.participants).toLocaleString()} FCFA`
+                        : "Devis"
+                      }
                     </span>
                   </div>
                 ))}
               </div>
 
-              <div className="pt-4 border-t border-gray-200">
-                <div className="flex justify-between items-center">
-                  <span className="font-bold text-gray-900">Total</span>
-                  <span className="text-2xl font-black text-[#00A4E0]">
-                    {total.toLocaleString()}
-                    <span className="text-base font-semibold text-gray-500 ml-1">FCFA</span>
-                  </span>
-                </div>
+              <div className="pt-4 border-t border-gray-100 space-y-2">
+                {total > 0 && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-500 font-medium">Total connu</span>
+                    <span className="font-black text-xl text-[#00A4E0]">
+                      {total.toLocaleString()} <span className="text-sm">FCFA</span>
+                    </span>
+                  </div>
+                )}
+                {hasDevis && (
+                  <div className="flex items-start gap-2 px-3 py-2.5 rounded-xl bg-orange-50 border border-orange-100">
+                    <MessageCircle size={14} className="text-orange-500 flex-shrink-0 mt-0.5" />
+                    <p className="text-xs text-orange-600 font-medium">
+                      Certaines formations nécessitent un devis personnalisé.
+                    </p>
+                  </div>
+                )}
               </div>
-
-              <button
-                onClick={() => navigate("/formations-continues")}
-                className="w-full py-3 rounded-xl border border-gray-200 text-gray-600 font-medium text-sm
-                           hover:border-gray-300 hover:bg-gray-50 transition-all duration-200"
-              >
-                Continuer ma sélection
-              </button>
 
             </div>
           </div>
@@ -445,10 +392,7 @@ export default function PanierPage() {
       </div>
 
       <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(6px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
       `}</style>
     </div>
   )

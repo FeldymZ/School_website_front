@@ -5,7 +5,10 @@ import { create } from "zustand"
 export interface PanierItem {
   formationId: number
   titre: string
+
   prix?: number
+  afficherPrix?: boolean
+
   participants: number
   slug: string
   coverUrl?: string
@@ -23,7 +26,6 @@ interface PanierState {
   items: PanierItem[]
   client: ClientInfo
 
-  /* 🔥 UI */
   isOpen: boolean
   open: () => void
   close: () => void
@@ -50,39 +52,43 @@ export const usePanier = create<PanierState>((set) => ({
     nomStructure: "",
   },
 
-  /* 🔥 DRAWER STATE */
   isOpen: false,
 
   open: () => set({ isOpen: true }),
-
   close: () => set({ isOpen: false }),
 
   /* ================= ADD ================= */
   add: (item) =>
     set((state) => {
-      const exists = state.items.find(
-        (i) => i.formationId === item.formationId
-      )
 
-      const safeItem: PanierItem = {
-        ...item,
+      const normalized: PanierItem = {
+        formationId: item.formationId,
+        titre: item.titre,
+        prix: item.prix,
+        afficherPrix: item.afficherPrix ?? true,
+        participants: Math.max(1, item.participants),
+        slug: item.slug,
         coverUrl: item.coverUrl ?? undefined,
       }
+
+      const exists = state.items.find(
+        (i) => i.formationId === normalized.formationId
+      )
 
       if (exists) {
         return {
           items: state.items.map((i) =>
-            i.formationId === item.formationId
+            i.formationId === normalized.formationId
               ? {
                   ...i,
-                  participants: i.participants + item.participants,
+                  participants: i.participants + normalized.participants,
                 }
               : i
           ),
         }
       }
 
-      return { items: [...state.items, safeItem] }
+      return { items: [...state.items, normalized] }
     }),
 
   /* ================= REMOVE ================= */
@@ -120,4 +126,5 @@ export const usePanier = create<PanierState>((set) => ({
       },
       isOpen: false,
     }),
+
 }))
