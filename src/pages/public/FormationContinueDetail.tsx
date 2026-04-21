@@ -282,7 +282,7 @@ export default function FormationContinueDetail() {
                   {added ? (
                     <><CheckCircle size={16} /> Ajouté à la demande !</>
                   ) : (
-                    <><ShoppingCart size={16} /> Ajouter à la demande</>
+                    <><ShoppingCart size={16} /> Ajouter la demande</>
                   )}
                 </span>
               </button>
