@@ -9,6 +9,9 @@ import ActualitesPage from "@/pages/Actualites";
 import ActualiteDetailsPage from "@/pages/ActualiteDetails";
 import MotDuDG from "@/pages/MotDuDG";
 
+/* ================= PREINSCRIPTION ================= */
+import PreinscriptionPage from "@/pages/public/PreinscriptionPage";
+
 /* ================= ACTIVITÉS ================= */
 import ActivitesPublicList from "@/pages/public/ActivitesPublicList";
 import ActivitePublicDetail from "@/pages/public/ActivitePublicDetail";
@@ -33,6 +36,12 @@ export const router = createBrowserRouter([
 
       { path: "nos-missions", element: <NosMissionsPage /> },
       { path: "nos-defis", element: <NosDéfisPage /> },
+
+      /* ================= PREINSCRIPTION ================= */
+      { path: "preinscription", element: <PreinscriptionPage /> },
+
+      // 🔥 AJOUT IMPORTANT
+      { path: "preinscription/:slug", element: <PreinscriptionPage /> },
 
       /* FORMATIONS */
       { path: "formations", element: <FormationsList /> },
