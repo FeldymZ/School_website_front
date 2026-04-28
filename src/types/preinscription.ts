@@ -9,34 +9,7 @@ export interface SessionPublique {
 }
 
 /* =========================
-   ENUMS FRONT (SYNC BACKEND)
-========================= */
-export type Civilite = "M" | "MME" | "MLLE";
-
-export type NiveauSouhaite =
-  | "PREMIERE_ANNEE"
-  | "DEUXIEME_ANNEE"
-  | "TROISIEME_ANNEE";
-
-/* =========================
-   REQUEST FRONT → BACK
-========================= */
-export interface FormationPreinscriptionRequest {
-  civilite: Civilite;
-  nom: string;
-  prenom: string;
-  dateNaissance: string;
-  lieuNaissance: string;
-  nationalite: string;
-  email: string;
-  telephone: string;
-  whatsapp?: string;
-  niveauSouhaite: NiveauSouhaite;
-  formationId: number;
-}
-
-/* =========================
-   DEMANDE (ADMIN)
+   DEMANDE PREINSCRIPTION
 ========================= */
 export interface PreinscriptionDemande {
   id: number;
@@ -59,4 +32,38 @@ export interface PreinscriptionDemande {
 
   statut?: "EN_ATTENTE" | "VALIDEE" | "REJETEE";
   createdAt?: string;
+}
+
+/* =========================
+   EMETTEUR
+========================= */
+export interface PreinscriptionEmetteur {
+  id: number;
+  nom: string;
+  fonction: string;
+  signatureUrl?: string;
+  actif?: boolean;
+}
+
+/* =========================
+   SESSION ADMIN
+========================= */
+export interface SessionUniversitaire {
+  id: number;
+  annee: string;
+}
+
+/* =========================
+   PERIODE
+========================= */
+export interface PreinscriptionPeriode {
+  id: number;
+
+  dateDebut: string;
+  dateFin: string;
+
+  active: boolean;
+
+  session?: SessionUniversitaire;
+  emetteur?: PreinscriptionEmetteur;
 }
