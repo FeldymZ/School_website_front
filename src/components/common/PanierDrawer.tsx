@@ -1,5 +1,3 @@
-"use client"
-
 import { usePanier } from "@/store/usePanier"
 import { resolveMediaUrl } from "@/utils/media"
 import {
@@ -13,6 +11,7 @@ import {
   InboxIcon,
   Minus,
   Plus,
+  MessageCircle,
 } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 
@@ -21,10 +20,13 @@ export default function PanierDrawer() {
   const { items, isOpen, close, remove, updateParticipants } = usePanier()
   const navigate = useNavigate()
 
+  /* ✅ Total — uniquement les items avec prix connu */
   const total = items.reduce(
-    (sum, i) => sum + (i.prix ?? 0) * i.participants,
+    (sum, i) => i.afficherPrix ? sum + (i.prix ?? 0) * i.participants : sum,
     0
   )
+
+  const hasPrix = items.some(i => i.afficherPrix)
 
   return (
     <>
@@ -122,11 +124,23 @@ export default function PanierDrawer() {
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-bold text-gray-900 line-clamp-2 leading-snug">{item.titre}</p>
-                  {item.prix != null && (
+                  <p className="text-xs font-bold text-gray-900 line-clamp-2 leading-snug">
+                    {item.titre}
+                  </p>
+
+                  {/* ✅ Prix / pers — uniquement si afficherPrix */}
+                  {item.afficherPrix && item.prix != null && (
                     <p className="text-[10px] text-gray-500 flex items-center gap-1 mt-0.5">
                       <Banknote size={9} />
                       {item.prix.toLocaleString()} FCFA / pers.
+                    </p>
+                  )}
+
+                  {/* ✅ Sur devis — si pas afficherPrix */}
+                  {!item.afficherPrix && (
+                    <p className="text-[10px] text-orange-500 flex items-center gap-1 mt-0.5 font-semibold">
+                      <MessageCircle size={9} />
+                      Sur devis
                     </p>
                   )}
                 </div>
@@ -169,9 +183,13 @@ export default function PanierDrawer() {
                   </div>
                 </div>
 
-                <span className="text-xs font-black text-[#00A4E0]">
-                  {((item.prix ?? 0) * item.participants).toLocaleString()} FCFA
-                </span>
+                {/* ✅ Sous-total — uniquement si prix connu */}
+               {/* ✅ Sous-total — uniquement si prix connu, rien sinon */}
+{item.afficherPrix && (
+  <span className="text-xs font-black text-[#00A4E0]">
+    {((item.prix ?? 0) * item.participants).toLocaleString()} FCFA
+  </span>
+)}
 
               </div>
             </div>
@@ -183,13 +201,16 @@ export default function PanierDrawer() {
         {items.length > 0 && (
           <div className="flex-shrink-0 p-3 border-t border-gray-100 space-y-2.5 bg-gradient-to-br from-white to-gray-50">
 
-            <div className="flex justify-between items-center px-0.5">
-              <span className="font-bold text-gray-800 text-sm">Total</span>
-              <span className="font-black text-base text-[#00A4E0]">
-                {total.toLocaleString()}
-                <span className="text-[11px] font-semibold text-gray-500 ml-1">FCFA</span>
-              </span>
-            </div>
+            {/* ✅ Total — uniquement si au moins 1 item avec prix */}
+            {hasPrix && (
+              <div className="flex justify-between items-center px-0.5">
+                <span className="font-bold text-gray-800 text-sm">Total</span>
+                <span className="font-black text-base text-[#00A4E0]">
+                  {total.toLocaleString()}
+                  <span className="text-[11px] font-semibold text-gray-500 ml-1">FCFA</span>
+                </span>
+              </div>
+            )}
 
             <button
               onClick={() => {
@@ -202,7 +223,7 @@ export default function PanierDrawer() {
               <div className="absolute inset-0 bg-gradient-to-r from-[#00A4E0] to-[#0077A8]" />
               <div className="absolute inset-0 bg-gradient-to-r from-[#0077A8] to-[#00A4E0] opacity-0 group-hover:opacity-100 transition-opacity" />
               <span className="relative flex items-center justify-center gap-1.5">
-                Voir le panier
+                Voir ma demande
                 <ArrowRight size={14} />
               </span>
             </button>

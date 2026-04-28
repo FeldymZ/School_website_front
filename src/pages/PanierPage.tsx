@@ -142,7 +142,7 @@ export default function PanierPage() {
               </div>
               <div>
                 <h1 className="text-2xl font-black bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                  Ma demande
+                  Ma demande de devis
                 </h1>
                 <p className="text-gray-500 text-sm mt-0.5">
                   {items.length} formation{items.length > 1 ? "s" : ""} sélectionnée{items.length > 1 ? "s" : ""}
