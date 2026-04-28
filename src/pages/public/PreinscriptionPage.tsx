@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -12,8 +10,6 @@ import {
   fetchPreinscriptionSession,
   submitPreinscription,
 } from "@/services/preinscription.service";
-
-
 
 import { Formation } from "@/types/formation";
 import { SessionPublique } from "@/types/preinscription";
@@ -40,41 +36,40 @@ import {
 
 /* ================= TYPES ================= */
 type Civilite = "M" | "MME" | "MLLE";
-type Niveau = "PREMIERE_ANNEE" | "DEUXIEME_ANNEE" | "TROISIEME_ANNEE";
+type Niveau   = "PREMIERE_ANNEE" | "DEUXIEME_ANNEE" | "TROISIEME_ANNEE";
 
 /* ================= PAGE ================= */
 export default function PreinscriptionPage() {
 
   const { slug } = useParams<{ slug: string }>();
 
-  const [session, setSession] = useState<SessionPublique | null>(null);
+  const [session, setSession]       = useState<SessionPublique | null>(null);
   const [formations, setFormations] = useState<Formation[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading]       = useState(true);
 
   const [sending, setSending] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError]     = useState<string | null>(null);
 
-  const [initialized, setInitialized] = useState(false);
-  const [autoSelected, setAutoSelected] = useState(false); // ✅ IMPORTANT
+  const [initialized, setInitialized]   = useState(false);
+  const [autoSelected, setAutoSelected] = useState(false);
 
-  /* ✅ locked quand vient du slug */
-  const [typeLocked, setTypeLocked] = useState(false);
+  const [typeLocked, setTypeLocked]           = useState(false);
   const [formationLocked, setFormationLocked] = useState(false);
 
   const [form, setForm] = useState({
-    civilite: "M" as Civilite,
-    nom: "",
-    prenom: "",
-    dateNaissance: "",
-    lieuNaissance: "",
-    nationalite: "",
-    email: "",
-    telephone: "",
-    whatsapp: "",
-    typeFormation: "LICENCE",
+    civilite:       "M" as Civilite,
+    nom:            "",
+    prenom:         "",
+    dateNaissance:  "",
+    lieuNaissance:  "",
+    nationalite:    "",
+    email:          "",
+    telephone:      "",
+    whatsapp:       "",
+    typeFormation:  "LICENCE",
     niveauSouhaite: "PREMIERE_ANNEE" as Niveau,
-    formationId: "",
+    formationId:    "",
   });
 
   /* ================= LOAD SESSION ================= */
@@ -118,13 +113,13 @@ export default function PreinscriptionPage() {
 
         setForm((prev) => ({
           ...prev,
-          formationId: String(formation.id),
+          formationId:   String(formation.id),
           typeFormation: formation.level || "LICENCE",
         }));
 
-        setAutoSelected(true);      // ✅ clé
-        setTypeLocked(true);        // ✅ verrouille le type
-        setFormationLocked(true);   // ✅ verrouille la formation
+        setAutoSelected(true);
+        setTypeLocked(true);
+        setFormationLocked(true);
 
       } catch {
         console.error("Formation introuvable");
@@ -141,17 +136,15 @@ export default function PreinscriptionPage() {
       return;
     }
 
-    // ❌ ne reset PAS si vient du slug
     if (autoSelected) {
       setAutoSelected(false);
       return;
     }
 
-    // ✅ reset normal si user change type
     setForm(prev => ({
       ...prev,
       niveauSouhaite: "PREMIERE_ANNEE",
-      formationId: "",
+      formationId:    "",
     }));
 
   }, [form.typeFormation]);
@@ -179,13 +172,13 @@ export default function PreinscriptionPage() {
     setError(null);
 
     if (
-      !form.nom.trim() ||
-      !form.prenom.trim() ||
-      !form.email.trim() ||
-      !form.telephone.trim() ||
-      !form.dateNaissance ||
+      !form.nom.trim()           ||
+      !form.prenom.trim()        ||
+      !form.email.trim()         ||
+      !form.telephone.trim()     ||
+      !form.dateNaissance        ||
       !form.lieuNaissance.trim() ||
-      !form.nationalite.trim() ||
+      !form.nationalite.trim()   ||
       !form.formationId
     ) {
       setError("Veuillez remplir tous les champs obligatoires");
@@ -201,17 +194,17 @@ export default function PreinscriptionPage() {
       setSending(true);
 
       await submitPreinscription({
-        civilite: form.civilite,
-        nom: form.nom.trim(),
-        prenom: form.prenom.trim(),
-        dateNaissance: form.dateNaissance,
-        lieuNaissance: form.lieuNaissance.trim(),
-        nationalite: form.nationalite.trim(),
-        email: form.email.trim(),
-        telephone: form.telephone.trim(),
-        whatsapp: form.whatsapp || undefined,
+        civilite:       form.civilite,
+        nom:            form.nom.trim(),
+        prenom:         form.prenom.trim(),
+        dateNaissance:  form.dateNaissance,
+        lieuNaissance:  form.lieuNaissance.trim(),
+        nationalite:    form.nationalite.trim(),
+        email:          form.email.trim(),
+        telephone:      form.telephone.trim(),
+        whatsapp:       form.whatsapp || undefined,
         niveauSouhaite: form.niveauSouhaite,
-        formationId: Number(form.formationId),
+        formationId:    Number(form.formationId),
       });
 
       setSuccess(true);
@@ -282,7 +275,7 @@ export default function PreinscriptionPage() {
     );
   }
 
-  /* ================= helpers ================= */
+  /* ================= HELPERS ================= */
   const inputCls = (locked = false) =>
     `w-full pl-10 pr-4 py-3 rounded-xl border text-sm transition-all bg-white
      ${locked
@@ -398,27 +391,71 @@ export default function PreinscriptionPage() {
             </select>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Field icon={<User size={15} />} name="nom" placeholder="Nom *" onChange={handleChange} />
-            <Field icon={<User size={15} />} name="prenom" placeholder="Prénom *" onChange={handleChange} />
-            <Field
-  icon={<Calendar size={15} />}
-  name="dateNaissance"
-  type="date"
-  placeholder="Date de naissance *"
-  onChange={handleChange}
-/>
-            <Field icon={<MapPin size={15} />} name="lieuNaissance" placeholder="Lieu de naissance *" onChange={handleChange} />
-            <Field icon={<Globe size={15} />} name="nationalite" placeholder="Nationalité *" onChange={handleChange} className="sm:col-span-2" />
-          </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+  {/* NOM */}
+  <div>
+    <Field
+      icon={<User size={15} />}
+      name="nom"
+      placeholder="Nom *"
+      onChange={handleChange}
+    />
+  </div>
+
+  {/* PRENOM */}
+  <div>
+    <Field
+      icon={<User size={15} />}
+      name="prenom"
+      placeholder="Prénom *"
+      onChange={handleChange}
+    />
+  </div>
+
+  {/* DATE NAISSANCE */}
+  <div className="sm:col-span-2 space-y-1">
+    <label className="text-xs font-medium text-gray-500 pl-1">
+      Date de naissance *
+    </label>
+
+    <Field
+      icon={<Calendar size={15} />}
+      name="dateNaissance"
+      type="date"
+      onChange={handleChange}
+    />
+  </div>
+
+  {/* NATIONALITE */}
+  <div className="sm:col-span-2">
+    <Field
+      icon={<Globe size={15} />}
+      name="nationalite"
+      placeholder="Nationalité *"
+      onChange={handleChange}
+    />
+  </div>
+
+  {/* ✅ LIEU NAISSANCE FULL WIDTH */}
+  <div className="sm:col-span-2">
+    <Field
+      icon={<MapPin size={15} />}
+      name="lieuNaissance"
+      placeholder="Lieu de naissance *"
+      onChange={handleChange}
+    />
+  </div>
+
+</div>
         </Section>
 
         {/* ===== SECTION : CONTACT ===== */}
         <Section title="Contact" icon={<Mail size={16} className="text-white" />} color="from-orange-400 to-amber-500">
           <Field icon={<Mail size={15} />} name="email" type="email" placeholder="Adresse email *" onChange={handleChange} />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Field icon={<Phone size={15} />} name="telephone" placeholder="Téléphone *" onChange={handleChange} />
-            <Field icon={<MessageSquare size={15} />} name="whatsapp" placeholder="WhatsApp (optionnel)" onChange={handleChange} />
+            <Field icon={<Phone size={15} />}        name="telephone" placeholder="Téléphone *"          onChange={handleChange} />
+            <Field icon={<MessageSquare size={15} />} name="whatsapp"  placeholder="WhatsApp (optionnel)" onChange={handleChange} />
           </div>
         </Section>
 
@@ -466,7 +503,6 @@ export default function PreinscriptionPage() {
 function Section({ title, icon, color, children }: any) {
   return (
     <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-white shadow-lg overflow-hidden">
-      {/* Header section */}
       <div className="relative px-6 py-4 flex items-center gap-3">
         <div className={`absolute inset-0 bg-gradient-to-r ${color} opacity-[0.07]`} />
         <div className={`relative w-8 h-8 bg-gradient-to-br ${color} rounded-lg flex items-center justify-center shadow-sm`}>
@@ -480,7 +516,7 @@ function Section({ title, icon, color, children }: any) {
 }
 
 /* ================= FIELD ================= */
-function Field({ icon, name, placeholder, onChange, type = "text", className = "", label }: any) {
+function Field({ icon, name, placeholder, onChange, type = "text", className = "" }: any) {
   return (
     <div className={`relative group ${className}`}>
       <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#00A4E0] transition-colors pointer-events-none">
@@ -495,9 +531,6 @@ function Field({ icon, name, placeholder, onChange, type = "text", className = "
                    focus:outline-none focus:ring-2 focus:ring-[#00A4E0]/30 focus:border-[#00A4E0]
                    text-sm transition-all bg-white"
       />
-      {label && !placeholder && (
-        <span className="absolute left-10 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none">{label}</span>
-      )}
     </div>
   );
 }
