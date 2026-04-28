@@ -67,3 +67,21 @@ export interface PreinscriptionPeriode {
   session?: SessionUniversitaire;
   emetteur?: PreinscriptionEmetteur;
 }
+
+
+export interface FormationPreinscriptionRequest {
+  civilite: "M" | "MME" | "MLLE";
+  nom: string;
+  prenom: string;
+  dateNaissance: string;
+  lieuNaissance: string;
+  nationalite: string;
+  email: string;
+  telephone: string;
+  whatsapp?: string;
+  niveauSouhaite:
+    | "PREMIERE_ANNEE"
+    | "DEUXIEME_ANNEE"
+    | "TROISIEME_ANNEE";
+  formationId: number;
+}
