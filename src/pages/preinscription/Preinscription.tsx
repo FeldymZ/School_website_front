@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { sendPreinscription } from "@/services/preinscription.service";
+import { submitPreinscription } from "@/services/preinscription.service";
 import type { FormationPreinscriptionRequest } from "@/types/preinscription";
 
 type FormState = {
@@ -84,58 +84,45 @@ export default function PreinscriptionForm() {
      ========================= */
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(null);
-    setSuccess(null);
-    setLoading(true);
+  e.preventDefault();
+  setError(null);
+  setSuccess(null);
+  setLoading(true);
 
-    const payload: FormationPreinscriptionRequest = {
+  try {
+    await submitPreinscription({
+      civilite: form.sexe === "FEMININ" ? "MME" : "M", // mapping
       nom: form.nom,
       prenom: form.prenom,
       dateNaissance: form.dateNaissance,
       lieuNaissance: form.lieuNaissance,
-      sexe: form.sexe as FormationPreinscriptionRequest["sexe"],
       nationalite: form.nationalite,
-      adresse: form.adresse,
-      telephone: form.telephone,
       email: form.email,
-      situationFamiliale:
-        form.situationFamiliale as FormationPreinscriptionRequest["situationFamiliale"],
+      telephone: form.telephone,
+      whatsapp: undefined,
 
-      nomEtablissement: form.nomEtablissement,
-      typeEtablissement:
-        form.typeEtablissement as FormationPreinscriptionRequest["typeEtablissement"],
-      serieBaccalaureat:
-        form.serieBaccalaureat as FormationPreinscriptionRequest["serieBaccalaureat"],
-      anneeObtention: Number(form.anneeObtention),
+      // ⚠️ mapping important
+      niveauSouhaite:
+        form.niveau === "MASTER"
+          ? "PREMIERE_ANNEE"
+          : "PREMIERE_ANNEE",
 
       formationId: Number(form.formationId),
-      niveau: form.niveau as FormationPreinscriptionRequest["niveau"],
-      niveauEtude: Number(form.niveauEtude),
+    });
 
-      statutEtudiant:
-        form.statutEtudiant as FormationPreinscriptionRequest["statutEtudiant"],
-      modeFinancement:
-        form.modeFinancement as FormationPreinscriptionRequest["modeFinancement"],
-      autreFinancement: form.autreFinancement || undefined,
+    setSuccess("Votre préinscription a été envoyée avec succès.");
+    setForm(initialFormState);
 
-      profession: form.profession,
-    };
-
-    try {
-      await sendPreinscription(payload);
-      setSuccess("Votre préinscription a été envoyée avec succès.");
-      setForm(initialFormState);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("Erreur lors de l’envoi de la préinscription");
-      }
-    } finally {
-      setLoading(false);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      setError(err.message);
+    } else {
+      setError("Erreur lors de l’envoi de la préinscription");
     }
-  };
+  } finally {
+    setLoading(false);
+  }
+};
 
   /* =========================
      RENDER

@@ -68,20 +68,42 @@ export interface PreinscriptionPeriode {
   emetteur?: PreinscriptionEmetteur;
 }
 
-
+/* =========================
+   ✅ PAYLOAD FORMULAIRE (IMPORTANT)
+========================= */
 export interface FormationPreinscriptionRequest {
-  civilite: "M" | "MME" | "MLLE";
   nom: string;
   prenom: string;
+
   dateNaissance: string;
   lieuNaissance: string;
+  sexe: "MASCULIN" | "FEMININ";
+
   nationalite: string;
-  email: string;
+  adresse: string;
+
   telephone: string;
-  whatsapp?: string;
-  niveauSouhaite:
-    | "PREMIERE_ANNEE"
-    | "DEUXIEME_ANNEE"
-    | "TROISIEME_ANNEE";
+  email: string;
+
+  situationFamiliale:
+    | "CELIBATAIRE_SANS_ENFANT"
+    | "CELIBATAIRE_AVEC_ENFANT"
+    | "COUPLE_SANS_ENFANT"
+    | "COUPLE_AVEC_ENFANT";
+
+  nomEtablissement: string;
+  typeEtablissement: string;
+  serieBaccalaureat: string;
+  anneeObtention: number;
+
   formationId: number;
+
+  niveau: "LICENCE" | "MASTER";
+  niveauEtude: number;
+
+  statutEtudiant: string;
+  modeFinancement: string;
+  autreFinancement?: string;
+
+  profession: string;
 }
