@@ -1,5 +1,3 @@
-"use client"
-
 import { useEffect, useState } from "react"
 import { Link, useSearchParams } from "react-router-dom"
 import { fetchPublicFormationsContinues } from "@/services/FormationsContinuesPublicService"
@@ -15,7 +13,6 @@ import {
   Loader2,
   Clock,
   MessageCircle,
-  Banknote,
 } from "lucide-react"
 
 const selectCls =
@@ -29,11 +26,11 @@ export default function FormationsContinuesList() {
   const [categories, setCategories]         = useState<any[]>([])
   const [sousCategories, setSousCategories] = useState<any[]>([])
 
-  const [formations, setFormations]     = useState<any[]>([])
-  const [loading, setLoading]           = useState(true)
-  const [loadingMore, setLoadingMore]   = useState(false)
-  const [page, setPage]                 = useState(0)
-  const [hasMore, setHasMore]           = useState(false)
+  const [formations, setFormations]   = useState<any[]>([])
+  const [loading, setLoading]         = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [page, setPage]               = useState(0)
+  const [hasMore, setHasMore]         = useState(false)
 
   const categorieId     = searchParams.get("cat")
   const sousCategorieId = searchParams.get("sub")
@@ -86,6 +83,18 @@ export default function FormationsContinuesList() {
     if (categorieId) params.cat = categorieId
     if (value) params.sub = value
     setSearchParams(params)
+  }
+
+  /* ── Retrouve la catégorie parente d'une formation
+        en matchant sousCategorie.id dans la liste categories ── */
+  const getCategorieLibelle = (f: any): string | null => {
+    for (const cat of categories) {
+      const found = cat.sousCategories?.find(
+        (sc: any) => sc.id === f.sousCategorie?.id
+      )
+      if (found) return cat.libelle
+    }
+    return null
   }
 
   const selectedCategorieName     = categories.find(c => c.id === Number(categorieId))?.libelle
@@ -241,10 +250,10 @@ export default function FormationsContinuesList() {
                       )}
                     </div>
 
-                    {/* CATEGORIE */}
+                    {/* CATEGORIE ✅ — retrouvée depuis la liste categories */}
                     <p className="text-sm text-gray-600">
                       <span className="font-semibold text-gray-400">Catégorie :</span>{" "}
-                      {f.sousCategorie?.libelle ?? (
+                      {getCategorieLibelle(f) ?? (
                         <span className="text-gray-300 italic">—</span>
                       )}
                     </p>

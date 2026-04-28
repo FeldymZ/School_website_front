@@ -1,5 +1,3 @@
-"use client"
-
 import { usePanier, PanierItem } from "@/store/usePanier"
 import { resolveMediaUrl } from "@/utils/media"
 import { useNavigate } from "react-router-dom"
@@ -10,7 +8,6 @@ import {
   Users,
   CheckCircle,
   ShoppingBag,
-  Banknote,
   MessageCircle,
   User,
   Mail,
@@ -31,10 +28,10 @@ export default function PanierPage() {
   const { items, remove, updateParticipants, clear } = usePanier()
 
   const [client, setClient] = useState({
-    nomClient: "",
-    email: "",
-    telephone: "",
-    entreprise: false,
+    nomClient:    "",
+    email:        "",
+    telephone:    "",
+    entreprise:   false,
     nomStructure: "",
   })
 
@@ -42,22 +39,21 @@ export default function PanierPage() {
   const [error, setError]     = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
 
-  /* ================= LOGIQUE ================= */
-  const total = items.reduce((sum, i) => {
+  /* ── Logique prix ── */
+  const total    = items.reduce((sum, i) => {
     if (!i.afficherPrix) return sum
     return sum + (i.prix ?? 0) * i.participants
   }, 0)
-
   const hasDevis = items.some(i => !i.afficherPrix)
   const hasPrix  = items.some(i => i.afficherPrix)
 
   const isInvalid =
-    !client.nomClient.trim() ||
-    !client.email.trim() ||
-    !client.telephone.trim() ||
+    !client.nomClient.trim()    ||
+    !client.email.trim()        ||
+    !client.telephone.trim()    ||
     (client.entreprise && !client.nomStructure.trim())
 
-  /* ================= SUBMIT ================= */
+  /* ── Submit ── */
   const handleSubmit = async () => {
     if (isInvalid) { setError("Veuillez remplir tous les champs"); return }
     if (!/\S+@\S+\.\S+/.test(client.email)) { setError("Email invalide"); return }
@@ -78,7 +74,7 @@ export default function PanierPage() {
     }
   }
 
-  /* ================= SUCCESS ================= */
+  /* ── Success ── */
   if (success) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-50/30 flex items-center justify-center p-6">
@@ -105,7 +101,7 @@ export default function PanierPage() {
     )
   }
 
-  /* ================= EMPTY ================= */
+  /* ── Empty ── */
   if (items.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-50/30 flex items-center justify-center p-6">
@@ -128,7 +124,7 @@ export default function PanierPage() {
     )
   }
 
-  /* ================= MAIN ================= */
+  /* ── Main ── */
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/20">
       <div className="max-w-6xl mx-auto px-6 py-10 space-y-6">
@@ -156,10 +152,11 @@ export default function PanierPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        {/* ===== GRILLE — résumé affiché seulement si hasPrix ===== */}
+        <div className={`grid grid-cols-1 gap-6 items-start ${hasPrix ? "lg:grid-cols-3" : ""}`}>
 
           {/* ===== LISTE + FORM ===== */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className={`space-y-4 ${hasPrix ? "lg:col-span-2" : ""}`}>
 
             {/* ITEMS */}
             {items.map((item: PanierItem, index) => (
@@ -173,7 +170,11 @@ export default function PanierPage() {
                   {/* COVER */}
                   {item.coverUrl && (
                     <div className="w-16 h-16 rounded-2xl overflow-hidden flex-shrink-0 bg-gray-100">
-                      <img src={resolveMediaUrl(item.coverUrl)} alt={item.titre} className="w-full h-full object-cover" />
+                      <img
+                        src={resolveMediaUrl(item.coverUrl)}
+                        alt={item.titre}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                   )}
 
@@ -188,25 +189,20 @@ export default function PanierPage() {
                       </button>
                     </div>
 
-                    {/* PRIX */}
-                    {item.afficherPrix ? (
-                      <div className="flex items-center gap-1.5 mt-1">
-                        <Banknote size={13} className="text-[#00A4E0]" />
-                        <span className="text-sm font-bold text-[#00A4E0]">
-                          {item.prix?.toLocaleString()} FCFA / pers.
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-1.5 mt-1">
-                        <MessageCircle size={13} className="text-orange-500" />
-                        <span className="text-sm font-bold text-orange-500">Sur devis</span>
-                      </div>
+                    {/* ✅ PRIX affiché uniquement si afficherPrix — "Sur devis" supprimé */}
+                    {item.afficherPrix && item.prix != null && (
+                      <p className="text-sm font-bold text-[#00A4E0] mt-1">
+                        {item.prix.toLocaleString()} FCFA / pers.
+                      </p>
                     )}
 
                     {/* PARTICIPANTS + SOUS-TOTAL */}
                     <div className="flex items-center justify-between mt-3">
                       <div className="relative group w-32">
-                        <Users className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#00A4E0] transition-colors" size={13} />
+                        <Users
+                          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#00A4E0] transition-colors"
+                          size={13}
+                        />
                         <input
                           type="number"
                           value={item.participants}
@@ -217,15 +213,15 @@ export default function PanierPage() {
                         />
                       </div>
 
-                      <div className="text-right">
-                        <p className="text-xs text-gray-400">Sous-total</p>
-                        <p className="font-black text-gray-900">
-                          {item.afficherPrix
-                            ? `${((item.prix ?? 0) * item.participants).toLocaleString()} FCFA`
-                            : "Sur devis"
-                          }
-                        </p>
-                      </div>
+                      {/* ✅ Sous-total affiché uniquement si prix connu */}
+                      {item.afficherPrix && (
+                        <div className="text-right">
+                          <p className="text-xs text-gray-400">Sous-total</p>
+                          <p className="font-black text-gray-900">
+                            {((item.prix ?? 0) * item.participants).toLocaleString()} FCFA
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -236,8 +232,10 @@ export default function PanierPage() {
             <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
               <div className="relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#00A4E0] to-[#0077A8]" />
-                <div className="absolute inset-0 opacity-10"
-                  style={{ backgroundImage: "radial-gradient(circle at 80% 50%, white 1px, transparent 1px)", backgroundSize: "20px 20px" }} />
+                <div
+                  className="absolute inset-0 opacity-10"
+                  style={{ backgroundImage: "radial-gradient(circle at 80% 50%, white 1px, transparent 1px)", backgroundSize: "20px 20px" }}
+                />
                 <div className="relative px-6 py-5 flex items-center gap-3">
                   <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center ring-1 ring-white/30">
                     <User size={18} className="text-white" />
@@ -251,7 +249,6 @@ export default function PanierPage() {
 
               <div className="p-6 space-y-4">
 
-                {/* NOM */}
                 <div className="relative group">
                   <User className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#00A4E0] transition-colors" size={15} />
                   <input
@@ -262,7 +259,6 @@ export default function PanierPage() {
                   />
                 </div>
 
-                {/* EMAIL */}
                 <div className="relative group">
                   <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#00A4E0] transition-colors" size={15} />
                   <input
@@ -274,7 +270,6 @@ export default function PanierPage() {
                   />
                 </div>
 
-                {/* TELEPHONE */}
                 <div className="relative group">
                   <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#00A4E0] transition-colors" size={15} />
                   <input
@@ -285,16 +280,19 @@ export default function PanierPage() {
                   />
                 </div>
 
-                {/* ENTREPRISE TOGGLE */}
                 <label className="flex items-center gap-3 cursor-pointer group w-fit">
                   <div className={`relative w-10 h-5 rounded-full transition-colors duration-200 ${client.entreprise ? "bg-[#00A4E0]" : "bg-gray-200"}`}>
                     <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${client.entreprise ? "translate-x-5" : "translate-x-0.5"}`} />
-                    <input type="checkbox" checked={client.entreprise} onChange={(e) => setClient({ ...client, entreprise: e.target.checked })} className="sr-only" />
+                    <input
+                      type="checkbox"
+                      checked={client.entreprise}
+                      onChange={(e) => setClient({ ...client, entreprise: e.target.checked })}
+                      className="sr-only"
+                    />
                   </div>
                   <span className="text-sm font-semibold text-gray-600">Inscription au nom d'une entreprise</span>
                 </label>
 
-                {/* NOM STRUCTURE */}
                 {client.entreprise && (
                   <div className="relative group">
                     <Building2 className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#00A4E0] transition-colors" size={15} />
@@ -307,7 +305,6 @@ export default function PanierPage() {
                   </div>
                 )}
 
-                {/* ERROR */}
                 {error && (
                   <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-semibold">
                     <AlertCircle size={15} className="flex-shrink-0" />
@@ -315,18 +312,16 @@ export default function PanierPage() {
                   </div>
                 )}
 
-                {/* SUBMIT */}
                 <button
                   onClick={handleSubmit}
                   disabled={loading}
                   className="group relative w-full py-4 rounded-xl font-bold text-sm text-white overflow-hidden
                              hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-lg shadow-blue-200
-                             disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100
-                             flex items-center justify-center gap-2"
+                             disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-[#00A4E0] to-[#0077A8]" />
                   <div className="absolute inset-0 bg-gradient-to-r from-[#0077A8] to-[#00A4E0] opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <span className="relative flex items-center gap-2">
+                  <span className="relative flex items-center justify-center gap-2">
                     {loading ? (
                       <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Envoi en cours...</>
                     ) : (
@@ -343,50 +338,35 @@ export default function PanierPage() {
             </div>
           </div>
 
-          {/* ===== RÉSUMÉ ===== */}
-          <div className="sticky top-6">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 space-y-4">
+          {/* ===== RÉSUMÉ — affiché uniquement si hasPrix ===== */}
+          {hasPrix && (
+            <div className="sticky top-6">
+              <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 space-y-4">
 
-              <h3 className="font-black text-gray-900 text-lg">Résumé</h3>
+                <h3 className="font-black text-gray-900 text-lg">Résumé</h3>
 
-              <div className="space-y-3">
-                {items.map(item => (
-                  <div key={item.formationId} className="flex items-start justify-between gap-3 text-sm">
-                    <div className="min-w-0">
-                      <p className="font-semibold text-gray-700 truncate">{item.titre}</p>
-                      <p className="text-xs text-gray-400">{item.participants} participant{item.participants > 1 ? "s" : ""}</p>
-                    </div>
-                    <span className={`font-black flex-shrink-0 ${item.afficherPrix ? "text-gray-900" : "text-orange-500"}`}>
-                      {item.afficherPrix
-                        ? `${((item.prix ?? 0) * item.participants).toLocaleString()} FCFA`
-                        : "Devis"
-                      }
-                    </span>
-                  </div>
-                ))}
+                <div className="space-y-3">
+                  {items
+                    .filter(i => i.afficherPrix)
+                    .map(item => (
+                      <div key={item.formationId} className="flex items-start justify-between gap-3 text-sm">
+                        <div className="min-w-0">
+                          <p className="font-semibold text-gray-700 truncate">{item.titre}</p>
+                          <p className="text-xs text-gray-400">{item.participants} participant{item.participants > 1 ? "s" : ""}</p>
+                        </div>
+                        <span className="font-black flex-shrink-0 text-gray-900">
+                          {((item.prix ?? 0) * item.participants).toLocaleString()} FCFA
+                        </span>
+                      </div>
+                    ))
+                  }
+                </div>
+
+                
+
               </div>
-
-              <div className="pt-4 border-t border-gray-100 space-y-2">
-                {total > 0 && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-500 font-medium">Total connu</span>
-                    <span className="font-black text-xl text-[#00A4E0]">
-                      {total.toLocaleString()} <span className="text-sm">FCFA</span>
-                    </span>
-                  </div>
-                )}
-                {hasDevis && (
-                  <div className="flex items-start gap-2 px-3 py-2.5 rounded-xl bg-orange-50 border border-orange-100">
-                    <MessageCircle size={14} className="text-orange-500 flex-shrink-0 mt-0.5" />
-                    <p className="text-xs text-orange-600 font-medium">
-                      Certaines formations nécessitent un devis personnalisé.
-                    </p>
-                  </div>
-                )}
-              </div>
-
             </div>
-          </div>
+          )}
 
         </div>
       </div>

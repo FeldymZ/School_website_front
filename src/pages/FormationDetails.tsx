@@ -252,7 +252,7 @@ export default function FormationDetailsPage() {
                     </div>
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900">Préinscription ouverte</h3>
+                    <h2 className="font-bold text-gray-800">DEMANDE DE PREINSCRIPTION OUVERTE</h2>
                     <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
                       <Sparkles size={10} className="text-green-500" />
                       {session.anneeUniversitaire}
@@ -275,7 +275,7 @@ export default function FormationDetailsPage() {
                   <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-600" />
                   <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-green-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                   <span className="relative flex items-center justify-center gap-2 text-sm">
-                    <Rocket size={15} /> Se préinscrire
+                    <Rocket size={15} /> Demander une préinscription
                   </span>
                 </button>
               </div>
