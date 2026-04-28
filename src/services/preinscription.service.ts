@@ -1,14 +1,9 @@
-import { SessionPublique } from "@/types/preinscription";
+import {
+  SessionPublique,
+  FormationPreinscriptionRequest
+} from "@/types/preinscription";
 
 const API_BASE_URL = "https://api-test.esiitech-gabon.com";
-
-/* ================= ENUMS (SYNC BACKEND) ================= */
-export type Civilite = "M" | "MME" | "MLLE";
-
-export type NiveauSouhaite =
-  | "PREMIERE_ANNEE"
-  | "DEUXIEME_ANNEE"
-  | "TROISIEME_ANNEE";
 
 /* ================= SESSION ACTIVE ================= */
 export async function fetchPreinscriptionSession(
@@ -36,19 +31,7 @@ export async function fetchPreinscriptionSession(
 
 /* ================= SUBMIT ================= */
 export async function submitPreinscription(
-  payload: {
-    civilite: Civilite;
-    nom: string;
-    prenom: string;
-    dateNaissance: string;
-    lieuNaissance: string;
-    nationalite: string;
-    email: string;
-    telephone: string;
-    whatsapp?: string;
-    niveauSouhaite: NiveauSouhaite;
-    formationId: number;
-  }
+  payload: FormationPreinscriptionRequest
 ): Promise<void> {
 
   const res = await fetch(
@@ -64,7 +47,6 @@ export async function submitPreinscription(
 
   if (!res.ok) {
 
-    // ✅ gestion intelligente erreur backend
     let message = "Erreur lors de la préinscription";
 
     try {
