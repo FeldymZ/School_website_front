@@ -103,13 +103,11 @@ export default function PreinscriptionPage() {
             fetchDiplomes(),
             fetchAnnees(),
           ]);
-
         setSession(sessionData);
         setFormations([...licences, ...masters]);
         setNationalites(nat);
         setDiplomes(dip);
         setAnnees(an);
-
       } catch {
         setError("Erreur chargement");
       } finally {
@@ -168,7 +166,6 @@ export default function PreinscriptionPage() {
     const refId   = Number(e.target.value);
     const diplome = diplomes.find(d => d.refID === refId) || null;
     setSelectedDiplome(diplome);
-
     if (diplome?.value1 === "BAC") {
       setBacSeries(diplomes.filter(d => d.value1 === "BAC" && d.value2));
     } else {
@@ -351,7 +348,6 @@ export default function PreinscriptionPage() {
         <Section title="Formation souhaitée" icon={<GraduationCap size={16} className="text-white" />} color="from-[#00A4E0] to-[#0077A8]">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
 
-            {/* Type */}
             <div className="relative group">
               <GraduationCap size={15} className={`${iconCls} ${typeLocked ? "text-gray-300" : "text-gray-400 group-focus-within:text-[#00A4E0] transition-colors"}`} />
               <ChevronDown size={14} className={`absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none ${typeLocked ? "text-gray-300" : "text-gray-400"}`} />
@@ -363,7 +359,6 @@ export default function PreinscriptionPage() {
               {typeLocked && <Lock size={11} className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none" />}
             </div>
 
-            {/* Niveau */}
             <div className="relative group">
               <GraduationCap size={15} className={`${iconCls} text-gray-400 group-focus-within:text-[#00A4E0] transition-colors`} />
               <ChevronDown size={14} className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400" />
@@ -374,7 +369,6 @@ export default function PreinscriptionPage() {
               </select>
             </div>
 
-            {/* Formation */}
             <div className="relative group">
               <GraduationCap size={15} className={`${iconCls} ${formationLocked ? "text-gray-300" : "text-gray-400 group-focus-within:text-[#00A4E0] transition-colors"}`} />
               <ChevronDown size={14} className={`absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none ${formationLocked ? "text-gray-300" : "text-gray-400"}`} />
@@ -414,47 +408,79 @@ export default function PreinscriptionPage() {
             </select>
           </div>
 
+          {/* Nom + Prénom */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Field icon={<User size={15} />} name="nom"    placeholder="Nom *"    onChange={handleChange} />
+            <Field icon={<User size={15} />} name="prenom" placeholder="Prénom *" onChange={handleChange} />
+          </div>
+
+          {/* ✅ Date + Lieu — même hauteur grâce aux labels alignés */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 
-            <Field icon={<User size={15} />}  name="nom"    placeholder="Nom *"    onChange={handleChange} />
-            <Field icon={<User size={15} />}  name="prenom" placeholder="Prénom *" onChange={handleChange} />
-
-            {/* Date de naissance avec label */}
+            {/* Date de naissance */}
             <div className="space-y-1">
               <label className="text-xs font-medium text-gray-500 pl-1">
                 Date de naissance *
               </label>
-              <Field
-                icon={<Calendar size={15} />}
-                name="dateNaissance"
-                type="date"
-                placeholder=""
-                onChange={handleChange}
-              />
+              <div className="relative group">
+                <Calendar
+                  size={15}
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-focus-within:text-[#00A4E0] transition-colors"
+                />
+                <input
+                  type="date"
+                  name="dateNaissance"
+                  onChange={handleChange}
+                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200
+                             focus:outline-none focus:ring-2 focus:ring-[#00A4E0]/30 focus:border-[#00A4E0]
+                             text-sm transition-all bg-white"
+                />
+              </div>
             </div>
 
-            <Field icon={<MapPin size={15} />} name="lieuNaissance" placeholder="Lieu de naissance *" onChange={handleChange} />
-
-            {/* Nationalité — dropdown */}
-            <div className="relative group sm:col-span-2">
-              <Globe size={15} className={`${iconCls} text-gray-400 group-focus-within:text-[#00A4E0] transition-colors`} />
-              <ChevronDown size={14} className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400" />
-              <select name="nationalite" value={form.nationalite} onChange={handleChange} className={selectCls()}>
-                <option value="">Nationalité *</option>
-                {nationalites.map(n => (
-                  <option key={n.refID} value={n.value1}>{n.value1}</option>
-                ))}
-              </select>
+            {/* ✅ Lieu de naissance — label identique pour aligner la hauteur */}
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-gray-500 pl-1">
+                Lieu de naissance *
+              </label>
+              <div className="relative group">
+                <MapPin
+                  size={15}
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-focus-within:text-[#00A4E0] transition-colors"
+                />
+                <input
+                  type="text"
+                  name="lieuNaissance"
+                  placeholder="Lieu de naissance *"
+                  onChange={handleChange}
+                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200
+                             focus:outline-none focus:ring-2 focus:ring-[#00A4E0]/30 focus:border-[#00A4E0]
+                             text-sm transition-all bg-white"
+                />
+              </div>
             </div>
 
           </div>
+
+          {/* Nationalité */}
+          <div className="relative group">
+            <Globe size={15} className={`${iconCls} text-gray-400 group-focus-within:text-[#00A4E0] transition-colors`} />
+            <ChevronDown size={14} className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400" />
+            <select name="nationalite" value={form.nationalite} onChange={handleChange} className={selectCls()}>
+              <option value="">Nationalité *</option>
+              {nationalites.map(n => (
+                <option key={n.refID} value={n.value1}>{n.value1}</option>
+              ))}
+            </select>
+          </div>
+
         </Section>
 
         {/* ── SECTION : CONTACT ── */}
         <Section title="Contact" icon={<Mail size={16} className="text-white" />} color="from-orange-400 to-amber-500">
           <Field icon={<Mail size={15} />} name="email" type="email" placeholder="Adresse email *" onChange={handleChange} />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Field icon={<Phone size={15} />}        name="telephone" placeholder="Téléphone *"          onChange={handleChange} />
+            <Field icon={<Phone size={15} />}         name="telephone" placeholder="Téléphone *"          onChange={handleChange} />
             <Field icon={<MessageSquare size={15} />} name="whatsapp"  placeholder="WhatsApp (optionnel)" onChange={handleChange} />
           </div>
         </Section>
