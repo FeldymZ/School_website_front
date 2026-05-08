@@ -1,219 +1,166 @@
 import { useState } from "react";
-import { submitPreinscription } from "@/services/preinscription.service";
-import type { FormationPreinscriptionRequest } from "@/types/preinscription";
+
+import {
+  Civilite,
+  NiveauSouhaite,
+  PreinscriptionRequest,
+} from "@/types/preinscription";
 
 type FormState = {
+
+  /* ================= IDENTITE ================= */
+
+  civilite: Civilite;
+
   nom: string;
   prenom: string;
+
   dateNaissance: string;
   lieuNaissance: string;
-  sexe: string;
-  nationalite: string;
-  adresse: string;
-  telephone: string;
-  email: string;
-  situationFamiliale: string;
 
-  nomEtablissement: string;
-  typeEtablissement: string;
-  serieBaccalaureat: string;
-  anneeObtention: string;
+  nationalite: string;
+
+  /* ================= CONTACT ================= */
+
+  email: string;
+
+  telephone: string;
+
+  whatsapp: string;
+
+  /* ================= FORMATION ================= */
 
   formationId: string;
-  niveau: string;
-  niveauEtude: string;
 
-  statutEtudiant: string;
-  modeFinancement: string;
-  autreFinancement: string;
+  niveauSouhaite: NiveauSouhaite;
 
-  profession: string;
+  /* ================= DIPLOME ================= */
+
+  diplome: string;
+
+  anneeObtention: string;
+
+  etablissementProvenance: string;
 };
 
-const initialFormState: FormState = {
-  nom: "",
-  prenom: "",
-  dateNaissance: "",
-  lieuNaissance: "",
-  sexe: "",
-  nationalite: "",
-  adresse: "",
-  telephone: "",
-  email: "",
-  situationFamiliale: "",
+export default function Example() {
 
-  nomEtablissement: "",
-  typeEtablissement: "",
-  serieBaccalaureat: "",
-  anneeObtention: "",
+  const [loading, setLoading] = useState(false);
 
-  formationId: "",
-  niveau: "",
-  niveauEtude: "",
+  const [form, setForm] = useState<FormState>({
 
-  statutEtudiant: "",
-  modeFinancement: "",
-  autreFinancement: "",
+    /* ================= IDENTITE ================= */
 
-  profession: "",
-};
+    civilite: "M",
 
-export default function PreinscriptionForm() {
-  /* =========================
-     STATE
-     ========================= */
+    nom: "",
+    prenom: "",
 
-  const [form, setForm] = useState<FormState>(initialFormState);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [success, setSuccess] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+    dateNaissance: "",
+    lieuNaissance: "",
 
-  /* =========================
-     HANDLERS
-     ========================= */
+    nationalite: "",
+
+    /* ================= CONTACT ================= */
+
+    email: "",
+
+    telephone: "",
+
+    whatsapp: "",
+
+    /* ================= FORMATION ================= */
+
+    formationId: "",
+
+    niveauSouhaite: "PREMIERE_ANNEE",
+
+    /* ================= DIPLOME ================= */
+
+    diplome: "",
+
+    anneeObtention: "",
+
+    etablissementProvenance: "",
+  });
+
+  /* ================= HANDLE CHANGE ================= */
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+
+    setForm(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
-  /* =========================
-     SUBMIT
-     ========================= */
+  /* ================= SUBMIT ================= */
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  setError(null);
-  setSuccess(null);
-  setLoading(true);
+  const handleSubmit = async () => {
 
-  try {
-    await submitPreinscription({
-      civilite: form.sexe === "FEMININ" ? "MME" : "M", // mapping
-      nom: form.nom,
-      prenom: form.prenom,
-      dateNaissance: form.dateNaissance,
-      lieuNaissance: form.lieuNaissance,
-      nationalite: form.nationalite,
-      email: form.email,
-      telephone: form.telephone,
-      whatsapp: undefined,
+    try {
 
-      // ⚠️ mapping important
-      niveauSouhaite:
-        form.niveau === "MASTER"
-          ? "PREMIERE_ANNEE"
-          : "PREMIERE_ANNEE",
+      setLoading(true);
 
-      formationId: Number(form.formationId),
-    });
+      const payload: PreinscriptionRequest = {
 
-    setSuccess("Votre préinscription a été envoyée avec succès.");
-    setForm(initialFormState);
+        civilite: form.civilite,
 
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      setError(err.message);
-    } else {
-      setError("Erreur lors de l’envoi de la préinscription");
+        nom: form.nom.trim(),
+        prenom: form.prenom.trim(),
+
+        dateNaissance: form.dateNaissance,
+
+        lieuNaissance: form.lieuNaissance.trim(),
+
+        nationalite: form.nationalite.trim(),
+
+        email: form.email.trim(),
+
+        telephone: form.telephone.trim(),
+
+        whatsapp:
+          form.whatsapp.trim() || undefined,
+
+        niveauSouhaite:
+          form.niveauSouhaite,
+
+        formationId:
+          Number(form.formationId),
+
+        /* ================= DIPLOME ================= */
+
+        diplomePresente:
+          form.diplome.trim(),
+
+        statutDiplome:
+          form.anneeObtention
+            ? "OBTENU"
+            : "EN_COURS",
+
+        anneeObtention:
+          form.anneeObtention
+            ? Number(form.anneeObtention)
+            : undefined,
+
+        etablissementProvenance:
+          form.etablissementProvenance.trim(),
+      };
+
+      console.log(payload);
+
+    } catch (e) {
+
+      console.error(e);
+
+    } finally {
+
+      setLoading(false);
+
     }
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
-  /* =========================
-     RENDER
-     ========================= */
-
-  return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">
-        Formulaire de préinscription
-      </h1>
-
-      {success && (
-        <div className="mb-6 p-4 bg-green-100 text-green-800 rounded">
-          {success}
-        </div>
-      )}
-
-      {error && (
-        <div className="mb-6 p-4 bg-red-100 text-red-800 rounded">
-          {error}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-8">
-
-        {/* =========================
-            INFOS PERSONNELLES
-           ========================= */}
-        <section className="space-y-4">
-          <h2 className="font-semibold text-lg">Informations personnelles</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input name="nom" value={form.nom} onChange={handleChange} placeholder="Nom" className="input" required />
-            <input name="prenom" value={form.prenom} onChange={handleChange} placeholder="Prénom" className="input" required />
-            <input type="date" name="dateNaissance" value={form.dateNaissance} onChange={handleChange} className="input" required />
-            <input name="lieuNaissance" value={form.lieuNaissance} onChange={handleChange} placeholder="Lieu de naissance" className="input" required />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <select name="sexe" value={form.sexe} onChange={handleChange} className="input" required>
-              <option value="">Sexe</option>
-              <option value="MASCULIN">Masculin</option>
-              <option value="FEMININ">Féminin</option>
-            </select>
-
-            <select name="situationFamiliale" value={form.situationFamiliale} onChange={handleChange} className="input" required>
-              <option value="">Situation familiale</option>
-              <option value="CELIBATAIRE_SANS_ENFANT">Célibataire sans enfant</option>
-              <option value="CELIBATAIRE_AVEC_ENFANT">Célibataire avec enfant</option>
-              <option value="COUPLE_SANS_ENFANT">Couple sans enfant</option>
-              <option value="COUPLE_AVEC_ENFANT">Couple avec enfant</option>
-            </select>
-          </div>
-        </section>
-
-        {/* =========================
-            CONTACT
-           ========================= */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input name="telephone" value={form.telephone} onChange={handleChange} placeholder="Téléphone" className="input" required />
-          <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="Email" className="input" required />
-        </section>
-
-        {/* =========================
-            FORMATION
-           ========================= */}
-        <section className="space-y-4">
-          <h2 className="font-semibold text-lg">Formation souhaitée</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <input name="formationId" value={form.formationId} onChange={handleChange} placeholder="ID formation" className="input" required />
-            <select name="niveau" value={form.niveau} onChange={handleChange} className="input" required>
-              <option value="">Niveau</option>
-              <option value="LICENCE">Licence</option>
-              <option value="MASTER">Master</option>
-            </select>
-            <input name="niveauEtude" value={form.niveauEtude} onChange={handleChange} placeholder="Niveau d’étude" className="input" required />
-          </div>
-        </section>
-
-        {/* =========================
-            SUBMIT
-           ========================= */}
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 disabled:opacity-50"
-        >
-          {loading ? "Envoi..." : "Envoyer la préinscription"}
-        </button>
-      </form>
-    </div>
-  );
+  return null;
 }

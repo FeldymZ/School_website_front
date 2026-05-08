@@ -9,101 +9,98 @@ export interface SessionPublique {
 }
 
 /* =========================
-   DEMANDE PREINSCRIPTION
+   ENUMS BACKEND
+========================= */
+export type Civilite =
+  | "M"
+  | "MME"
+  | "MLLE";
+
+export type NiveauSouhaite =
+  | "PREMIERE_ANNEE"
+  | "DEUXIEME_ANNEE"
+  | "TROISIEME_ANNEE";
+
+export type StatutDiplome =
+  | "OBTENU"
+  | "EN_COURS";
+
+/* =========================
+   REQUEST BACKEND
+========================= */
+export type PreinscriptionRequest = {
+
+  civilite: Civilite;
+
+  nom: string;
+  prenom: string;
+
+  dateNaissance: string;
+  lieuNaissance: string;
+
+  nationalite: string;
+
+  email: string;
+
+  telephone: string;
+
+  whatsapp?: string;
+
+  niveauSouhaite: NiveauSouhaite;
+
+  formationId: number;
+
+  /* ================= DIPLOME ================= */
+
+  diplomePresente: string;
+
+  statutDiplome: StatutDiplome;
+
+  anneeObtention?: number;
+
+  etablissementProvenance: string;
+};
+
+/* =========================
+   RESPONSE BACKEND
 ========================= */
 export interface PreinscriptionDemande {
+
   id: number;
 
   civilite: string;
+
   nom: string;
   prenom: string;
 
-  dateNaissance: string;
-  lieuNaissance: string;
-  nationalite: string;
-
   email: string;
+
   telephone: string;
+
   whatsapp?: string;
 
-  niveauSouhaite: "LICENCE" | "MASTER";
+  niveau: string;
 
-  formationId: number;
-
-  statut?: "EN_ATTENTE" | "VALIDEE" | "REJETEE";
-  createdAt?: string;
-}
-
-/* =========================
-   EMETTEUR
-========================= */
-export interface PreinscriptionEmetteur {
-  id: number;
-  nom: string;
-  fonction: string;
-  signatureUrl?: string;
-  actif?: boolean;
-}
-
-/* =========================
-   SESSION ADMIN
-========================= */
-export interface SessionUniversitaire {
-  id: number;
-  annee: string;
-}
-
-/* =========================
-   PERIODE
-========================= */
-export interface PreinscriptionPeriode {
-  id: number;
-
-  dateDebut: string;
-  dateFin: string;
-
-  active: boolean;
-
-  session?: SessionUniversitaire;
-  emetteur?: PreinscriptionEmetteur;
-}
-
-/* =========================
-   ✅ PAYLOAD FORMULAIRE (IMPORTANT)
-========================= */
-export interface FormationPreinscriptionRequest {
-  nom: string;
-  prenom: string;
-
-  dateNaissance: string;
-  lieuNaissance: string;
-  sexe: "MASCULIN" | "FEMININ";
+  formation: string;
 
   nationalite: string;
-  adresse: string;
 
-  telephone: string;
-  email: string;
+  diplomePresente: string;
 
-  situationFamiliale:
-    | "CELIBATAIRE_SANS_ENFANT"
-    | "CELIBATAIRE_AVEC_ENFANT"
-    | "COUPLE_SANS_ENFANT"
-    | "COUPLE_AVEC_ENFANT";
+  statutDiplome: string;
 
-  nomEtablissement: string;
-  typeEtablissement: string;
-  serieBaccalaureat: string;
-  anneeObtention: number;
+  anneeObtention?: number;
 
-  formationId: number;
+  etablissementProvenance: string;
 
-  niveau: "LICENCE" | "MASTER";
-  niveauEtude: number;
+  statut:
+    | "EN_ATTENTE"
+    | "VALIDEE"
+    | "REJETEE";
 
-  statutEtudiant: string;
-  modeFinancement: string;
-  autreFinancement?: string;
+  createdAt?: string;
 
-  profession: string;
+  validatedAt?: string;
+
+  pdfUrl?: string;
 }
