@@ -44,7 +44,7 @@ export const router = createBrowserRouter([
       { path: "preinscription/:slug", element: <PreinscriptionPage /> },
 
       /* FORMATIONS */
-      { path: "formations", element: <FormationsList /> },
+      { path: "formationsList", element: <FormationsList /> },
       { path: "formations/:slug", element: <FormationDetailsPage /> },
 
       { path: "Cisco-Networking-Academy", element: <CiscoNetworkingAcademyPage /> },
