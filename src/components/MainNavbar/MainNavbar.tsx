@@ -191,7 +191,7 @@ export default function MainNavbar() {
 
             <li>
               <Link
-                to="/formations"
+                to="/formationsList"
                 onClick={closeMobile}
                 className="block px-6 py-4 text-sm text-gray-800 hover:bg-gray-50 hover:text-[#00A4E0] transition-colors"
               >
