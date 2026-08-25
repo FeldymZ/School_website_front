@@ -168,45 +168,46 @@ function TestimonialModal({
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
     >
       <div
         onClick={(e) => e.stopPropagation()}
         className="
-          w-full max-w-2xl rounded-3xl shadow-2xl
+          w-full max-w-md rounded-2xl shadow-2xl
           bg-gradient-to-br from-[#8C8C8C] via-[#A6A6A6] to-[#C0C0C0]
           text-white overflow-hidden
+          max-h-[85vh] flex flex-col
         "
       >
-        <div className="p-8 relative">
+        <div className="p-5 relative flex flex-col overflow-hidden">
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 w-10 h-10 bg-white/20 rounded-full flex items-center justify-center"
+            className="absolute top-3 right-3 w-8 h-8 bg-white/20 rounded-full flex items-center justify-center"
           >
-            <X />
+            <X size={18} />
           </button>
 
-          <div className="flex items-center gap-4 mb-6">
+          <div className="flex items-center gap-3 mb-4">
             <img
               src={resolveMediaUrl(item.authorImageUrl)}
               alt={item.authorName}
-              className="w-20 h-20 rounded-full object-cover ring-4 ring-white/30"
+              className="w-12 h-12 rounded-full object-cover ring-2 ring-white/30"
             />
             <div>
-              <h3 className="text-2xl font-bold">{item.authorName}</h3>
-              <p className="text-sm text-white/80">{item.displayDate}</p>
+              <h3 className="text-lg font-bold">{item.authorName}</h3>
+              <p className="text-xs text-white/80">{item.displayDate}</p>
             </div>
           </div>
 
-          <div className="bg-white/90 rounded-2xl p-6 text-gray-700 max-h-[60vh] overflow-y-auto">
-            <Quote className="text-gray-400 mb-4" />
-            <p className="italic leading-relaxed">{item.content}</p>
-            <Quote className="text-gray-400 rotate-180 mt-4 ml-auto" />
+          <div className="bg-white/90 rounded-xl p-4 text-gray-700 overflow-y-auto max-h-[40vh]">
+            <Quote size={16} className="text-gray-400 mb-2" />
+            <p className="italic leading-relaxed text-sm">{item.content}</p>
+            <Quote size={16} className="text-gray-400 rotate-180 mt-2 ml-auto" />
           </div>
 
           <button
             onClick={onClose}
-            className="mt-6 w-full py-4 bg-white/20 rounded-xl font-semibold hover:bg-white/30 transition"
+            className="mt-4 w-full py-3 bg-white/20 rounded-lg text-sm font-semibold hover:bg-white/30 transition"
           >
             Fermer
           </button>
