@@ -20,21 +20,6 @@ import { sanitizeHTML } from "@/utils/sanitize"
 import { usePanier } from "@/store/usePanier"
 import type { FormationContinue } from "@/types/formation-continue"
 
-/* ================= HTML FORMAT ================= */
-function formatHtmlForDisplay(html: string): string {
-  if (!html) return ""
-  return html.replace(
-    /<p>\s*((?:•.*?<br>\s*)+)<\/p>/gs,
-    (_: string, list: string) => {
-      const items = list
-        .split("<br>")
-        .map((line: string) => line.replace("•", "").trim())
-        .filter(Boolean)
-      return `<ul>${items.map((item) => `<li>${item}</li>`).join("")}</ul>`
-    }
-  )
-}
-
 /* ================= SECTION CARD ================= */
 function SectionCard({ icon: Icon, title, html }: {
   icon: React.ElementType
@@ -56,10 +41,14 @@ function SectionCard({ icon: Icon, title, html }: {
         className="prose prose-lg max-w-none
                    prose-headings:text-gray-900 prose-headings:font-bold
                    prose-p:text-gray-600 prose-p:leading-relaxed
-                   prose-li:text-gray-600
+                   prose-strong:text-gray-800 prose-strong:font-bold
                    prose-blockquote:border-[#00A4E0] prose-blockquote:bg-blue-50 prose-blockquote:rounded-r-xl
-                   prose-a:text-[#00A4E0] prose-a:no-underline hover:prose-a:underline"
-        dangerouslySetInnerHTML={{ __html: sanitizeHTML(formatHtmlForDisplay(html)) }}
+                   prose-a:text-[#00A4E0] prose-a:no-underline hover:prose-a:underline
+                   [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-1.5 [&_ul]:my-3
+                   [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:space-y-1.5 [&_ol]:my-3
+                   [&_li]:text-gray-600 [&_li]:leading-relaxed
+                   [&_li::marker]:text-gray-900 [&_li::marker]:font-bold"
+        dangerouslySetInnerHTML={{ __html: sanitizeHTML(html) }}
       />
     </div>
   )

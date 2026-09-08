@@ -5,7 +5,7 @@ import { fetchFormationsByLevel } from "@/services/formationService";
 import { resolveMediaUrl } from "@/utils/media";
 import { Link } from "react-router-dom";
 
-export default function FormationsList() {
+export default function Formations() {
   const [level, setLevel] = useState<FormationLevel | "ALL">("ALL");
   const [formations, setFormations] = useState<Formation[]>([]);
   const [loading, setLoading] = useState(false);
