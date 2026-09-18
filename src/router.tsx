@@ -3,7 +3,6 @@ import App from "./App";
 
 /* ================= PAGES ================= */
 import Home from "@/pages/Home";
-import FormationsList from "@/pages/FormationsList";
 import FormationDetailsPage from "@/pages/FormationDetails";
 import ActualitesPage from "@/pages/Actualites";
 import ActualiteDetailsPage from "@/pages/ActualiteDetails";
@@ -25,6 +24,7 @@ import NosDéfisPage from "./pages/nosDefis/NosDéfisPage";
 import NosMissionsPage from "./pages/apropos/NosMissionsPage";
 import CiscoNetworkingAcademyPage from "./pages/Cisco/CiscoNetworkingAcademyPage";
 import PanierPage from "@/pages/PanierPage";
+import Formations from "./components/Formations";
 
 export const router = createBrowserRouter([
   {
@@ -44,7 +44,7 @@ export const router = createBrowserRouter([
       { path: "preinscription/:slug", element: <PreinscriptionPage /> },
 
       /* FORMATIONS */
-      { path: "formations", element: <FormationsList /> },
+      { path: "formations", element: <Formations /> },
       { path: "formations/:slug", element: <FormationDetailsPage /> },
 
       { path: "Cisco-Networking-Academy", element: <CiscoNetworkingAcademyPage /> },
