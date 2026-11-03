@@ -5,7 +5,6 @@ import {
   Menu,
   X,
   Sparkles,
-  ExternalLink,
 } from "lucide-react";
 
 import MegaMenu from "../MegaMenu/MegaMenu";
@@ -39,6 +38,7 @@ export default function MainNavbar() {
   const [activeMenu, setActiveMenu] = useState<MenuKey | null>(null);
   const [anchorLeft, setAnchorLeft] = useState(0);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  /* Sous-menu ouvert dans le menu mobile (accordéon) */
   const [mobileOpenMenu, setMobileOpenMenu] = useState<MenuKey | null>(null);
 
   const location = useLocation();
@@ -70,10 +70,8 @@ export default function MainNavbar() {
     navigate("/?scroll=contact");
   };
 
-  const goToPartenaires = () => {
-    closeMobile();
-    navigate("/?scroll=partenaires");
-  };
+  /* 🆕 Onglet « Session de formation » actif ? */
+  const sessionsActif = location.pathname.startsWith("/sessions-formation");
 
   /* ================= MEGA MENU POSITION ================= */
 
@@ -199,14 +197,54 @@ export default function MainNavbar() {
               </Link>
             </li>
 
+            {/* 🆕 FORMATIONS CONTINUES : sous-menu qui s'ouvre / se ferme */}
             <li>
-              <Link
-                to="/formations-continues"
-                onClick={closeMobile}
-                className="block px-6 py-4 text-sm text-gray-800 hover:bg-gray-50 hover:text-[#00A4E0] transition-colors"
+              <button
+                type="button"
+                onClick={() => setMobileOpenMenu((m) => (m === "formationsContinue" ? null : "formationsContinue"))}
+                aria-expanded={mobileOpenMenu === "formationsContinue"}
+                className={`w-full flex items-center justify-between px-6 py-4 text-left text-sm hover:bg-gray-50 hover:text-[#00A4E0] transition-colors ${
+                  mobileOpenMenu === "formationsContinue" || sessionsActif || location.pathname.startsWith("/formations-continues")
+                    ? "text-[#00A4E0]"
+                    : "text-gray-800"
+                }`}
               >
                 FORMATIONS CONTINUES
-              </Link>
+                <ChevronDown
+                  size={18}
+                  className={`flex-shrink-0 transition-transform duration-300 ${
+                    mobileOpenMenu === "formationsContinue" ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {/* Sous-liens (animés à l'ouverture / fermeture) */}
+              <div
+                className={`grid transition-all duration-300 ease-out ${
+                  mobileOpenMenu === "formationsContinue" ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                }`}
+              >
+                <div className="overflow-hidden">
+                  <div className="bg-gray-50/70 py-1">
+                    {[
+                      { to: "/formations-continues", label: "CATALOGUE DES FORMATIONS CONTINUES" },
+                      { to: "/sessions-formation", label: "SESSIONS DE FORMATION" },
+                    ].map((lien) => (
+                      <Link
+                        key={lien.to}
+                        to={lien.to}
+                        onClick={closeMobile}
+                        tabIndex={mobileOpenMenu === "formationsContinue" ? 0 : -1}
+                        className={`block pl-10 pr-6 py-3 text-[13px] font-semibold hover:text-[#00A4E0] transition-colors ${
+                          location.pathname.startsWith(lien.to) ? "text-[#00A4E0]" : "text-gray-600"
+                        }`}
+                      >
+                        {lien.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </li>
 
             <li>

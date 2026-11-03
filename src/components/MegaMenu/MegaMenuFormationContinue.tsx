@@ -1,9 +1,15 @@
 import { Link } from "react-router-dom";
-import { GraduationCap, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 type Props = {
   anchorLeft: number;
 };
+
+/* Liens du sous-menu « Formations continues » (dans l'ordre d'affichage) */
+const LIENS = [
+  { to: "/formations-continues", label: "CATALOGUE DES FORMATIONS CONTINUES" },
+  { to: "/sessions-formation", label: "SESSIONS DE FORMATION" }, // 🆕 2e sous-menu
+];
 
 export default function MegaMenuFormationContinue({ anchorLeft }: Props) {
 
@@ -16,23 +22,24 @@ export default function MegaMenuFormationContinue({ anchorLeft }: Props) {
       {/* Déco gradient */}
       <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-[#00A4E0]/10 to-transparent rounded-full blur-2xl pointer-events-none" />
 
-     
-
       {/* Liens */}
       <div className="flex flex-col gap-1 pr-1 relative">
-        <Link
-          to="/formations-continues"
-          className="group flex items-center justify-between px-4 py-3 rounded-xl
-                     text-sm font-semibold text-[#0A2A6A] bg-white
-                     hover:bg-[#EAF7FD]
-                     transition-all duration-300"
-        >
-          <span>CATALOGUE DES FORMATIONS CONTINUES</span>
-          <ArrowRight
-            size={15}
-            className="opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-200"
-          />
-        </Link>
+        {LIENS.map((lien) => (
+          <Link
+            key={lien.to}
+            to={lien.to}
+            className="group flex items-center justify-between px-4 py-3 rounded-xl
+                       text-sm font-semibold text-[#0A2A6A] bg-white
+                       hover:bg-[#EAF7FD]
+                       transition-all duration-300"
+          >
+            <span>{lien.label}</span>
+            <ArrowRight
+              size={15}
+              className="opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-200"
+            />
+          </Link>
+        ))}
       </div>
     </div>
   );

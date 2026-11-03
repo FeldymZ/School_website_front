@@ -19,6 +19,10 @@ import ActivitePublicDetail from "@/pages/public/ActivitePublicDetail";
 import FormationsContinuesList from "@/pages/public/FormationsContinuesList";
 import FormationContinueDetail from "@/pages/public/FormationContinueDetail";
 
+/* ================= 🆕 SESSIONS DE FORMATION ================= */
+import SessionsFormationPage from "@/components/sessions/SessionsFormationPage";
+import SessionFormationDetailPage from "@/components/sessions/SessionFormationDetailPage";
+
 /* ================= AUTRES ================= */
 import NosDéfisPage from "./pages/nosDefis/NosDéfisPage";
 import NosMissionsPage from "./pages/apropos/NosMissionsPage";
@@ -52,6 +56,10 @@ export const router = createBrowserRouter([
       /* FORMATIONS CONTINUES */
       { path: "formations-continues", element: <FormationsContinuesList /> },
       { path: "formations-continues/:slug", element: <FormationContinueDetail /> },
+
+      /* 🆕 SESSIONS DE FORMATION (inscription au lieu du devis) */
+      { path: "sessions-formation", element: <SessionsFormationPage /> },
+      { path: "sessions-formation/:slug", element: <SessionFormationDetailPage /> },
 
       /* ACTUALITÉS */
       { path: "actualites", element: <ActualitesPage /> },
